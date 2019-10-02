@@ -25,8 +25,8 @@ class position_generators {
 //    }
 
 public:
-    static std::vector<std::pair<double,double>> circle(int xOffset, int yOffset, int w, int h, int n) {
-        std::vector<std::pair<double,double>> ret;
+    static std::vector<std::pair<double, double>> circle(int xOffset, int yOffset, int w, int h, int n) {
+        std::vector<std::pair<double, double>> ret;
         w = w / 2;
         h = h / 2;
         w -= xOffset;
@@ -45,6 +45,7 @@ public:
         }
         return ret;
     }
+
 //
 //    public static Point[] circle(int xOffset, int yOffset, int w, int h, int n, double degree) {
 //        Point[] ret = new Point[n];
@@ -68,19 +69,20 @@ public:
 //        return ret;
 //    }
 //
-//    public static Point[] circle(int r, int x, int y, int n) {
-//        Point[] ret = circle(0, 0, r, r, n);
-//        shift(ret, x - r / 2, y - r / 2);
-//        return ret;
-//    }
+    static std::vector<std::pair<double, double>>
+    shift(std::vector<std::pair<double, double>> input, int xOffset, int yOffset) {
+        for (std::pair<double, double> p : input) {
+            p.first += xOffset;
+            p.second += yOffset;
+        }
+        return input;
+    }
 
-//    private static Point[] shift(Point[] input, int xOffset, int yOffset) {
-//        for (Point p : input) {
-//            p.x += xOffset;
-//            p.y += yOffset;
-//        }
-//        return input;
-//    }
+    static std::vector<std::pair<double, double>> circle(int r, int x, int y, int n) {
+        std::vector<std::pair<double, double>> ret = circle(0, 0, r, r, n);
+        shift(ret, x - r / 2, y - r / 2);
+        return ret;
+    }
 //
 //    public static Point[] rotate(Point[] input, double degree) {
 //

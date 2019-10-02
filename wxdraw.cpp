@@ -5,6 +5,7 @@
     #include <wx/wx.h>
     #include <wx/sizer.h>
     #include "datatypes.h"
+    #include <string>
 #include "generators/Cycle.h"
 #endif
 
@@ -63,7 +64,7 @@ wxIMPLEMENT_APP(MyApp);
 bool MyApp::OnInit()
 {
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    MyFrame *frame = new MyFrame( "GTea", wxPoint(50, 50), wxSize(450, 340) );
+    MyFrame *frame = new MyFrame( "GTea", wxPoint(100, 100), wxSize(1000, 1000) );
     drawPane = new BasicDrawPane( (wxFrame*) frame );
     sizer->Add(drawPane, 1, wxEXPAND);
 
@@ -194,12 +195,22 @@ void BasicDrawPane::render(wxDC&  dc) {
 
     // Look at the wxDC docs to learn how to draw other stuff
     Cycle cy(10);
-    Graph g = cy.generate();
+    Graph g = cy.generate(true);
     for_each_v(g, [&](Ver v) {
         // draw a circle
         dc.SetBrush(*wxGREEN_BRUSH); // green filling
-        dc.SetPen(wxPen(wxColor(255, 0, 0), 5)); // 5-pixels-thick red outline
-        dc.DrawCircle(wxPoint(200, 100), 25 /* radius */ );
+        dc.SetPen(wxPen(wxColor(255, 0, 0), 1)); // 5-pixels-thick red outline
+        std::pair<double,double> pos = boost::get(boost::vertex_distance, g, v);
+        std::cerr << pos.first << " " << pos.second << std::endl;
+        dc.DrawCircle(wxPoint(pos.first, pos.second), 20 /* radius */ );
+        int tmp = boost::get(boost::vertex_index, g, v);
+//        std::string stlstring = "Hello world";
+// assuming your string is encoded as UTF-8, change the wxConv* parameter as needed
+//        wxString mystring(stlstring.c_str(), wxConvUTF8);
+        
+        wxString mystring = wxString::Format(wxT("%i"),tmp);
+        // draw some text
+        dc.DrawText(mystring, pos.first, pos.second);
     });
 }
 
