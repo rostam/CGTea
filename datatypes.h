@@ -25,10 +25,12 @@ using boost::edge_name_t;
 using boost::property_map;
 using boost::graph_traits;
 using boost::vertex_color;
+using boost::vertex_distance;
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS,
-        property<boost::vertex_color_t, int>,
+        property<boost::vertex_color_t, int,
+        property<boost::vertex_distance_t, std::pair<double,double>>>,
         property<boost::edge_weight_t, int,
-                property<boost::edge_name_t, string>>> Graph;
+        property<boost::edge_name_t, string>>> Graph;
 
 typedef boost::graph_traits<Graph>::vertex_iterator V_iter;
 typedef boost::graph_traits<Graph>::edge_iterator E_iter;
