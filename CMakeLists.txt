@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.13)
+project(CGTea)
+set(CMAKE_CXX_STANDARD 17)
+find_package(wxWidgets REQUIRED COMPONENTS net core base)
+include(${wxWidgets_USE_FILE})
+#set( CMAKE_CXX_FLAGS "`wx-config --cxxflags --libs`")
+add_executable(CGTea test2.cpp)
+target_link_libraries(CGTea ${wxWidgets_LIBRARIES})
