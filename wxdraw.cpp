@@ -4,6 +4,7 @@
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
     #include <wx/sizer.h>
+    #include "datatypes.h"
 #endif
 
 class BasicDrawPane : public wxPanel
