@@ -176,38 +176,31 @@ void BasicDrawPane::paintNow()
  * (e.g. wxPaintDC or wxClientDC) is used.
  */
 void BasicDrawPane::render(wxDC&  dc) {
-    // draw some text
-    dc.DrawText(wxT("Testing"), 40, 60);
-
-    // draw a circle
-    dc.SetBrush(*wxGREEN_BRUSH); // green filling
-    dc.SetPen(wxPen(wxColor(255, 0, 0), 5)); // 5-pixels-thick red outline
-    dc.DrawCircle(wxPoint(200, 100), 25 /* radius */ );
-
-    // draw a rectangle
-    dc.SetBrush(*wxBLUE_BRUSH); // blue filling
-    dc.SetPen(wxPen(wxColor(255, 175, 175), 10)); // 10-pixels-thick pink outline
-    dc.DrawRectangle(300, 100, 400, 200);
-
-    // draw a line
-    dc.SetPen(wxPen(wxColor(0, 0, 0), 3)); // black line, 3 pixels thick
-    dc.DrawLine(300, 100, 700, 300); // draw line across the rectangle
-
     // Look at the wxDC docs to learn how to draw other stuff
     Cycle cy(10);
     Graph g = cy.generate(true);
+
+    for_each_e(g, [&](Edge e) {
+        Ver src = boost::source(e,g);
+        Ver tgt = boost::target(e,g);
+        std::pair<double,double> src_pos = boost::get(boost::vertex_distance, g, src);
+        std::pair<double,double> tgt_pos = boost::get(boost::vertex_distance, g, tgt);
+        // draw a line
+        dc.SetPen(wxPen(wxColor(0, 0, 0), 3)); // black line, 3 pixels thick
+        dc.DrawLine(src_pos.first, src_pos.second, tgt_pos.first, tgt_pos.second); // draw line across the rectangle
+    });
+
     for_each_v(g, [&](Ver v) {
         // draw a circle
         dc.SetBrush(*wxGREEN_BRUSH); // green filling
         dc.SetPen(wxPen(wxColor(255, 0, 0), 1)); // 5-pixels-thick red outline
         std::pair<double,double> pos = boost::get(boost::vertex_distance, g, v);
-        std::cerr << pos.first << " " << pos.second << std::endl;
         dc.DrawCircle(wxPoint(pos.first, pos.second), 20 /* radius */ );
         int tmp = boost::get(boost::vertex_index, g, v);
 //        std::string stlstring = "Hello world";
 // assuming your string is encoded as UTF-8, change the wxConv* parameter as needed
 //        wxString mystring(stlstring.c_str(), wxConvUTF8);
-        
+
         wxString mystring = wxString::Format(wxT("%i"),tmp);
         // draw some text
         dc.DrawText(mystring, pos.first, pos.second);

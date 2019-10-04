@@ -80,7 +80,7 @@ public:
 
     static std::vector<std::pair<double, double>> circle(int r, int x, int y, int n) {
         std::vector<std::pair<double, double>> ret = circle(0, 0, r, r, n);
-        shift(ret, x - r / 2, y - r / 2);
+        shift(ret, x, y);
         return ret;
     }
 //
