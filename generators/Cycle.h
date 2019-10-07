@@ -8,6 +8,7 @@
 #include "boost/graph/fruchterman_reingold.hpp"
 #include "boost/graph/random_layout.hpp"
 #include "boost/graph/topology.hpp"
+#include "compute_force_directed.h"
 
 class Cycle : public GeneratorInterface {
 public:
@@ -33,7 +34,7 @@ public:
 
     Graph generate_with_force_directed() {
         Graph g = generate();
-        compute_force_directed(500, 500);
+        compute_force_directed(500, 500, g);
     }
 };
 

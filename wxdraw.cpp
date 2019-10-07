@@ -178,7 +178,7 @@ void BasicDrawPane::paintNow()
 void BasicDrawPane::render(wxDC&  dc) {
     // Look at the wxDC docs to learn how to draw other stuff
     Cycle cy(10);
-    Graph g = cy.generate(true);
+    Graph g = cy.generate_with_positions();
 
     for_each_e(g, [&](Edge e) {
         Ver src = boost::source(e,g);
