@@ -12,16 +12,16 @@
 
 class Cycle : public GeneratorInterface {
 public:
-    Cycle(int n) : GeneratorInterface(n) {};
+    explicit Cycle(unsigned int n) : GeneratorInterface(n) {};
 
-    Graph generate() {
+    Graph generate() override {
         Graph g;
-        for (int i = 0; i < n; i++)
+        for (unsigned int i = 0; i < n; i++)
             add_edge(i, ((i + 1) % n), g);
         return g;
     }
 
-    Graph generate_with_positions() {
+    Graph generate_with_positions(double width, double height) override {
         Graph g = generate();
         std::vector<std::pair<double, double>> pos = position_generators::circle(200, 500, 500, n);
         int i = 0;
@@ -32,9 +32,9 @@ public:
         return g;
     }
 
-    Graph generate_with_force_directed() {
+    Graph generate_with_force_directed(double width, double height) override {
         Graph g = generate();
-        compute_force_directed(500, 500, g);
+        compute_force_directed(width, height, g);
     }
 };
 

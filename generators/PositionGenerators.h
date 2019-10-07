@@ -25,13 +25,13 @@ class position_generators {
 //    }
 
 public:
-    static std::vector<std::pair<double, double>> circle(int xOffset, int yOffset, int w, int h, int n) {
+    static std::vector<std::pair<double, double>> circle(int xOffset, int yOffset, int w, int h, unsigned int n) {
         std::vector<std::pair<double, double>> ret;
         w = w / 2;
         h = h / 2;
         w -= xOffset;
         h -= yOffset;
-        for (int i = 0; i < n; i++) {
+        for (unsigned int i = 0; i < n; i++) {
             double deg = 2 * M_PI / n * i;
             double x = sin(deg);
             double y = cos(deg);
@@ -78,7 +78,7 @@ public:
         return input;
     }
 
-    static std::vector<std::pair<double, double>> circle(int r, int x, int y, int n) {
+    static std::vector<std::pair<double, double>> circle(int r, int x, int y, unsigned int n) {
         std::vector<std::pair<double, double>> ret = circle(0, 0, r, r, n);
         shift(ret, x, y);
         return ret;

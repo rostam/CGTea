@@ -20,6 +20,8 @@ public:
 
     void render(wxDC& dc);
 
+    void drawEdges(Graph &g, wxDC&  dc);
+    void drawVertices(Graph &g, wxDC&  dc);
     // some useful events
     /*
      void mouseMoved(wxMouseEvent& event);
@@ -35,26 +37,30 @@ public:
 DECLARE_EVENT_TABLE()
 };
 
-class MyApp: public wxApp
-{
-    BasicDrawPane * drawPane;
+class MyApp: public wxApp {
+    BasicDrawPane *drawPane;
 public:
     virtual bool OnInit();
 };
-class MyFrame: public wxFrame
-{
+
+class MyFrame: public wxFrame {
 public:
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+    MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
+
 private:
-    void OnHello(wxCommandEvent& event);
-    void OnExit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
-    wxDECLARE_EVENT_TABLE();
+    void OnHello(wxCommandEvent &event);
+
+    void OnExit(wxCommandEvent &event);
+
+    void OnAbout(wxCommandEvent &event);
+
+wxDECLARE_EVENT_TABLE();
 };
-enum
-{
+
+enum {
     ID_Hello = 1
 };
+
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Hello,   MyFrame::OnHello)
     EVT_MENU(wxID_EXIT,  MyFrame::OnExit)
@@ -178,32 +184,35 @@ void BasicDrawPane::paintNow()
 void BasicDrawPane::render(wxDC&  dc) {
     // Look at the wxDC docs to learn how to draw other stuff
     Cycle cy(10);
-    Graph g = cy.generate_with_positions();
+    Graph g = cy.generate_with_positions(500, 500);
+    drawEdges(g,dc);
+    drawVertices(g, dc);
 
+    Graph gg = cy.generate_with_force_directed(500, 500);
+//    drawEdges(gg,dc);
+//    drawVertices(gg, dc);
+}
+
+void BasicDrawPane::drawEdges(Graph &g, wxDC &dc) {
     for_each_e(g, [&](Edge e) {
         Ver src = boost::source(e,g);
         Ver tgt = boost::target(e,g);
         std::pair<double,double> src_pos = boost::get(boost::vertex_distance, g, src);
         std::pair<double,double> tgt_pos = boost::get(boost::vertex_distance, g, tgt);
-        // draw a line
         dc.SetPen(wxPen(wxColor(0, 0, 0), 3)); // black line, 3 pixels thick
         dc.DrawLine(src_pos.first, src_pos.second, tgt_pos.first, tgt_pos.second); // draw line across the rectangle
     });
-//
+}
+
+void BasicDrawPane::drawVertices(Graph &g, wxDC &dc) {
     for_each_v(g, [&](Ver v) {
-//         draw a circle
         dc.SetBrush(*wxGREEN_BRUSH); // green filling
         dc.SetPen(wxPen(wxColor(255, 0, 0), 1)); // 5-pixels-thick red outline
         std::pair<double,double> pos = boost::get(boost::vertex_distance, g, v);
         dc.DrawCircle(wxPoint(pos.first, pos.second), 20 /* radius */ );
         int tmp = boost::get(boost::vertex_index, g, v);
-        std::string stlstring = "Hello world";
-// assuming your string is encoded as UTF-8, change the wxConv* parameter as needed
-//        wxString mystring(stlstring.c_str(), wxConvUTF8);
-
+        std::string stlstring = "CGTea";
         wxString mystring = wxString::Format(wxT("%i"),tmp);
-//         draw some text
         dc.DrawText(mystring, pos.first, pos.second);
     });
 }
-

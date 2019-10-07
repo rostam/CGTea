@@ -39,7 +39,7 @@ typedef Graph::edge_descriptor Edge;
 typedef boost::property_map<Graph, boost::edge_weight_t>::type edge_weight_type;
 typedef boost::dynamic_bitset<> dynbit;
 
-typedef std::vector<boost::square_topology<minstd_rand>::point> PositionVec;
+//typedef std::vector<boost::square_topology<minstd_rand>::point> PositionVec;
 //typedef boost::iterator_property_map<PositionVec::iterator, boost::property_map<Graph, boost::vertex_index_t>::type> PositionMap;
 
 
