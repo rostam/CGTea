@@ -189,20 +189,20 @@ void BasicDrawPane::render(wxDC&  dc) {
         dc.SetPen(wxPen(wxColor(0, 0, 0), 3)); // black line, 3 pixels thick
         dc.DrawLine(src_pos.first, src_pos.second, tgt_pos.first, tgt_pos.second); // draw line across the rectangle
     });
-
+//
     for_each_v(g, [&](Ver v) {
-        // draw a circle
+//         draw a circle
         dc.SetBrush(*wxGREEN_BRUSH); // green filling
         dc.SetPen(wxPen(wxColor(255, 0, 0), 1)); // 5-pixels-thick red outline
         std::pair<double,double> pos = boost::get(boost::vertex_distance, g, v);
         dc.DrawCircle(wxPoint(pos.first, pos.second), 20 /* radius */ );
         int tmp = boost::get(boost::vertex_index, g, v);
-//        std::string stlstring = "Hello world";
+        std::string stlstring = "Hello world";
 // assuming your string is encoded as UTF-8, change the wxConv* parameter as needed
 //        wxString mystring(stlstring.c_str(), wxConvUTF8);
 
         wxString mystring = wxString::Format(wxT("%i"),tmp);
-        // draw some text
+//         draw some text
         dc.DrawText(mystring, pos.first, pos.second);
     });
 }
