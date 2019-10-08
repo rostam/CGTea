@@ -5,7 +5,7 @@
 #ifndef EXACT_COLORING_GENERATORINTERFACE_H
 #define EXACT_COLORING_GENERATORINTERFACE_H
 
-#include "../datatypes.h"
+#include "datatypes.h"
 #include "PositionGenerators.h"
 #include "compute_force_directed.h"
 

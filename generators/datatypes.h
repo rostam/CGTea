@@ -11,6 +11,7 @@
 #include <boost/dynamic_bitset.hpp>
 #include <random>
 #include "boost/graph/simple_point.hpp"
+#include "point.h"
 
 using namespace std;
 
@@ -28,7 +29,7 @@ using boost::vertex_color;
 using boost::vertex_distance;
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS,
         property<boost::vertex_color_t, int,
-        property<boost::vertex_distance_t, std::pair<double,double>>>,
+        property<boost::vertex_distance_t, cgtea_geometry::Point>>,
         property<boost::edge_weight_t, int,
         property<boost::edge_name_t, string>>> Graph;
 

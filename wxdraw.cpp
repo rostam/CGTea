@@ -4,7 +4,7 @@
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
     #include <wx/sizer.h>
-    #include "datatypes.h"
+    #include "generators/datatypes.h"
     #include <string>
 #include "generators/Cycle.h"
 #endif
@@ -182,7 +182,6 @@ void BasicDrawPane::paintNow()
  * (e.g. wxPaintDC or wxClientDC) is used.
  */
 void BasicDrawPane::render(wxDC&  dc) {
-    // Look at the wxDC docs to learn how to draw other stuff
     Cycle cy(10);
     Graph g = cy.generate_with_positions(500, 500);
     drawEdges(g,dc);
@@ -197,10 +196,10 @@ void BasicDrawPane::drawEdges(Graph &g, wxDC &dc) {
     for_each_e(g, [&](Edge e) {
         Ver src = boost::source(e,g);
         Ver tgt = boost::target(e,g);
-        std::pair<double,double> src_pos = boost::get(boost::vertex_distance, g, src);
-        std::pair<double,double> tgt_pos = boost::get(boost::vertex_distance, g, tgt);
+        cgtea_geometry::Point src_pos = boost::get(boost::vertex_distance, g, src);
+        cgtea_geometry::Point tgt_pos = boost::get(boost::vertex_distance, g, tgt);
         dc.SetPen(wxPen(wxColor(0, 0, 0), 3)); // black line, 3 pixels thick
-        dc.DrawLine(src_pos.first, src_pos.second, tgt_pos.first, tgt_pos.second); // draw line across the rectangle
+        dc.DrawLine(src_pos.x, src_pos.y, tgt_pos.x, tgt_pos.y); // draw line across the rectangle
     });
 }
 
@@ -208,11 +207,11 @@ void BasicDrawPane::drawVertices(Graph &g, wxDC &dc) {
     for_each_v(g, [&](Ver v) {
         dc.SetBrush(*wxGREEN_BRUSH); // green filling
         dc.SetPen(wxPen(wxColor(255, 0, 0), 1)); // 5-pixels-thick red outline
-        std::pair<double,double> pos = boost::get(boost::vertex_distance, g, v);
-        dc.DrawCircle(wxPoint(pos.first, pos.second), 20 /* radius */ );
+        cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
+        dc.DrawCircle(wxPoint(pos.x, pos.y), 20 /* radius */ );
         int tmp = boost::get(boost::vertex_index, g, v);
         std::string stlstring = "CGTea";
         wxString mystring = wxString::Format(wxT("%i"),tmp);
-        dc.DrawText(mystring, pos.first, pos.second);
+        dc.DrawText(mystring, pos.x, pos.y);
     });
 }
