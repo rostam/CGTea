@@ -7,6 +7,7 @@
     #include "generators/datatypes.h"
     #include <string>
 #include "generators/Cycle.h"
+#include "generators/Complete.h"
 #endif
 
 class BasicDrawPane : public wxPanel
@@ -187,6 +188,11 @@ void BasicDrawPane::render(wxDC&  dc) {
     drawEdges(g,dc);
     drawVertices(g, dc);
 
+    Complete complete(10);
+    Graph gg = complete.generate_with_positions(200, 200);
+    drawEdges(gg,dc);
+    drawVertices(gg, dc);
+
 //    Graph gg = cy.generate_with_force_directed(500, 500);
 //    drawEdges(gg,dc);
 //    drawVertices(gg, dc);
@@ -198,7 +204,7 @@ void BasicDrawPane::drawEdges(Graph &g, wxDC &dc) {
         Ver tgt = boost::target(e,g);
         cgtea_geometry::Point src_pos = boost::get(boost::vertex_distance, g, src);
         cgtea_geometry::Point tgt_pos = boost::get(boost::vertex_distance, g, tgt);
-        dc.SetPen(wxPen(wxColor(0, 0, 0), 3)); // black line, 3 pixels thick
+        dc.SetPen(wxPen(wxColor(0, 0, 0), 2)); // black line, 3 pixels thick
         dc.DrawLine(src_pos.x, src_pos.y, tgt_pos.x, tgt_pos.y); // draw line across the rectangle
     });
 }
