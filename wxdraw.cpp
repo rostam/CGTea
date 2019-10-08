@@ -188,7 +188,7 @@ void BasicDrawPane::render(wxDC&  dc) {
     drawEdges(g,dc);
     drawVertices(g, dc);
 
-    Graph gg = cy.generate_with_force_directed(500, 500);
+//    Graph gg = cy.generate_with_force_directed(500, 500);
 //    drawEdges(gg,dc);
 //    drawVertices(gg, dc);
 }

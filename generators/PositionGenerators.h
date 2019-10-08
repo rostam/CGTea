@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <cmath>
+#include "point.h"
 
 class position_generators {
 //    public static Point[] line(int xOffset, int yOffset, int w, int h, int n) {
@@ -25,26 +26,36 @@ class position_generators {
 //    }
 
 public:
-    static std::vector<std::pair<double, double>> circle(int xOffset, int yOffset, int w, int h, unsigned int n) {
-        std::vector<std::pair<double, double>> ret;
-        w = w / 2;
-        h = h / 2;
-        w -= xOffset;
-        h -= yOffset;
-        for (unsigned int i = 0; i < n; i++) {
+
+    static std::vector<cgtea_geometry::Point> circle(int w, int h, double r, unsigned int n) {
+        std::vector<cgtea_geometry::Point> ret;
+        for(unsigned int i=0;i < n;i++) {
             double deg = 2 * M_PI / n * i;
-            double x = sin(deg);
-            double y = cos(deg);
-            x *= w;
-            y *= h;
-            x += w;
-            y += h;
-            x += xOffset;
-            y += yOffset;
-            ret.push_back(std::pair((int) x, (int) y));
+            ret.emplace_back( w + r*cos( deg ), h + r*sin( deg ) );
         }
         return ret;
     }
+//
+//    static std::vector<std::pair<double, double>> circle(int xOffset, int yOffset, int w, int h, unsigned int n) {
+//        std::vector<std::pair<double, double>> ret;
+//        w = w / 2;
+//        h = h / 2;
+//        w -= xOffset;
+//        h -= yOffset;
+//        for (unsigned int i = 0; i < n; i++) {
+//            double deg = 2 * M_PI / n * i;
+//            double x = sin(deg);
+//            double y = cos(deg);
+//            x *= w;
+//            y *= h;
+//            x += w;
+//            y += h;
+//            x += xOffset;
+//            y += yOffset;
+//            ret.push_back(std::pair((int) x, (int) y));
+//        }
+//        return ret;
+//    }
 
 //
 //    public static Point[] circle(int xOffset, int yOffset, int w, int h, int n, double degree) {
@@ -77,12 +88,12 @@ public:
         }
         return input;
     }
-
-    static std::vector<std::pair<double, double>> circle(int r, int x, int y, unsigned int n) {
-        std::vector<std::pair<double, double>> ret = circle(0, 0, r, r, n);
-        shift(ret, x, y);
-        return ret;
-    }
+//
+//    static std::vector<std::pair<double, double>> circle(int r, int x, int y, unsigned int n) {
+//        std::vector<std::pair<double, double>> ret = circle(0, 0, r, r, n);
+//        shift(ret, x, y);
+//        return ret;
+//    }
 //
 //    public static Point[] rotate(Point[] input, double degree) {
 //

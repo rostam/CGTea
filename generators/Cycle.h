@@ -9,6 +9,7 @@
 #include "boost/graph/random_layout.hpp"
 #include "boost/graph/topology.hpp"
 #include "compute_force_directed.h"
+#include "point.h"
 
 class Cycle : public GeneratorInterface {
 public:
@@ -23,10 +24,10 @@ public:
 
     Graph generate_with_positions(double width, double height) override {
         Graph g = generate();
-        std::vector<std::pair<double, double>> pos = position_generators::circle(200, 500, 500, n);
+        std::vector<cgtea_geometry::Point> pos = position_generators::circle(width, height, 100.0, n);
         int i = 0;
         for_each_v(g, [&](Ver v) {
-            boost::put(boost::vertex_distance, g, v, pos[i]);
+            boost::put(boost::vertex_distance, g, v, pair(pos[i].x,pos[i].y));
             i++;
         });
         return g;
