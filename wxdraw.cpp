@@ -6,9 +6,10 @@
     #include <wx/sizer.h>
     #include "generators/datatypes.h"
     #include <string>
+#endif
 #include "generators/Cycle.h"
 #include "generators/Complete.h"
-#endif
+#include <exception>
 
 class BasicDrawPane : public wxPanel
 {
@@ -21,8 +22,8 @@ public:
 
     void render(wxDC& dc);
 
-    void drawEdges(Graph &g, wxDC&  dc);
-    void drawVertices(Graph &g, wxDC&  dc);
+    void drawEdges(const Graph &g, wxDC&  dc);
+    void drawVertices(const Graph &g, wxDC&  dc);
     // some useful events
     /*
      void mouseMoved(wxMouseEvent& event);
@@ -184,22 +185,26 @@ void BasicDrawPane::paintNow()
  */
 void BasicDrawPane::render(wxDC&  dc) {
     Cycle cy(10);
-    Graph g = cy.generate_with_positions(500, 500);
-    drawEdges(g,dc);
-    drawVertices(g, dc);
-
-    Complete complete(10);
-    Graph gg = complete.generate_with_positions(200, 200);
-    drawEdges(gg,dc);
-    drawVertices(gg, dc);
-
-//    Graph gg = cy.generate_with_force_directed(500, 500);
+//    Graph g = cy.generate_with_positions(500, 500);
+//    drawEdges(g,dc);
+//    drawVertices(g, dc);
+//
+//    Complete complete(10);
+//    Graph gg = complete.generate_with_positions(200, 200);
 //    drawEdges(gg,dc);
 //    drawVertices(gg, dc);
+    try {
+    Graph ggg = cy.generate_with_force_directed(500, 500);
+
+        drawEdges(ggg, dc);
+        drawVertices(ggg, dc);
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
-void BasicDrawPane::drawEdges(Graph &g, wxDC &dc) {
-    for_each_e(g, [&](Edge e) {
+void BasicDrawPane::drawEdges(const Graph &g, wxDC &dc) {
+    for_each_e_const(g, [&](Edge e) {
         Ver src = boost::source(e,g);
         Ver tgt = boost::target(e,g);
         cgtea_geometry::Point src_pos = boost::get(boost::vertex_distance, g, src);
@@ -209,8 +214,8 @@ void BasicDrawPane::drawEdges(Graph &g, wxDC &dc) {
     });
 }
 
-void BasicDrawPane::drawVertices(Graph &g, wxDC &dc) {
-    for_each_v(g, [&](Ver v) {
+void BasicDrawPane::drawVertices(const Graph &g, wxDC &dc) {
+    for_each_v_const(g, [&](Ver v) {
         dc.SetBrush(*wxGREEN_BRUSH); // green filling
         dc.SetPen(wxPen(wxColor(255, 0, 0), 1)); // 5-pixels-thick red outline
         cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);

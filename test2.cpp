@@ -1,150 +1,102 @@
-#include "wx/wx.h"
-#include "wx/sizer.h"
+// Copyright 2004 The Trustees of Indiana University.
 
-class BasicDrawPane : public wxPanel
+// Use, modification and distribution is subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
+//  Authors: Douglas Gregor
+//           Andrew Lumsdaine
+#include <boost/graph/fruchterman_reingold.hpp>
+#include <boost/graph/random_layout.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/topology.hpp>
+#include <boost/lexical_cast.hpp>
+#include <string>
+#include <iostream>
+#include <map>
+#include <vector>
+#include <boost/random/linear_congruential.hpp>
+#include <boost/progress.hpp>
+#include <boost/shared_ptr.hpp>
+
+using namespace boost;
+
+typedef boost::rectangle_topology<> topology_type;
+typedef topology_type::point_type point_type;
+
+typedef adjacency_list<listS, vecS, undirectedS,
+        property<vertex_name_t, std::string> > Graph;
+
+typedef graph_traits<Graph>::vertex_descriptor Vertex;
+
+typedef std::map<std::string, Vertex> NameToVertex;
+
+Vertex get_vertex(const std::string& name, Graph& g, NameToVertex& names)
 {
-    
+    NameToVertex::iterator i = names.find(name);
+    if (i == names.end())
+        i = names.insert(std::make_pair(name, add_vertex(name, g))).first;
+    return i->second;
+}
+
+class progress_cooling : public linear_cooling<double>
+{
+    typedef linear_cooling<double> inherited;
+
 public:
-    BasicDrawPane(wxFrame* parent);
-    
-    void paintEvent(wxPaintEvent & evt);
-    void paintNow();
-    
-    void render(wxDC& dc);
-    
-    // some useful events
-    /*
-     void mouseMoved(wxMouseEvent& event);
-     void mouseDown(wxMouseEvent& event);
-     void mouseWheelMoved(wxMouseEvent& event);
-     void mouseReleased(wxMouseEvent& event);
-     void rightClick(wxMouseEvent& event);
-     void mouseLeftWindow(wxMouseEvent& event);
-     void keyPressed(wxKeyEvent& event);
-     void keyReleased(wxKeyEvent& event);
-     */
-    
-    DECLARE_EVENT_TABLE()
+    explicit progress_cooling(std::size_t iterations) : inherited(iterations)
+    {
+        display.reset(new progress_display(iterations + 1, std::cerr));
+    }
+
+    double operator()()
+    {
+        ++(*display);
+        return inherited::operator()();
+    }
+
+private:
+    shared_ptr<boost::progress_display> display;
 };
 
-
-class MyApp: public wxApp
+int main(int argc, char* argv[])
 {
-    bool OnInit();
-    
-    wxFrame *frame;
-    BasicDrawPane * drawPane;
-public:
-        
-};
-
-IMPLEMENT_APP(MyApp)
+    int iterations = 100;
 
 
-bool MyApp::OnInit()
-{
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    frame = new wxFrame((wxFrame *)NULL, -1,  wxT("Hello wxDC"), wxPoint(50,50), wxSize(800,600));
-	
-    drawPane = new BasicDrawPane( (wxFrame*) frame );
-    sizer->Add(drawPane, 1, wxEXPAND);
-	
-    frame->SetSizer(sizer);
-    frame->SetAutoLayout(true);
-	
-    frame->Show();
-    return true;
-} 
-
-BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
-// some useful events
-/*
- EVT_MOTION(BasicDrawPane::mouseMoved)
- EVT_LEFT_DOWN(BasicDrawPane::mouseDown)
- EVT_LEFT_UP(BasicDrawPane::mouseReleased)
- EVT_RIGHT_DOWN(BasicDrawPane::rightClick)
- EVT_LEAVE_WINDOW(BasicDrawPane::mouseLeftWindow)
- EVT_KEY_DOWN(BasicDrawPane::keyPressed)
- EVT_KEY_UP(BasicDrawPane::keyReleased)
- EVT_MOUSEWHEEL(BasicDrawPane::mouseWheelMoved)
- */
-
-// catch paint events
-EVT_PAINT(BasicDrawPane::paintEvent)
-
-END_EVENT_TABLE()
+    double width = 0;
+    double height = 0;
 
 
-// some useful events
-/*
- void BasicDrawPane::mouseMoved(wxMouseEvent& event) {}
- void BasicDrawPane::mouseDown(wxMouseEvent& event) {}
- void BasicDrawPane::mouseWheelMoved(wxMouseEvent& event) {}
- void BasicDrawPane::mouseReleased(wxMouseEvent& event) {}
- void BasicDrawPane::rightClick(wxMouseEvent& event) {}
- void BasicDrawPane::mouseLeftWindow(wxMouseEvent& event) {}
- void BasicDrawPane::keyPressed(wxKeyEvent& event) {}
- void BasicDrawPane::keyReleased(wxKeyEvent& event) {}
- */
+    Graph g;
+    NameToVertex names;
 
-BasicDrawPane::BasicDrawPane(wxFrame* parent) :
-wxPanel(parent)
-{
-}
+    add_edge(1,2,g);
+    add_edge(2,3,g);
+    add_edge(3,1,g);
+//    std::string source, target;
+//    while (std::cin >> source >> target) {
+//        add_edge(get_vertex(source, g, names), get_vertex(target, g, names), g);
+//    }
 
-/*
- * Called by the system of by wxWidgets when the panel needs
- * to be redrawn. You can also trigger this call by
- * calling Refresh()/Update().
- */
+    typedef std::vector<point_type> PositionVec;
+    PositionVec position_vec(num_vertices(g));
+    typedef iterator_property_map<PositionVec::iterator,
+            property_map<Graph, vertex_index_t>::type>
+            PositionMap;
+    PositionMap position(position_vec.begin(), get(vertex_index, g));
 
-void BasicDrawPane::paintEvent(wxPaintEvent & evt)
-{
-    wxPaintDC dc(this);
-    render(dc);
-}
+    minstd_rand gen;
+    topology_type topo(gen, -width/2, -height/2, width/2, height/2);
+    random_graph_layout(g, position, topo);
+    fruchterman_reingold_force_directed_layout
+            (g, position, topo,
+             cooling(progress_cooling(iterations)));
 
-/*
- * Alternatively, you can use a clientDC to paint on the panel
- * at any time. Using this generally does not free you from
- * catching paint events, since it is possible that e.g. the window
- * manager throws away your drawing when the window comes to the
- * background, and expects you will redraw it when the window comes
- * back (by sending a paint event).
- *
- * In most cases, this will not be needed at all; simply handling
- * paint events and calling Refresh() when a refresh is needed
- * will do the job.
- */
-void BasicDrawPane::paintNow()
-{
-    wxClientDC dc(this);
-    render(dc);
-}
-
-/*
- * Here we do the actual rendering. I put it in a separate
- * method so that it can work no matter what type of DC
- * (e.g. wxPaintDC or wxClientDC) is used.
- */
-void BasicDrawPane::render(wxDC&  dc)
-{
-    // draw some text
-    dc.DrawText(wxT("Testing"), 40, 60); 
-    
-    // draw a circle
-    dc.SetBrush(*wxGREEN_BRUSH); // green filling
-    dc.SetPen( wxPen( wxColor(255,0,0), 5 ) ); // 5-pixels-thick red outline
-    dc.DrawCircle( wxPoint(200,100), 25 /* radius */ );
-    
-    // draw a rectangle
-    dc.SetBrush(*wxBLUE_BRUSH); // blue filling
-    dc.SetPen( wxPen( wxColor(255,175,175), 10 ) ); // 10-pixels-thick pink outline
-    dc.DrawRectangle( 300, 100, 400, 200 );
-    
-    // draw a line
-    dc.SetPen( wxPen( wxColor(0,0,0), 3 ) ); // black line, 3 pixels thick
-    dc.DrawLine( 300, 100, 700, 300 ); // draw line across the rectangle
-    
-    // Look at the wxDC docs to learn how to draw other stuff
+    graph_traits<Graph>::vertex_iterator vi, vi_end;
+    for (boost::tie(vi, vi_end) = vertices(g); vi != vi_end; ++vi) {
+        std::cout << get(vertex_name, g, *vi) << '\t'
+                  << position[*vi][0] << '\t' << position[*vi][1] << std::endl;
+    }
+    return 0;
 }

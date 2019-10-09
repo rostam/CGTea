@@ -52,7 +52,21 @@ static void for_each_v(Graph& g, Lambda func) {
 }
 
 template<typename Lambda>
+static void for_each_v_const(const Graph& g, Lambda func) {
+    V_iter vi, vi_end;
+    tie(vi, vi_end) = vertices(g);
+    std::for_each(vi,vi_end,func);
+}
+
+template<typename Lambda>
 static void for_each_e(Graph& g, Lambda func) {
+    E_iter ei, ei_end;
+    tie(ei, ei_end) = edges(g);
+    std::for_each(ei,ei_end,func);
+}
+
+template<typename Lambda>
+static void for_each_e_const(const Graph& g, Lambda func) {
     E_iter ei, ei_end;
     tie(ei, ei_end) = edges(g);
     std::for_each(ei,ei_end,func);

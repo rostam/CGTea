@@ -4,5 +4,5 @@
 
 #ifndef CGTEA_COMPUTE_FORCE_DIRECTED_H
 #define CGTEA_COMPUTE_FORCE_DIRECTED_H
-void compute_force_directed(double width, double height, Graph& g);
+std::vector<cgtea_geometry::Point> compute_force_directed(double width, double height, const Graph& g);
 #endif //CGTEA_COMPUTE_FORCE_DIRECTED_H
