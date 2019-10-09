@@ -48,6 +48,7 @@ public:
 
 class MyFrame: public wxFrame {
 public:
+    Graph currentGraph;
     MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
 
 private:
@@ -123,6 +124,11 @@ void MyFrame::OnAbout(wxCommandEvent& event)
 void MyFrame::OnHello(wxCommandEvent& event)
 {
     wxLogMessage("Hello world from wxWidgets!");
+    Cycle cy;
+    currentGraph = cy.generate_with_positions(10,0,500, 500);
+    Refresh();
+//    drawEdges(g,dc);
+//    drawVertices(g, dc);
 }
 BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
 // some useful events
@@ -155,10 +161,7 @@ END_EVENT_TABLE()
  void BasicDrawPane::keyReleased(wxKeyEvent& event) {}
  */
 
-BasicDrawPane::BasicDrawPane(wxFrame* parent) :
-        wxPanel(parent)
-{
-}
+BasicDrawPane::BasicDrawPane(wxFrame* parent) : wxPanel(parent) {}
 
 /*
  * Called by the system of by wxWidgets when the panel needs
@@ -206,10 +209,10 @@ void BasicDrawPane::render(wxDC&  dc) {
 //    drawEdges(gg,dc);
 //    drawVertices(gg, dc);
     try {
-        Graph ggg = cy.generate_with_force_directed(10, 0, 500, 500);
-
-        drawEdges(ggg, dc);
-        drawVertices(ggg, dc);
+//        Graph ggg = cy.generate_with_force_directed(10, 0, 500, 500);
+        const Graph& g = ((MyFrame*)this->m_parent)->currentGraph;
+        drawEdges(g, dc);
+        drawVertices(g, dc);
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
