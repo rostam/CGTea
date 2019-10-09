@@ -85,7 +85,7 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
         : wxFrame(NULL, wxID_ANY, title, pos, size)
 {
-    GeneratorInterface::registry()
+
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
                      "Help string shown in status bar for this menu item");
@@ -93,11 +93,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(wxID_EXIT);
 
     wxMenu *menuGenerate = new wxMenu;
+    string allGenerators[] = {"Cycle", "Complete"};
+    for (auto& it: allGenerators) {
+        menuGenerate->Append(0, wxString(it.c_str(), wxConvUTF8), wxString("test"));
+    }
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, "&File" );
+    menuBar->Append(menuGenerate, "&Generate");
     menuBar->Append( menuHelp, "&Help" );
     SetMenuBar( menuBar );
     CreateStatusBar();

@@ -12,7 +12,6 @@
 #include "point.h"
 
 class Cycle : public GeneratorInterface {
-    static Registrar<Cycle> registrar;
 public:
     explicit Cycle(unsigned int n) : GeneratorInterface(n) {};
 
@@ -45,7 +44,6 @@ public:
         return g;
     }
 };
-Registrar<Cycle> Cycle::registrar("Cycle Generator Class");
 
 
 #endif
