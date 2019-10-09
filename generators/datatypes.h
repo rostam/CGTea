@@ -27,6 +27,7 @@ using boost::property_map;
 using boost::graph_traits;
 using boost::vertex_color;
 using boost::vertex_distance;
+
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS,
         property<boost::vertex_color_t, int,
         property<boost::vertex_distance_t, cgtea_geometry::Point>>,

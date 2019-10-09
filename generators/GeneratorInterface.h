@@ -11,15 +11,11 @@
 
 class GeneratorInterface {
 public:
-    explicit GeneratorInterface(unsigned int num_of_vertices) : n(num_of_vertices), k(0) {}
-
-    GeneratorInterface(unsigned int num_of_vertices, unsigned int kk) : n(num_of_vertices), k(kk) {}
-
-    virtual Graph generate() = 0;
-    virtual Graph generate_with_positions(double width, double height) = 0;
-    virtual Graph generate_with_force_directed(double width, double height) = 0;
-protected:
-    unsigned int n, k{};
+    virtual Graph generate(unsigned int num_of_vertices, unsigned int k) = 0;
+    virtual Graph generate_with_positions(unsigned int num_of_vertices, unsigned int k,double width, double height) = 0;
+    virtual Graph generate_with_force_directed(unsigned int num_of_vertices, unsigned int k,double width, double height) = 0;
+    virtual string name() = 0;
+    virtual string description() = 0;
 };
 
 #endif //EXACT_COLORING_GENERATORINTERFACE_H

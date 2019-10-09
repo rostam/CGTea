@@ -10,6 +10,7 @@
 #include "generators/Cycle.h"
 #include "generators/Complete.h"
 #include <exception>
+#include <any>
 
 class BasicDrawPane : public wxPanel
 {
@@ -75,10 +76,8 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame( "GTea", wxPoint(100, 100), wxSize(1000, 1000) );
     drawPane = new BasicDrawPane( (wxFrame*) frame );
     sizer->Add(drawPane, 1, wxEXPAND);
-
     frame->SetSizer(sizer);
     frame->SetAutoLayout(true);
-
     frame->Show( true );
     return true;
 }
@@ -93,10 +92,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(wxID_EXIT);
 
     wxMenu *menuGenerate = new wxMenu;
-    string allGenerators[] = {"Cycle", "Complete"};
-    for (auto& it: allGenerators) {
-        menuGenerate->Append(0, wxString(it.c_str(), wxConvUTF8), wxString("test"));
-    }
+    std::tuple<Cycle, Complete> t = std::make_tuple(Cycle(), Complete());
+    int i=0;
+    std::apply([&](auto&&... args) {
+        ((menuGenerate->Append(i, wxString(args.name().c_str(), wxConvUTF8), wxString(args.description().c_str(), wxConvUTF8)),i++), ...);
+        }, t);
+//    for (auto& it: allGenerators) {
+//        menuGenerate->Append(0, wxString(it.name().c_str(), wxConvUTF8), wxString("test"));
+//    }
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
@@ -193,7 +196,7 @@ void BasicDrawPane::paintNow()
  * (e.g. wxPaintDC or wxClientDC) is used.
  */
 void BasicDrawPane::render(wxDC&  dc) {
-    Cycle cy(10);
+    Cycle cy;
 //    Graph g = cy.generate_with_positions(500, 500);
 //    drawEdges(g,dc);
 //    drawVertices(g, dc);
@@ -203,7 +206,7 @@ void BasicDrawPane::render(wxDC&  dc) {
 //    drawEdges(gg,dc);
 //    drawVertices(gg, dc);
     try {
-    Graph ggg = cy.generate_with_force_directed(500, 500);
+        Graph ggg = cy.generate_with_force_directed(10, 0, 500, 500);
 
         drawEdges(ggg, dc);
         drawVertices(ggg, dc);

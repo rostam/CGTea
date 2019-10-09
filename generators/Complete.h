@@ -13,19 +13,19 @@
 
 class Complete : public GeneratorInterface {
 public:
-    explicit Complete(unsigned int n) : GeneratorInterface(n) {};
+    explicit Complete() : GeneratorInterface() {};
 
-    Graph generate() override {
+    Graph generate(unsigned int num_of_vertices, unsigned int k) override {
         Graph g;
-        for (unsigned int i = 0; i < n; i++)
-            for (unsigned int j = i+1; j < n; j++)
+        for (unsigned int i = 0; i < num_of_vertices; i++)
+            for (unsigned int j = i+1; j < num_of_vertices; j++)
             add_edge(i, j, g);
         return g;
     }
 
-    Graph generate_with_positions(double width, double height) override {
-        Graph g = generate();
-        std::vector<cgtea_geometry::Point> pos = position_generators::circle(width, height, 100.0, n);
+    Graph generate_with_positions(unsigned int num_of_vertices, unsigned int k, double width, double height) override {
+        Graph g = generate(num_of_vertices, k);
+        std::vector<cgtea_geometry::Point> pos = position_generators::circle(width, height, 100.0, num_of_vertices);
         int i = 0;
         for_each_v(g, [&](Ver v) {
             boost::put(boost::vertex_distance, g, v, pos[i]);
@@ -34,9 +34,17 @@ public:
         return g;
     }
 
-    Graph generate_with_force_directed(double width, double height) override {
-        Graph g = generate();
+    Graph generate_with_force_directed(unsigned int num_of_vertices, unsigned int k, double width, double height) override {
+        Graph g = generate(num_of_vertices, k);
         compute_force_directed(0,0, width, height, g);
+    }
+
+    string name() override {
+        return "Complete Graph";
+    }
+
+    string description() override {
+        return "Generates a complete graph.";
     }
 };
 
