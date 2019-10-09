@@ -11,9 +11,9 @@
 
 class GeneratorInterface {
 public:
-    virtual Graph generate(unsigned int num_of_vertices, unsigned int k) = 0;
-    virtual Graph generate_with_positions(unsigned int num_of_vertices, unsigned int k,double width, double height) = 0;
-    virtual Graph generate_with_force_directed(unsigned int num_of_vertices, unsigned int k,double width, double height) = 0;
+    virtual Graph generate(unsigned int n, unsigned int k) = 0;
+    virtual Graph generate_with_positions(unsigned int n, unsigned int k,double width, double height) = 0;
+    virtual Graph generate_with_force_directed(unsigned int n, unsigned int k,double width, double height) = 0;
     virtual string name() = 0;
     virtual string description() = 0;
 };
