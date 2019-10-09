@@ -12,6 +12,7 @@
 #include "point.h"
 
 class Complete : public GeneratorInterface {
+    static Registrar<Cycle> registrar;
 public:
     explicit Complete(unsigned int n) : GeneratorInterface(n) {};
 
@@ -39,5 +40,6 @@ public:
         compute_force_directed(0,0, width, height, g);
     }
 };
+Registrar<Complete> Complete::registrar("Complete Graph Generator Class");
 
 #endif

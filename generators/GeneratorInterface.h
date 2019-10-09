@@ -31,7 +31,7 @@ protected:
 
 template <typename T> struct Registrar
 {
-    Registrar(std::string const & s) { GeneratorInterface::typemap()[typeid(T)] = s; }
+    Registrar(std::string const & s) { typemap()[typeid(T)] = s; }
 };
 
 #endif //EXACT_COLORING_GENERATORINTERFACE_H
