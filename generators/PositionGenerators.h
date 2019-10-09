@@ -27,7 +27,7 @@ class position_generators {
 
 public:
 
-    static std::vector<cgtea_geometry::Point> circle(int w, int h, double r, unsigned int n) {
+    static std::vector<cgtea_geometry::Point> circle(double w, double h, double r, unsigned int n) {
         std::vector<cgtea_geometry::Point> ret;
         for(unsigned int i=0;i < n;i++) {
             double deg = 2 * M_PI / n * i;

@@ -19,6 +19,7 @@ public:
     virtual Graph generate_with_positions(double width, double height) = 0;
     virtual Graph generate_with_force_directed(double width, double height) = 0;
 
+    static vector<string> all_generator_names;
 protected:
     unsigned int n, k{};
 };

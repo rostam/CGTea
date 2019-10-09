@@ -36,7 +36,7 @@ public:
 
     Graph generate_with_force_directed(double width, double height) override {
         Graph g = generate();
-        compute_force_directed(width, height, g);
+        compute_force_directed(0,0, width, height, g);
     }
 };
 

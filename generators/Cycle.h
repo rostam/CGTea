@@ -35,7 +35,7 @@ public:
 
     Graph generate_with_force_directed(double width, double height) override {
         Graph g = generate();
-        std::vector<cgtea_geometry::Point> pos = compute_force_directed(width, height, g);
+        std::vector<cgtea_geometry::Point> pos = compute_force_directed(100,100, width, height, g);
         int i = 0;
         for_each_v(g, [&](Ver v) {
             boost::put(boost::vertex_distance, g, v, pos[i]);

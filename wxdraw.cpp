@@ -90,6 +90,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                      "Help string shown in status bar for this menu item");
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
+
+    wxMenu *menuGenerate = new wxMenu;
+
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
     wxMenuBar *menuBar = new wxMenuBar;
