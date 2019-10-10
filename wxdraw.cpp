@@ -11,6 +11,7 @@
 #include "generators/Complete.h"
 #include "generators/Antiprism.h"
 #include "generators/Prism.h"
+#include "generators/Star.h"
 #include <exception>
 
 class BasicDrawPane : public wxPanel
@@ -54,7 +55,7 @@ public:
 private:
     std::vector<GeneratorInterface*> availableGenerators =
             vector<GeneratorInterface*>({new Cycle(), new Complete(), new Antiprism(),
-                                           new Prism()});
+                                           new Prism(), new Star()});
 //    std::tuple<Cycle, Complete, Antiprism> availableGenerators = std::make_tuple(Cycle(), Complete(), Antiprism());
 
     void Generate(wxCommandEvent &event);
