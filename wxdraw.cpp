@@ -9,7 +9,7 @@
 #endif
 #include "generators/Cycle.h"
 #include "generators/Complete.h"
-#include "generators/antiprism.h"
+#include "generators/Antiprism.h"
 #include <exception>
 
 class BasicDrawPane : public wxPanel
@@ -50,15 +50,17 @@ class MyFrame: public wxFrame {
 public:
     Graph currentGraph;
     MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
-
 private:
+    std::vector<GeneratorInterface*> availableGenerators;
+//    std::tuple<Cycle, Complete, Antiprism> availableGenerators = std::make_tuple(Cycle(), Complete(), Antiprism());
+
     void OnHello(wxCommandEvent &event);
 
-    void drawCycle(wxCommandEvent &event);
+    void Generate(wxCommandEvent &event);
 
-    void drawComplete(wxCommandEvent &event);
-
-    void drawAntiprism(wxCommandEvent &event);
+//    void drawComplete(wxCommandEvent &event);
+//
+//    void drawAntiprism(wxCommandEvent &event);
 
     void OnExit(wxCommandEvent &event);
 
@@ -68,17 +70,17 @@ wxDECLARE_EVENT_TABLE();
 };
 
 enum {
-    ID_Hello = 1,
-    ID_Cycle = 2,
-    ID_Complete = 3,
-    ID_Antiprism = 4
+    ID_Cycle = 0,
+    ID_Complete = 1,
+    ID_Antiprism = 2,
+    ID_Hello = 3
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Hello,   MyFrame::OnHello)
-    EVT_MENU(ID_Cycle,   MyFrame::drawCycle)
-    EVT_MENU(ID_Complete,   MyFrame::drawComplete)
-    EVT_MENU(ID_Antiprism,   MyFrame::drawAntiprism)
+    EVT_MENU(ID_Cycle,   MyFrame::Generate)
+    EVT_MENU(ID_Complete,   MyFrame::Generate)
+    EVT_MENU(ID_Antiprism,   MyFrame::Generate)
     EVT_MENU(wxID_EXIT,  MyFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
 wxEND_EVENT_TABLE()
@@ -101,11 +103,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(ID_Hello, "&Hello...\tCtrl-H","Help string shown in status bar for this menu item");
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
-
+    availableGenerators.emplace_back(new Cycle());
+    availableGenerators.emplace_back(new Complete());
+    availableGenerators.emplace_back(new Antiprism());// = vector<GeneratorInterface>({Cycle(), Complete(), Antiprism()});
     wxMenu *menuGenerate = new wxMenu;
-    std::tuple<Cycle, Complete, Antiprism> t = std::make_tuple(Cycle(), Complete(), Antiprism());
-    int i=2;
-    std::apply([&](auto&&... args) {((menuGenerate->Append(i, wxString(args.name().c_str(), wxConvUTF8), wxString(args.description().c_str(), wxConvUTF8)),i++), ...);}, t);
+    int i=0;
+//    std::apply([&](auto&&... args) {((menuGenerate->Append(i, wxString(args.name().c_str(), wxConvUTF8), wxString(args.description().c_str(), wxConvUTF8)),i++), ...);}, availableGenerators);
+    for(GeneratorInterface* gi : availableGenerators) {
+        menuGenerate->Append(i, wxString(gi->name().c_str(), wxConvUTF8), wxString(gi->description().c_str(), wxConvUTF8));
+        i++;
+    }
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
@@ -128,32 +135,16 @@ void MyFrame::OnAbout(wxCommandEvent& event)
 }
 void MyFrame::OnHello(wxCommandEvent& event)
 {
-    wxLogMessage("Hello world from wxWidgets!");
-    Cycle cy;
-    currentGraph = cy.generate_with_positions(10,0,500, 500);
+    wxLogMessage(wxString::Format(wxT("%i"),event.GetId()));
+}
+
+void MyFrame::Generate(wxCommandEvent& event)
+{
+    int id = event.GetId();
+    currentGraph = availableGenerators[id]->generate_with_positions(10, 0, 500, 500);
     Refresh();
 }
 
-void MyFrame::drawCycle(wxCommandEvent& event)
-{
-    Cycle cy;
-    currentGraph = cy.generate_with_positions(10,0,500, 500);
-    Refresh();
-}
-
-void MyFrame::drawComplete(wxCommandEvent& event)
-{
-    Complete cy;
-    currentGraph = cy.generate_with_positions(10,0,500, 500);
-    Refresh();
-}
-
-void MyFrame::drawAntiprism(wxCommandEvent &event)
-{
-    Antiprism cy;
-    currentGraph = cy.generate_with_positions(10,0,500, 500);
-    Refresh();
-}
 BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
 // some useful events
 /*

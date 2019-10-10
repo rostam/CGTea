@@ -34,11 +34,6 @@ public:
         return g;
     }
 
-    Graph generate_with_force_directed(unsigned int n, unsigned int k, double width, double height) override {
-        Graph g = generate(n, k);
-        compute_force_directed(0,0, width, height, g);
-    }
-
     string name() override {
         return "Complete Graph";
     }

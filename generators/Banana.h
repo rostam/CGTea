@@ -1,24 +1,21 @@
-/**
- * Created by rostami on 28.06.17.
- */
-#ifndef EXACT_COLORING_CYCLE_H
-#define EXACT_COLORING_CYCLE_H
+//
+// Created by rostam on 09.10.19.
+//
+
+#ifndef CGTEA_BANANA_H
+#define CGTEA_BANANA_H
 
 #include "GeneratorInterface.h"
-#include "boost/graph/fruchterman_reingold.hpp"
-#include "boost/graph/random_layout.hpp"
-#include "boost/graph/topology.hpp"
-#include "compute_force_directed.h"
-#include "point.h"
 
-class Cycle : public GeneratorInterface {
+class Banana : public GeneratorInterface {
 public:
-    explicit Cycle() : GeneratorInterface() {};
+    explicit Banana() : GeneratorInterface() {};
 
     Graph generate(unsigned int n, unsigned int k) override {
         Graph g;
         for (unsigned int i = 0; i < n; i++)
-            add_edge(i, ((i + 1) % n), g);
+            for (unsigned int j = i+1; j < n; j++)
+                add_edge(i, j, g);
         return g;
     }
 
@@ -34,13 +31,13 @@ public:
     }
 
     string name() override {
-        return "Cycle";
+        return "Banana Graph";
     }
 
     string description() override {
-        return "Generates a cycle graph.";
+        return "Generates a banana graph.";
     }
 };
 
 
-#endif
+#endif //CGTEA_BANANA_H

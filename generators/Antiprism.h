@@ -32,7 +32,6 @@ public:
         std::vector<cgtea_geometry::Point> pos2 = position_generators::circle(width, height, 200.0, n);
         pos1.insert(pos1.end(), pos2.begin(), pos2.end());
         int i = 0;
-        cerr << pos1.size() << " " << boost::num_vertices(g);
         for_each_v(g, [&](Ver v) {
             boost::put(boost::vertex_distance, g, v, pos1[i]);
             i++;
@@ -40,12 +39,7 @@ public:
         return g;
     }
 
-    Graph generate_with_force_directed(unsigned int n, unsigned int k, double width, double height) override {
-        Graph g;
-        return g;
-    }
-
-        string name() override {
+    string name() override {
         return "Antiprism Graphs";
     }
 
