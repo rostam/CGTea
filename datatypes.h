@@ -45,6 +45,12 @@ typedef boost::dynamic_bitset<> dynbit;
 //typedef boost::iterator_property_map<PositionVec::iterator, boost::property_map<Graph, boost::vertex_index_t>::type> PositionMap;
 
 
+static string statistics(const Graph& g) {
+    string stat = string("Number of vertices:") + to_string( boost::num_vertices(g)) +
+                  string("\nNum of edges:") + to_string(boost::num_edges(g));
+    return stat;
+}
+
 template<typename Lambda>
 static void for_each_v(Graph& g, Lambda func) {
     V_iter vi, vi_end;

@@ -51,6 +51,7 @@ public:
 class MyFrame: public wxFrame {
 public:
     Graph currentGraph;
+    wxStaticText* statistics_text = nullptr;
     MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
 private:
     std::vector<GeneratorInterface*> availableGenerators =
@@ -85,10 +86,25 @@ bool MyApp::OnInit()
 
     // Create the sidebar
     wxPanel* panel1 = new wxPanel(frame, wxID_ANY);
-    wxTextCtrl* textCtrl1 = new wxTextCtrl(panel1, wxID_ANY, L"Panel 1 Text",
-                                           wxDefaultPosition, wxSize(250, 150));
-    wxBoxSizer* panel1Sizer = new wxBoxSizer(wxHORIZONTAL);
-    panel1Sizer->Add(textCtrl1, 1, wxEXPAND);
+    wxStaticText * textStatistics = new wxStaticText (panel1, wxID_ANY, L"Statistics",wxDefaultPosition, wxSize(350, 15));
+    wxFont font = textStatistics->GetFont();
+    font.SetPointSize(14);
+    font.SetWeight(wxFONTWEIGHT_BOLD);
+    textStatistics->SetFont(font);
+    wxString string1="Number of vertices:\nNumber of edges:\nMaximum degree:";
+    frame->statistics_text = new wxStaticText (panel1, wxID_ANY, string1,wxDefaultPosition, wxDefaultSize);
+    wxFont font2 = frame->statistics_text->GetFont();
+    font2.SetPointSize(14);
+//    font.SetWeight(wxFONTWEIGHT_BOLD);
+    frame->statistics_text->SetFont(font2);
+//    wxStaticText * textNumOfEdges = new wxStaticText (panel1, wxID_ANY, L"Number of edges:",wxDefaultPosition, wxSize(350, 20));
+//    wxStaticText * textMaxDeg = new wxStaticText (panel1, wxID_ANY, L"Maximum Degree:",wxDefaultPosition, wxSize(350, 20));
+    wxBoxSizer* panel1Sizer = new wxBoxSizer(wxVERTICAL);
+    panel1Sizer->Add(textStatistics, 1, wxLEFT, 8);
+    panel1Sizer->Add(frame->statistics_text, 1, wxLEFT, 8);
+//    panel1Sizer->Add(textNumOfEdges, 1, wxLEFT, 8);
+//    panel1Sizer->Add(textMaxDeg, 1, wxLEFT, 8);
+//    panel1Sizer->Add(textNumOfEdges, 1, wxEXPAND);
     panel1->SetSizer(panel1Sizer);
 
     drawPane = new BasicDrawPane( frame );
@@ -149,6 +165,7 @@ void MyFrame::Generate(wxCommandEvent& event)
 {
     int id = event.GetId();
     currentGraph = availableGenerators[id]->generate_with_positions(10, 0, 500, 500);
+    this->statistics_text->SetLabelText(wxString(statistics(currentGraph)));
     Refresh();
 }
 
