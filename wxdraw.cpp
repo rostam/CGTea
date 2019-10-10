@@ -18,7 +18,7 @@ class BasicDrawPane : public wxPanel
 {
 
 public:
-    BasicDrawPane(wxFrame* parent);
+    BasicDrawPane(wxWindow* parent);
 
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
@@ -77,11 +77,22 @@ bool MyApp::OnInit()
 {
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
     MyFrame *frame = new MyFrame( "GTea", wxPoint(100, 100), wxSize(1000, 1000) );
-    drawPane = new BasicDrawPane( (wxFrame*) frame );
+
+    // Create the left panel
+    wxPanel* panel1 = new wxPanel(frame, wxID_ANY);
+    wxTextCtrl* textCtrl1 = new wxTextCtrl(panel1, wxID_ANY, L"Panel 1 Text",
+                                           wxDefaultPosition, wxSize(250, 150));
+    wxBoxSizer* panel1Sizer = new wxBoxSizer(wxHORIZONTAL);
+    panel1Sizer->Add(textCtrl1, 1, wxEXPAND);
+    panel1->SetSizer(panel1Sizer);
+
+    drawPane = new BasicDrawPane( frame );
+    sizer->Add(panel1);
     sizer->Add(drawPane, 1, wxEXPAND);
     frame->SetSizer(sizer);
     frame->SetAutoLayout(true);
     frame->Show( true );
+
     return true;
 }
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
@@ -158,7 +169,7 @@ END_EVENT_TABLE()
  void BasicDrawPane::keyReleased(wxKeyEvent& event) {}
  */
 
-BasicDrawPane::BasicDrawPane(wxFrame* parent) : wxPanel(parent) {}
+BasicDrawPane::BasicDrawPane(wxWindow* parent) : wxPanel(parent, wxID_ANY) {}
 
 /*
  * Called by the system of by wxWidgets when the panel needs
@@ -196,17 +207,9 @@ void BasicDrawPane::paintNow()
  * (e.g. wxPaintDC or wxClientDC) is used.
  */
 void BasicDrawPane::render(wxDC&  dc) {
-    Cycle cy;
-//    Graph g = cy.generate_with_positions(500, 500);
-//    drawEdges(g,dc);
-//    drawVertices(g, dc);
-//
-//    Complete complete(10);
-//    Graph gg = complete.generate_with_positions(200, 200);
-//    drawEdges(gg,dc);
-//    drawVertices(gg, dc);
+    dc.SetPen(wxPen(wxColor(0, 0, 0), 1)); // black line, 3 pixels thick
+    dc.DrawRectangle(0,0,dc.GetSize().GetWidth(),dc.GetSize().GetHeight());
     try {
-//        Graph ggg = cy.generate_with_force_directed(10, 0, 500, 500);
         const Graph& g = ((MyFrame*)this->m_parent)->currentGraph;
         drawEdges(g, dc);
         drawVertices(g, dc);
@@ -235,6 +238,6 @@ void BasicDrawPane::drawVertices(const Graph &g, wxDC &dc) {
         int tmp = boost::get(boost::vertex_index, g, v);
         std::string stlstring = "CGTea";
         wxString mystring = wxString::Format(wxT("%i"),tmp);
-        dc.DrawText(mystring, pos.x, pos.y);
+        dc.DrawText(mystring, pos.x-3, pos.y-6);
     });
 }
