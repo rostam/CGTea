@@ -1,10 +1,9 @@
-// wxWidgets "Hello world" Program
 // For compilers that support precompilation, includes "wx/wx.h".
 #include <wx/wxprec.h>
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
     #include <wx/sizer.h>
-    #include "generators/datatypes.h"
+    #include "datatypes.h"
     #include <string>
 #endif
 #include "generators/Cycle.h"
@@ -12,6 +11,7 @@
 #include "generators/Antiprism.h"
 #include "generators/Prism.h"
 #include "generators/Star.h"
+#include "reports/NumOfVertices.h"
 #include <exception>
 
 class BasicDrawPane : public wxPanel
@@ -56,9 +56,14 @@ private:
     std::vector<GeneratorInterface*> availableGenerators =
             vector<GeneratorInterface*>({new Cycle(), new Complete(), new Antiprism(),
                                            new Prism(), new Star()});
+
+    std::vector<ReportInterface*> availableReports =
+            vector<ReportInterface*>({new NumOfVertices()});
 //    std::tuple<Cycle, Complete, Antiprism> availableGenerators = std::make_tuple(Cycle(), Complete(), Antiprism());
 
     void Generate(wxCommandEvent &event);
+
+    void Report(wxCommandEvent &event);
 
     void OnExit(wxCommandEvent &event);
 
@@ -76,9 +81,9 @@ wxIMPLEMENT_APP(MyApp);
 bool MyApp::OnInit()
 {
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    MyFrame *frame = new MyFrame( "GTea", wxPoint(100, 100), wxSize(1000, 1000) );
+    MyFrame *frame = new MyFrame( "CGTea", wxPoint(100, 100), wxSize(1000, 1000) );
 
-    // Create the left panel
+    // Create the sidebar
     wxPanel* panel1 = new wxPanel(frame, wxID_ANY);
     wxTextCtrl* textCtrl1 = new wxTextCtrl(panel1, wxID_ANY, L"Panel 1 Text",
                                            wxDefaultPosition, wxSize(250, 150));
@@ -111,11 +116,20 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
         i++;
     }
 
+    wxMenu *menuReport = new wxMenu;
+    for(ReportInterface* ri : availableReports) {
+        menuReport->Append(i, wxString(ri->name().c_str(), wxConvUTF8), wxString(ri->description().c_str(), wxConvUTF8));
+        Connect(i,wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(MyFrame::Report));
+        i++;
+    }
+
+
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, "&File" );
     menuBar->Append(menuGenerate, "&Generate");
+    menuBar->Append(menuReport, "&Report");
     menuBar->Append( menuHelp, "&Help" );
     SetMenuBar( menuBar );
     CreateStatusBar();
@@ -127,8 +141,8 @@ void MyFrame::OnExit(wxCommandEvent& event)
 }
 void MyFrame::OnAbout(wxCommandEvent& event)
 {
-    wxMessageBox( "This is a wxWidgets' Hello world sample",
-                  "About Hello World", wxOK | wxICON_INFORMATION );
+    wxMessageBox( "CGTea is a c++-version of GraphTea, a software for working with graphs.",
+                  "CGTea 1.0", wxOK | wxICON_INFORMATION );
 }
 
 void MyFrame::Generate(wxCommandEvent& event)
@@ -136,6 +150,11 @@ void MyFrame::Generate(wxCommandEvent& event)
     int id = event.GetId();
     currentGraph = availableGenerators[id]->generate_with_positions(10, 0, 500, 500);
     Refresh();
+}
+
+void MyFrame::Report(wxCommandEvent& event)
+{
+
 }
 
 BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)

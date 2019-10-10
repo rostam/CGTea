@@ -14,7 +14,7 @@
 #include <boost/random/linear_congruential.hpp>
 #include <boost/progress.hpp>
 #include <boost/shared_ptr.hpp>
-#include "datatypes.h"
+#include "../datatypes.h"
 #include "compute_force_directed.h"
 #include <boost/progress.hpp>
 #include <boost/shared_ptr.hpp>

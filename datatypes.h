@@ -11,7 +11,7 @@
 #include <boost/dynamic_bitset.hpp>
 #include <random>
 #include "boost/graph/simple_point.hpp"
-#include "point.h"
+#include "generators/point.h"
 
 using namespace std;
 
