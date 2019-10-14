@@ -12,6 +12,10 @@
 #include <random>
 #include "boost/graph/simple_point.hpp"
 #include "generators/point.h"
+#include "Eigen/Dense"
+#include "Eigen/Eigenvalues"
+
+
 
 using namespace std;
 
@@ -44,13 +48,6 @@ typedef boost::dynamic_bitset<> dynbit;
 //typedef std::vector<boost::square_topology<minstd_rand>::point> PositionVec;
 //typedef boost::iterator_property_map<PositionVec::iterator, boost::property_map<Graph, boost::vertex_index_t>::type> PositionMap;
 
-
-static string statistics(const Graph& g) {
-    string stat = string("Number of vertices:") + to_string( boost::num_vertices(g)) +
-                  string("\nNum of edges:") + to_string(boost::num_edges(g));
-    return stat;
-}
-
 template<typename Lambda>
 static void for_each_v(Graph& g, Lambda func) {
     V_iter vi, vi_end;
@@ -77,6 +74,35 @@ static void for_each_e_const(const Graph& g, Lambda func) {
     E_iter ei, ei_end;
     tie(ei, ei_end) = edges(g);
     std::for_each(ei,ei_end,func);
+}
+
+static std::tuple<double,double,double> eigen_values(const Graph& g) {
+    int n = boost::num_vertices(g);
+    Eigen::MatrixXd m (n, n);
+    for_each_e_const(g, [&](Edge e){
+        m(boost::source(e,g), boost::target(e,g)) = 1;
+        m(boost::target(e,g), boost::source(e,g)) = 1;
+    });
+    Eigen::EigenSolver<Eigen::MatrixXd> eigensolver;
+    eigensolver.compute(m);
+    Eigen::VectorXd eigen_values = eigensolver.eigenvalues().real();
+    Eigen::MatrixXd eigen_vectors = eigensolver.eigenvectors().real();
+
+    double max_eigen = eigensolver.eigenvalues().real().maxCoeff();
+    double min_eigen = eigensolver.eigenvalues().real().minCoeff();
+    double sum_eigen = eigensolver.eigenvalues().real().sum();
+    return std::make_tuple(max_eigen,min_eigen,sum_eigen);
+}
+
+
+static string statistics(const Graph& g) {
+    tuple<double,double,double> t = eigen_values(g);
+    string stat = string("Number of vertices:") + to_string( boost::num_vertices(g)) +
+                  string("\nNumber of edges:") + to_string(boost::num_edges(g)) +
+                  string("\nMaximum eigenvalue:" + to_string(std::get<0>(t))) +
+                  string("\nMinimum eigenvalue:" + to_string(std::get<1>(t))) +
+                  string("\nSum of eigenvalues:" + to_string(std::get<2>(t)));
+    return stat;
 }
 
 static auto ge_degree = [](pair<int,int> t1, pair<int,int> t2){return t1.second>=t2.second;};

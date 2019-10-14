@@ -66,6 +66,8 @@ private:
 
     void Report(wxCommandEvent &event);
 
+    void Layout(wxCommandEvent &event);
+
     void OnExit(wxCommandEvent &event);
 
     void OnAbout(wxCommandEvent &event);
@@ -91,20 +93,15 @@ bool MyApp::OnInit()
     font.SetPointSize(14);
     font.SetWeight(wxFONTWEIGHT_BOLD);
     textStatistics->SetFont(font);
-    wxString string1="Number of vertices:\nNumber of edges:\nMaximum degree:";
+    wxString string1="Number of vertices:\nNumber of edges:\nMaximum degree:\nMaximum eigenvalue:\n"
+                     "Minimum eigenvalue:\nSum of eigenvalues:";
     frame->statistics_text = new wxStaticText (panel1, wxID_ANY, string1,wxDefaultPosition, wxDefaultSize);
     wxFont font2 = frame->statistics_text->GetFont();
     font2.SetPointSize(14);
-//    font.SetWeight(wxFONTWEIGHT_BOLD);
     frame->statistics_text->SetFont(font2);
-//    wxStaticText * textNumOfEdges = new wxStaticText (panel1, wxID_ANY, L"Number of edges:",wxDefaultPosition, wxSize(350, 20));
-//    wxStaticText * textMaxDeg = new wxStaticText (panel1, wxID_ANY, L"Maximum Degree:",wxDefaultPosition, wxSize(350, 20));
     wxBoxSizer* panel1Sizer = new wxBoxSizer(wxVERTICAL);
     panel1Sizer->Add(textStatistics, 1, wxLEFT, 8);
     panel1Sizer->Add(frame->statistics_text, 1, wxLEFT, 8);
-//    panel1Sizer->Add(textNumOfEdges, 1, wxLEFT, 8);
-//    panel1Sizer->Add(textMaxDeg, 1, wxLEFT, 8);
-//    panel1Sizer->Add(textNumOfEdges, 1, wxEXPAND);
     panel1->SetSizer(panel1Sizer);
 
     drawPane = new BasicDrawPane( frame );
@@ -139,13 +136,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
         i++;
     }
 
-
+    wxMenu *menuLayout = new wxMenu;
+    menuLayout->Append(i, "Force-directed drawing", "Force-directed drawing");
+    Connect(i,wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(MyFrame::Layout));
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, "&File" );
     menuBar->Append(menuGenerate, "&Generate");
     menuBar->Append(menuReport, "&Report");
+    menuBar->Append(menuLayout, "&Layout");
     menuBar->Append( menuHelp, "&Help" );
     SetMenuBar( menuBar );
     CreateStatusBar();
@@ -163,9 +163,30 @@ void MyFrame::OnAbout(wxCommandEvent& event)
 
 void MyFrame::Generate(wxCommandEvent& event)
 {
+    wxString valueTyped;
+    wxTextEntryDialog myDialog(this, _("n"), _("Enter graph parameters"), _("10"));
+    if ( myDialog.ShowModal() == wxID_OK ) {
+        valueTyped = myDialog.GetValue();
+    }
+    long value;
+    if(!valueTyped.ToLong(&value)) { return; }
+
     int id = event.GetId();
-    currentGraph = availableGenerators[id]->generate_with_positions(10, 0, 500, 500);
+    currentGraph = availableGenerators[id]->generate_with_positions(value, 0, 300, 300);
     this->statistics_text->SetLabelText(wxString(statistics(currentGraph)));
+    Refresh();
+}
+
+void MyFrame::Layout(wxCommandEvent& event)
+{
+//    int id = event.GetId();
+//    currentGraph = availableGenerators[id]->generate_with_force_directed(10,0,500,500);
+    std::vector<cgtea_geometry::Point> pos = compute_force_directed(10,10, 300, 300, currentGraph);
+    int i = 0;
+    for_each_v(currentGraph, [&](Ver v) {
+        boost::put(boost::vertex_distance, currentGraph, v, pos[i]);
+        i++;
+    });
     Refresh();
 }
 

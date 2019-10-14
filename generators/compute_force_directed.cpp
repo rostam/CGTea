@@ -54,7 +54,7 @@ std::vector<cgtea_geometry::Point> compute_force_directed(double x, double y, do
     std::vector<cgtea_geometry::Point> ret;
     for_each_v_const(g, [&](Ver v) {
 //        std::cerr << position[v][0] << " " << position[v][1] << endl;
-        ret.emplace_back(cgtea_geometry::Point(position[v][0],position[v][1]));
+        ret.emplace_back(cgtea_geometry::Point(position[v][0] + 50,position[v][1]+20));
     });
     return ret;
 //    graph_traits<Graph>::vertex_iterator vi, vi_end;
