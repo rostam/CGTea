@@ -49,11 +49,29 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     SetMenuBar( menuBar );
     CreateStatusBar();
     SetStatusText( "Welcome to wxWidgets!" );
+
+    wxDir dir(wxGetCwd()+"/mats/");
+    if ( !dir.IsOpened() )
+    {
+        // deal with the error here - wxDir would already log an error message
+        // explaining the exact reason of the failure
+        return;
+    }
+    
+    wxString filename;
+    bool cont = dir.GetFirst(&filename);//, filespec, flags);
+    while ( cont )
+    {
+        cout << filename.c_str() << endl;
+        cont = dir.GetNext(&filename);
+    }
 }
+
 void CGTeaFrame::OnExit(wxCommandEvent& event)
 {
     Close( true );
 }
+
 void CGTeaFrame::OnAbout(wxCommandEvent& event)
 {
     wxMessageBox( "CGTea is a c++-version of GraphTea, a software for working with graphs.",
