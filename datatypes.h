@@ -104,35 +104,15 @@ static std::tuple<double,double,double> eigen_values_laplacian(const Graph& g) {
     return std::make_tuple(max_eigen,min_eigen,sum_eigen);
 }
 
-
-static std::tuple<double,double,double> eigen_values(const Graph& g) {
-    int n = boost::num_vertices(g);
-    Eigen::MatrixXd m (n, n);
-    for_each_e_const(g, [&](Edge e){
-        m(boost::source(e,g), boost::target(e,g)) = 1;
-        m(boost::target(e,g), boost::source(e,g)) = 1;
-    });
-    Eigen::EigenSolver<Eigen::MatrixXd> eigensolver;
-    eigensolver.compute(m);
-    Eigen::VectorXd eigen_values = eigensolver.eigenvalues().real();
-    Eigen::MatrixXd eigen_vectors = eigensolver.eigenvectors().real();
-
-    double max_eigen = eigensolver.eigenvalues().real().maxCoeff();
-    double min_eigen = eigensolver.eigenvalues().real().minCoeff();
-    double sum_eigen = eigensolver.eigenvalues().real().sum();
-    return std::make_tuple(max_eigen,min_eigen,sum_eigen);
-}
-
-
-static string statistics(const Graph& g) {
-    tuple<double,double,double> t = eigen_values(g);
-    string stat = string("Number of vertices:") + to_string( boost::num_vertices(g)) +
-                  string("\nNumber of edges:") + to_string(boost::num_edges(g)) +
-                  string("\nMaximum eigenvalue:" + to_string(std::get<0>(t))) +
-                  string("\nMinimum eigenvalue:" + to_string(std::get<1>(t))) +
-                  string("\nSum of eigenvalues:" + to_string(std::get<2>(t)));
-    return stat;
-}
+//static string statistics(const Graph& g) {
+//    tuple<double,double,double> t = eigen_values(g);
+//    string stat = string("Number of vertices:") + to_string( boost::num_vertices(g)) +
+//                  string("\nNumber of edges:") + to_string(boost::num_edges(g)) +
+//                  string("\nMaximum eigenvalue:" + to_string(std::get<0>(t))) +
+//                  string("\nMinimum eigenvalue:" + to_string(std::get<1>(t))) +
+//                  string("\nSum of eigenvalues:" + to_string(std::get<2>(t)));
+//    return stat;
+//}
 
 static auto ge_degree = [](pair<int,int> t1, pair<int,int> t2){return t1.second>=t2.second;};
 static auto lt_degree = [](pair<int,int> t1, pair<int,int> t2){return t1.second<t2.second;};

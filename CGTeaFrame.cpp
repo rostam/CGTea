@@ -90,7 +90,11 @@ void CGTeaFrame::Generate(wxCommandEvent& event)
 
     int id = event.GetId();
     currentGraph = availableGenerators[id]->generate_with_positions(value, 0, 300, 300);
-    this->statistics_text->SetLabelText(wxString(statistics(currentGraph)));
+    string out = "";
+    for(ReportInterface* gi : availableReports) {
+        out += gi->name() + ": " + gi->report(currentGraph) + "\n";
+    }
+    this->statistics_text->SetLabelText(wxString(out.c_str()));
     Refresh();
 }
 

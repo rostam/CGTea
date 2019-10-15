@@ -9,14 +9,14 @@
 
 class NumOfVertices : public ReportInterface{
 public:
-    virtual string generate(const Graph& g) {
+    string report(const Graph& g) override {
         int n = boost::num_vertices(g);
         return std::to_string(n);
     };
-    virtual string name() {
+    string name() override {
         return "Number of vertices";
     };
-    virtual string description() {
+    string description() override {
         return "Number of vertices";
     };
 };

@@ -21,6 +21,11 @@
 #include "generators/Prism.h"
 #include "generators/Star.h"
 #include "reports/NumOfVertices.h"
+#include "reports/NumOfEdges.h"
+#include "reports/MaxDegree.h"
+#include "reports/MaxEigenValue.h"
+#include "reports/MinEigenValue.h"
+#include "reports/SumEigenValues.h"
 
 class CGTeaFrame: public wxFrame {
 public:
@@ -33,7 +38,8 @@ private:
                                          new Prism(), new Star()});
 
     std::vector<ReportInterface*> availableReports =
-            vector<ReportInterface*>({new NumOfVertices()});
+            vector<ReportInterface*>({new NumOfVertices(), new NumOfEdges(), new MaxDegree(), 
+                                      new MaxEigenValue(), new MinEigenValue(), new SumEigenValues()});
 //    std::tuple<Cycle, Complete, Antiprism> availableGenerators = std::make_tuple(Cycle(), Complete(), Antiprism());
 
     void Generate(wxCommandEvent &event);

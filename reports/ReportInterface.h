@@ -10,7 +10,7 @@
 
 class ReportInterface {
 public:
-    virtual string generate(const Graph& g) {};
+    virtual string report(const Graph& g) {};
     virtual string name() {};
     virtual string description() {};
 };
