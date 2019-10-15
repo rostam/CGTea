@@ -57,7 +57,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
         // explaining the exact reason of the failure
         return;
     }
-    
+
     wxString filename;
     bool cont = dir.GetFirst(&filename);//, filespec, flags);
     while ( cont )
