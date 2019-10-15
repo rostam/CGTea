@@ -30,17 +30,16 @@
 class CGTeaFrame: public wxFrame {
 public:
     Graph currentGraph;
-    wxStaticText* statistics_text = nullptr;
     CGTeaFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
-private:
     std::vector<GeneratorInterface*> availableGenerators =
             vector<GeneratorInterface*>({new Cycle(), new Complete(), new Antiprism(),
                                          new Prism(), new Star()});
 
     std::vector<ReportInterface*> availableReports =
-            vector<ReportInterface*>({new NumOfVertices(), new NumOfEdges(), new MaxDegree(), 
+            vector<ReportInterface*>({new NumOfVertices(), new NumOfEdges(), new MaxDegree(),
                                       new MaxEigenValue(), new MinEigenValue(), new SumEigenValues()});
 //    std::tuple<Cycle, Complete, Antiprism> availableGenerators = std::make_tuple(Cycle(), Complete(), Antiprism());
+private:
 
     void Generate(wxCommandEvent &event);
 

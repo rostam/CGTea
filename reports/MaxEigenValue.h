@@ -27,11 +27,12 @@ public:
             m(boost::source(e,g), boost::target(e,g)) = 1;
             m(boost::target(e,g), boost::source(e,g)) = 1;
         });
+        if(m.rows()<=0 || m.cols()<=0)  return std::make_tuple(0,0,0);
+
         Eigen::EigenSolver<Eigen::MatrixXd> eigensolver;
         eigensolver.compute(m);
         Eigen::VectorXd eigen_values = eigensolver.eigenvalues().real();
         Eigen::MatrixXd eigen_vectors = eigensolver.eigenvectors().real();
-
         double max_eigen = eigensolver.eigenvalues().real().maxCoeff();
         double min_eigen = eigensolver.eigenvalues().real().minCoeff();
         double sum_eigen = eigensolver.eigenvalues().real().sum();
