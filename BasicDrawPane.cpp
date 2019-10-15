@@ -3,7 +3,7 @@
 //
 
 #include "BasicDrawPane.h"
-#include "MyFrame.h"
+#include "CGTeaFrame.h"
 
 
 BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
@@ -78,7 +78,7 @@ void BasicDrawPane::render(wxDC&  dc) {
     dc.SetPen(wxPen(wxColor(0, 0, 0), 1)); // black line, 3 pixels thick
     dc.DrawRectangle(0,0,dc.GetSize().GetWidth(),dc.GetSize().GetHeight());
     try {
-        const Graph& g = ((MyFrame*)this->m_parent)->currentGraph;
+        const Graph& g = ((CGTeaFrame*)this->m_parent)->currentGraph;
         drawEdges(g, dc);
         drawVertices(g, dc);
     } catch (std::exception &e) {

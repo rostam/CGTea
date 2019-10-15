@@ -2,8 +2,8 @@
 // Created by rostam on 15.10.19.
 //
 
-#ifndef CGTEA_MYFRAME_H
-#define CGTEA_MYFRAME_H
+#ifndef CGTEA_CGTEAFRAME_H
+#define CGTEA_CGTEAFRAME_H
 
 #include "datatypes.h"
 
@@ -21,11 +21,11 @@
 #include "generators/Star.h"
 #include "reports/NumOfVertices.h"
 
-class MyFrame: public wxFrame {
+class CGTeaFrame: public wxFrame {
 public:
     Graph currentGraph;
     wxStaticText* statistics_text = nullptr;
-    MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
+    CGTeaFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
 private:
     std::vector<GeneratorInterface*> availableGenerators =
             vector<GeneratorInterface*>({new Cycle(), new Complete(), new Antiprism(),
@@ -49,4 +49,4 @@ private:
 };
 
 
-#endif //CGTEA_MYFRAME_H
+#endif //CGTEA_CGTEAFRAME_H

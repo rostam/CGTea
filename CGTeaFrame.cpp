@@ -2,17 +2,17 @@
 // Created by rostam on 15.10.19.
 //
 
-#include "MyFrame.h"
+#include "CGTeaFrame.h"
 
 
-wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-                EVT_MENU(wxID_EXIT,  MyFrame::OnExit)
-                EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+wxBEGIN_EVENT_TABLE(CGTeaFrame, wxFrame)
+                EVT_MENU(wxID_EXIT, CGTeaFrame::OnExit)
+                EVT_MENU(wxID_ABOUT, CGTeaFrame::OnAbout)
 wxEND_EVENT_TABLE()
 
 
 
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
+CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
         : wxFrame(NULL, wxID_ANY, title, pos, size)
 {
     wxMenu *menuFile = new wxMenu;
@@ -24,20 +24,20 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 //    std::apply([&](auto&&... args) {((menuGenerate->Append(i, wxString(args.name().c_str(), wxConvUTF8), wxString(args.description().c_str(), wxConvUTF8)),i++), ...);}, availableGenerators);
     for(GeneratorInterface* gi : availableGenerators) {
         menuGenerate->Append(i, wxString(gi->name().c_str(), wxConvUTF8), wxString(gi->description().c_str(), wxConvUTF8));
-        Connect(i,wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(MyFrame::Generate));
+        Connect(i,wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(CGTeaFrame::Generate));
         i++;
     }
 
     wxMenu *menuReport = new wxMenu;
     for(ReportInterface* ri : availableReports) {
         menuReport->Append(i, wxString(ri->name().c_str(), wxConvUTF8), wxString(ri->description().c_str(), wxConvUTF8));
-        Connect(i,wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(MyFrame::Report));
+        Connect(i,wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(CGTeaFrame::Report));
         i++;
     }
 
     wxMenu *menuLayout = new wxMenu;
     menuLayout->Append(i, "Force-directed drawing", "Force-directed drawing");
-    Connect(i,wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(MyFrame::Layout));
+    Connect(i,wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(CGTeaFrame::Layout));
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
     wxMenuBar *menuBar = new wxMenuBar;
@@ -50,17 +50,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     CreateStatusBar();
     SetStatusText( "Welcome to wxWidgets!" );
 }
-void MyFrame::OnExit(wxCommandEvent& event)
+void CGTeaFrame::OnExit(wxCommandEvent& event)
 {
     Close( true );
 }
-void MyFrame::OnAbout(wxCommandEvent& event)
+void CGTeaFrame::OnAbout(wxCommandEvent& event)
 {
     wxMessageBox( "CGTea is a c++-version of GraphTea, a software for working with graphs.",
                   "CGTea 1.0", wxOK | wxICON_INFORMATION );
 }
 
-void MyFrame::Generate(wxCommandEvent& event)
+void CGTeaFrame::Generate(wxCommandEvent& event)
 {
     wxString valueTyped;
     wxTextEntryDialog myDialog(this, _("n"), _("Enter graph parameters"), _("10"));
@@ -76,7 +76,7 @@ void MyFrame::Generate(wxCommandEvent& event)
     Refresh();
 }
 
-void MyFrame::Layout(wxCommandEvent& event)
+void CGTeaFrame::Layout(wxCommandEvent& event)
 {
 //    int id = event.GetId();
 //    currentGraph = availableGenerators[id]->generate_with_force_directed(10,0,500,500);
@@ -89,7 +89,7 @@ void MyFrame::Layout(wxCommandEvent& event)
     Refresh();
 }
 
-void MyFrame::Report(wxCommandEvent& event)
+void CGTeaFrame::Report(wxCommandEvent& event)
 {
 
 }

@@ -2,14 +2,14 @@
 // Created by rostam on 15.10.19.
 //
 
-#include "MyApp.h"
-#include "MyFrame.h"
+#include "CGTeaApp.h"
+#include "CGTeaFrame.h"
 
 
-bool MyApp::OnInit()
+bool CGTeaApp::OnInit()
 {
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    MyFrame *frame = new MyFrame( "CGTea", wxPoint(100, 100), wxSize(1000, 1000) );
+    CGTeaFrame *frame = new CGTeaFrame("CGTea", wxPoint(100, 100), wxSize(1000, 1000) );
 
     // Create the sidebar
     wxPanel* panel1 = new wxPanel(frame, wxID_ANY);
@@ -39,4 +39,4 @@ bool MyApp::OnInit()
     return true;
 }
 
-wxIMPLEMENT_APP(MyApp);
+wxIMPLEMENT_APP(CGTeaApp);
