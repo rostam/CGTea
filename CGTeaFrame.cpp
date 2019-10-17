@@ -20,7 +20,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
     wxMenu *menuGenerate = new wxMenu;
-    int i=0;
+    int i=1;
 //    std::apply([&](auto&&... args) {((menuGenerate->Append(i, wxString(args.name().c_str(), wxConvUTF8), wxString(args.description().c_str(), wxConvUTF8)),i++), ...);}, availableGenerators);
     for(GeneratorInterface* gi : availableGenerators) {
         menuGenerate->Append(i, wxString(gi->name().c_str(), wxConvUTF8), wxString(gi->description().c_str(), wxConvUTF8));

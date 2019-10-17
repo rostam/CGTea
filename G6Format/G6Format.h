@@ -15,13 +15,14 @@ private:
     G6Format() {
 
     }
-     int BIAS6 = 63;
-     int SMALLN = 62;
-     int SMALLISHN = 258047;
-     int TOPBIT6 = 32;
-     int  WORDSIZE = 32;
 
-     int SIZELEN(int n) {
+    int BIAS6 = 63;
+    int SMALLN = 62;
+    int SMALLISHN = 258047;
+    int TOPBIT6 = 32;
+    int WORDSIZE = 32;
+
+    int SIZELEN(int n) {
         return (n) <= SMALLN ? 1 : ((n) <= SMALLISHN ? 4 : 8);
     }
 
@@ -34,7 +35,7 @@ private:
     }
 
 
-  Graph stringToGraph2(std::string g6) {
+    Graph stringToGraph2(std::string g6) {
         int n = graphsize(g6);
         Graph graph;
         std::string p = g6;
@@ -43,9 +44,9 @@ private:
         p = p.substr(SIZELEN(n));
 
         int m = (n + WORDSIZE - 1) / WORDSIZE;
-        int x=0;
+        int x = 0;
         vector<int> g;
-        for (int ii = m * n; --ii > 0; ) g[ii] = 0;
+        for (int ii = m * n; --ii > 0;) g[ii] = 0;
         g[0] = 0;
         int k = 1;
         int it = 0;
@@ -57,7 +58,7 @@ private:
                     it++;
                 }
                 if ((x & TOPBIT6) != 0) {
-                    boost::add_edge(i,j,graph);
+                    boost::add_edge(i, j, graph);
                 }
                 x <<= 1;
             }
@@ -65,11 +66,11 @@ private:
         return graph;
     }
 
-  Graph stringToGraph(std::string g6) {
+    Graph stringToGraph(std::string g6) {
         int n = graphsize(g6);
         Graph graph;
-        for(int i=0;i<graphsize(g6);i++) {
-            boost::add_vertex(i,graph);
+        for (int i = 0; i < graphsize(g6); i++) {
+            boost::add_vertex(i, graph);
         }
         std::string p = g6;
         if (g6[0] == ':' || g6[0] == '&')
@@ -77,9 +78,9 @@ private:
         p = p.substr(SIZELEN(n));
 
         int m = (n + WORDSIZE - 1) / WORDSIZE;
-        int x=0;
+        int x = 0;
         vector<long> g;// = new long[m * n];
-        for (int ii = m * n; --ii > 0; ) g.emplace_back(0);
+        for (int ii = m * n; --ii > 0;) g.emplace_back(0);
         g[0] = 0;
         int k = 1;
         int it = 0;
@@ -91,7 +92,7 @@ private:
                     it++;
                 }
                 if ((x & TOPBIT6) != 0)
-                    boost::add_edge(i,j, graph);
+                    boost::add_edge(i, j, graph);
                 x <<= 1;
             }
         }
@@ -99,7 +100,7 @@ private:
     }
 
     /* Get size of graph out of graph6 or sparse6 string. */
-     int graphsize(std::string s) {
+    int graphsize(std::string s) {
         std::string p;
         if (s[0] == ':') p = s.substr(1);
         else p = s;
@@ -116,30 +117,27 @@ private:
 
     ////////////////////////////////////////////////////////////////////
     ////////////// Generate G6 Format
-  std::string graphToG6(Graph g) {
-        return encodeGraph(boost::num_vertices(g), createAdjMatrix(g.getAdjacencyMatrix()));
-    }
-
-  std::string createAdjMatrix (Matrix m){
-        std::string result="";
-
-        for (int i = 1, k = 1; k < m.getColumnDimension(); i++, k++) {
+    std::string graphToG6(Graph g) {
+        std::string result = "";
+        for (int i = 1, k = 1; k < boost::num_vertices(g); i++, k++) {
             for (int j = 0; j < i; j++) {
-                if (m.get(j,i) != 0) result += "1";
+                Graph::edge_descriptor e1;
+                bool found;
+                boost::tie(e1, found) = edge(j,i,g);
+                if (found) result += "1";
                 else result += "0";
             }
         }
-        return result;
+        return encodeGraph(boost::num_vertices(g), result);
     }
 
-
-  std::string encodeGraph(int NoNodes, std::string adjmatrix) {
+    std::string encodeGraph(int NoNodes, std::string adjmatrix) {
         std::string rv = "";
         vector<int> nn = encodeN(NoNodes);
         vector<int> adj = encodeR(adjmatrix);
         vector<int> res;// = new int[nn.length + adj.length];
-        for(int n : nn) res[n] = n;
-        for(int i=0;i < adj.size();i++)
+        for (int n : nn) res[n] = n;
+        for (int i = 0; i < adj.size(); i++)
             res[i + nn.size()] = adj[i];
         for (int re : res) {
             rv = rv + (char) re;
@@ -148,49 +146,49 @@ private:
     }
 
     std::string toBinaryString(int n) {
-        std::string s = std::bitset< 64 >( n ).to_string(); // string conversion
+        std::string s = std::bitset<64>(n).to_string(); // string conversion
         return s;
-     }
+    }
 
-  vector<int> encodeN(long i) {
+    vector<int> encodeN(long i) {
         vector<int> ret;
         if (0 <= i && i <= 62) {
             ret.emplace_back(i + 63);
         } else if (63 <= i && i <= 258047) {
             ret.emplace_back(126);
             vector<int> g = R(padL(toBinaryString(i), 18));
-            for(int ii=0;ii<3;ii++) {
-                ret[ii+1] = g[ii];
+            for (int ii = 0; ii < 3; ii++) {
+                ret[ii + 1] = g[ii];
             }
             return ret;
         } else {
             ret.emplace_back(126);
             ret.emplace_back(126);
             vector<int> g = R(padL(toBinaryString(i), 36));
-            for(int ii=0;ii<6;ii++) {
-                ret[ii+2] = g[ii];
+            for (int ii = 0; ii < 6; ii++) {
+                ret[ii + 2] = g[ii];
             }
             return ret;
         }
 
     }
 
-  vector<int> R(std::string a) {
+    vector<int> R(std::string a) {
         vector<int> bytes;
         for (int i = 0; i < a.length() / 6; i++) {
-            int tmp = std::stoi(a.substr(i * 6, ((i * 6) + 6) - (i*6)).c_str(), nullptr, 2);
+            int tmp = std::stoi(a.substr(i * 6, ((i * 6) + 6) - (i * 6)).c_str(), nullptr, 2);
             bytes[i] = (tmp + 63);
         }
 
         return bytes;
     }
 
-  vector<int> encodeR(std::string a) {
+    vector<int> encodeR(std::string a) {
         a = padR(a);
         return R(a);
     }
 
-   std::string padR(std::string str) {
+    std::string padR(std::string str) {
         int padwith = 6 - (str.length() % 6);
         for (int i = 0; i < padwith; i++) {
             str += "0";
@@ -198,7 +196,7 @@ private:
         return str;
     }
 
-   std::string padL(std::string str, int h) {
+    std::string padL(std::string str, int h) {
         std::string retval = "";
         for (int i = 0; i < h - str.length(); i++) {
             retval += "0";

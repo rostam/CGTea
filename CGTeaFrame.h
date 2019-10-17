@@ -26,6 +26,7 @@
 #include "reports/MaxEigenValue.h"
 #include "reports/MinEigenValue.h"
 #include "reports/SumEigenValues.h"
+#include "G6Format/G6Format.h"
 
 class CGTeaFrame: public wxFrame {
 public:
