@@ -14,6 +14,9 @@ class Coloring : public ActionInterface {
         std::vector<vertices_size_type> color_vec(num_vertices(g));
         boost::iterator_property_map<vertices_size_type*, vertex_index_map> color(&color_vec.front(), get(boost::vertex_index, g));
         auto num_colors = boost::sequential_vertex_coloring(g, color);
+        for_each_v_const(g, [&](Ver v){
+           boost::put(vertex_color, g, v, color[v]);
+        });
         cerr << num_colors;
         return g;
     }

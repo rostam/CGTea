@@ -137,7 +137,8 @@ void CGTeaFrame::Report(wxCommandEvent& event) {
 }
 
 void CGTeaFrame::Action(wxCommandEvent& event) {
-    availableActions[0]->action(currentGraph);
+    currentGraph = availableActions[0]->action(currentGraph);
+    Refresh();
 }
 
 void CGTeaFrame::Open(wxCommandEvent& event) {

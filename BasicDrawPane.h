@@ -13,20 +13,23 @@
 #include <string>
 #endif
 #include <exception>
+#include <wx/graphics.h>
+#include <map>
 
 class BasicDrawPane : public wxPanel
 {
-
 public:
+    std::map<int, wxColour> distinctColors;
+
     BasicDrawPane(wxWindow* parent);
 
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
 
-    void render(wxDC& dc);
+    void render(wxPaintDC& dc);
 
-    void drawEdges(const Graph &g, wxDC&  dc);
-    void drawVertices(const Graph &g, wxDC&  dc);
+    void drawEdges(const Graph &g, wxGraphicsContext* gc);
+    void drawVertices(const Graph &g, wxGraphicsContext* gc);
     // some useful events
     /*
      void mouseMoved(wxMouseEvent& event);
