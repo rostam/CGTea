@@ -11,12 +11,12 @@ class Regular : public GeneratorInterface {
 public:
     explicit Regular() : GeneratorInterface() {};
 
-    Graph generate(unsigned int n, unsigned int deg) override {
+    Graph generate(unsigned int n, unsigned int k) override {
         Graph g;
         int t = 0;
-        if (deg % 2 == 0) {
+        if (k % 2 == 0) {
             for (unsigned int i = 0; i < n; i++) {
-                for (unsigned int j = i + 1; j < i + (deg / 2) + 1; j++) {
+                for (unsigned int j = i + 1; j < i + (k / 2) + 1; j++) {
                     if (i != j) {
                         add_edge(i, j % n, g);
                     }
@@ -24,11 +24,11 @@ public:
             }
         } else {
             for (unsigned int i = 0; i < n; i = i + 1) {
-                for (unsigned int j = i + 1; j < i + ((deg - 1) / 2) + 1; j++) {
+                for (unsigned int j = i + 1; j < i + ((k - 1) / 2) + 1; j++) {
                     add_edge(i, j % n, g);
                 }
 
-                for (unsigned int j = i - 1; j > i - ((deg - 1) / 2) - 1; j--) {
+                for (unsigned int j = i - 1; j > i - ((k - 1) / 2) - 1; j--) {
                     add_edge(i, (j + n) % n, g);
                 }
             }

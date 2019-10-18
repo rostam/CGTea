@@ -12,8 +12,8 @@
 
 class GeneratorInterface {
 public:
-    virtual Graph generate(unsigned int n, unsigned int k) {};
-    virtual Graph generate_with_positions(unsigned int n, unsigned int k,double width, double height) {};
+    virtual Graph generate(unsigned int n, unsigned int k) { return Graph();};
+    virtual Graph generate_with_positions(unsigned int n, unsigned int k,double width, double height) {return Graph();};
     Graph generate_with_force_directed(unsigned int n, unsigned int k, double width, double height) {
         Graph g = generate(n, k);
         std::vector<cgtea_geometry::Point> pos = compute_force_directed(50,50, width, height, g);
@@ -24,8 +24,8 @@ public:
         });
         return g;
     }
-    virtual string name() {};
-    virtual string description() {};
+    virtual string name() {return "Generator Interface";};
+    virtual string description() {return "Generator Interface";};
 };
 
 #endif //EXACT_COLORING_GENERATORINTERFACE_H

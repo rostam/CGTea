@@ -5,7 +5,6 @@
 #define EXACT_COLORING_CYCLE_H
 
 #include "GeneratorInterface.h"
-#include "point.h"
 
 class Cycle : public GeneratorInterface {
 public:
