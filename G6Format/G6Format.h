@@ -11,7 +11,7 @@
 
 
 class G6Format {
-private:
+public:
     G6Format() {
 
     }
@@ -45,7 +45,7 @@ private:
 
         int m = (n + WORDSIZE - 1) / WORDSIZE;
         int x = 0;
-        vector<int> g;
+        vector<int> g (m*n);
         for (int ii = m * n; --ii > 0;) g[ii] = 0;
         g[0] = 0;
         int k = 1;
@@ -135,8 +135,9 @@ private:
         std::string rv = "";
         vector<int> nn = encodeN(NoNodes);
         vector<int> adj = encodeR(adjmatrix);
-        vector<int> res;// = new int[nn.length + adj.length];
-        for (int n : nn) res[n] = n;
+        vector<int> res(nn.size() + adj.size());// = new int[nn.length + adj.length];
+        for (int n : nn)
+            res[n] = n;
         for (int i = 0; i < adj.size(); i++)
             res[i + nn.size()] = adj[i];
         for (int re : res) {
@@ -155,15 +156,17 @@ private:
         if (0 <= i && i <= 62) {
             ret.emplace_back(i + 63);
         } else if (63 <= i && i <= 258047) {
-            ret.emplace_back(126);
+            ret.resize(4);
+            ret[0] = 126;
             vector<int> g = R(padL(toBinaryString(i), 18));
             for (int ii = 0; ii < 3; ii++) {
                 ret[ii + 1] = g[ii];
             }
             return ret;
         } else {
-            ret.emplace_back(126);
-            ret.emplace_back(126);
+            ret.resize(8);
+            ret[0] = 126;
+            ret[1] = 126;
             vector<int> g = R(padL(toBinaryString(i), 36));
             for (int ii = 0; ii < 6; ii++) {
                 ret[ii + 2] = g[ii];
@@ -174,7 +177,7 @@ private:
     }
 
     vector<int> R(std::string a) {
-        vector<int> bytes;
+        vector<int> bytes (a.length());
         for (int i = 0; i < a.length() / 6; i++) {
             int tmp = std::stoi(a.substr(i * 6, ((i * 6) + 6) - (i * 6)).c_str(), nullptr, 2);
             bytes[i] = (tmp + 63);

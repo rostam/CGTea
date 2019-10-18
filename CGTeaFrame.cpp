@@ -28,9 +28,14 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableReports.emplace_back(std::make_unique<SumEigenValues>());
 
     wxMenu *menuFile = new wxMenu;
-//    menuFile->Append(ID_Hello, "&Hello...\tCtrl-H","Help string shown in status bar for this menu item");
+    menuFile->Append(1000, "&Open");
+    menuFile->Append(1001, "&Save");
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
+
+    Connect(1000, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Open));
+    Connect(1001, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Save));
+
     wxMenu *menuGenerate = new wxMenu;
     int i = 1;
 //    std::apply([&](auto&&... args) {((menuGenerate->Append(i, wxString(args.name().c_str(), wxConvUTF8), wxString(args.description().c_str(), wxConvUTF8)),i++), ...);}, availableGenerators);
@@ -118,4 +123,23 @@ void CGTeaFrame::Layout(wxCommandEvent& event) {
 
 void CGTeaFrame::Report(wxCommandEvent& event) {
 
+}
+
+void CGTeaFrame::Open(wxCommandEvent& event) {
+    ifstream in("test.g6");
+    std::string g6;
+    in >> g6;
+    in.close();
+    G6Format g6Format;
+    currentGraph = g6Format.stringToGraph(g6);
+}
+
+void CGTeaFrame::Save(wxCommandEvent& event) {
+    G6Format g6Format;
+    std::string g6 = g6Format.graphToG6(currentGraph);
+    ofstream out("test.g6");
+    out << g6;
+    out.flush();
+    out.close();
+    cerr << g6 << endl;
 }

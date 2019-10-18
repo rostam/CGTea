@@ -44,14 +44,12 @@ public:
 private:
 
     void Generate(wxCommandEvent &event);
-
     void Report(wxCommandEvent &event);
-
     void Layout(wxCommandEvent &event);
-
     void OnExit(wxCommandEvent &event);
-
     void OnAbout(wxCommandEvent &event);
+    void Open(wxCommandEvent &event);
+    void Save(wxCommandEvent &event);
 
 wxDECLARE_EVENT_TABLE();
 };
