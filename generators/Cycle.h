@@ -5,10 +5,6 @@
 #define EXACT_COLORING_CYCLE_H
 
 #include "GeneratorInterface.h"
-#include "boost/graph/fruchterman_reingold.hpp"
-#include "boost/graph/random_layout.hpp"
-#include "boost/graph/topology.hpp"
-#include "compute_force_directed.h"
 #include "point.h"
 
 class Cycle : public GeneratorInterface {

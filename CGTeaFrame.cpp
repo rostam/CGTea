@@ -81,15 +81,18 @@ void CGTeaFrame::OnAbout(wxCommandEvent& event)
 void CGTeaFrame::Generate(wxCommandEvent& event)
 {
     wxString valueTyped;
-    wxTextEntryDialog myDialog(this, _("n"), _("Enter graph parameters"), _("10"));
+    wxTextEntryDialog myDialog(this, _("n,k"), _("Enter graph parameters"), _("10,0"));
     if ( myDialog.ShowModal() == wxID_OK ) {
         valueTyped = myDialog.GetValue();
     }
-    long value;
-    if(!valueTyped.ToLong(&value)) { return; }
-
+    long value_n, value_k;
+    int position_of_comma = valueTyped.find(",");
+    if(position_of_comma == -1) return;
+    if(!valueTyped.substr(0,position_of_comma).ToLong(&value_n)) { return; }
+    if(!valueTyped.substr(position_of_comma+1).ToLong(&value_k)) { return; }
+    cerr << value_n << " " << value_k << endl;
     int id = event.GetId();
-    currentGraph = availableGenerators[id]->generate_with_positions(value, 0, 300, 300);
+    currentGraph = availableGenerators[id]->generate_with_positions(value_n, value_k, 300, 300);
     Refresh();
 }
 

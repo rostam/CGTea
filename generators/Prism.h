@@ -6,7 +6,6 @@
 #define CGTEA_PRISM_H
 
 #include "GeneratorInterface.h"
-#include "point.h"
 
 class Prism : public GeneratorInterface {
 
@@ -16,7 +15,7 @@ public:
     Graph generate(unsigned int n, unsigned int k) override {
         Graph g;
         //generating edges
-        for (int i = 0; i < n; i++) {
+        for (unsigned int i = 0; i < n; i++) {
            add_edge(i, (i + 1) % n, g);
            if ((i + n + 1) == 2 * n) add_edge(i + n, n,g);
            else add_edge(i + n, i + n + 1,g);

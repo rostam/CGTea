@@ -20,6 +20,7 @@
 #include "generators/Antiprism.h"
 #include "generators/Prism.h"
 #include "generators/Star.h"
+#include "generators/Regular.h"
 #include "reports/NumOfVertices.h"
 #include "reports/NumOfEdges.h"
 #include "reports/MaxDegree.h"
@@ -31,14 +32,16 @@
 class CGTeaFrame: public wxFrame {
 public:
     Graph currentGraph;
-    CGTeaFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
-    std::vector<GeneratorInterface*> availableGenerators =
-            vector<GeneratorInterface*>({new Cycle(), new Complete(), new Antiprism(),
-                                         new Prism(), new Star()});
 
-    std::vector<ReportInterface*> availableReports =
-            vector<ReportInterface*>({new NumOfVertices(), new NumOfEdges(), new MaxDegree(),
-                                      new MaxEigenValue(), new MinEigenValue(), new SumEigenValues()});
+    CGTeaFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
+
+    std::vector<GeneratorInterface *> availableGenerators =
+            vector<GeneratorInterface *>({new Cycle(), new Complete(), new Antiprism(),
+                                          new Prism(), new Star(), new Regular()});
+
+    std::vector<ReportInterface *> availableReports =
+            vector<ReportInterface *>({new NumOfVertices(), new NumOfEdges(), new MaxDegree(),
+                                       new MaxEigenValue(), new MinEigenValue(), new SumEigenValues()});
 //    std::tuple<Cycle, Complete, Antiprism> availableGenerators = std::make_tuple(Cycle(), Complete(), Antiprism());
 private:
 
@@ -52,7 +55,7 @@ private:
 
     void OnAbout(wxCommandEvent &event);
 
-    wxDECLARE_EVENT_TABLE();
+wxDECLARE_EVENT_TABLE();
 };
 
 

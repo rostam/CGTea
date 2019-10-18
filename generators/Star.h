@@ -33,7 +33,7 @@ public:
     }
 
     string name() override {
-        return "Star Graph";
+        return "Star";
     }
 
     string description() override {
