@@ -31,6 +31,7 @@
 #include "reports/MinEigenValue.h"
 #include "reports/SumEigenValues.h"
 #include "G6Format/G6Format.h"
+#include "actions/Coloring.h"
 
 class CGTeaFrame: public wxFrame {
 public:
@@ -40,12 +41,16 @@ public:
 
     std::vector<std::unique_ptr<GeneratorInterface>> availableGenerators;
     std::vector<std::unique_ptr<ReportInterface>> availableReports;
+    std::vector<std::unique_ptr<ActionInterface>> availableActions;
+
 //    std::tuple<Cycle, Complete, Antiprism> availableGenerators = std::make_tuple(Cycle(), Complete(), Antiprism());
 private:
 
     void Generate(wxCommandEvent &event);
     void Report(wxCommandEvent &event);
     void Layout(wxCommandEvent &event);
+    void Action(wxCommandEvent &event);
+
     void OnExit(wxCommandEvent &event);
     void OnAbout(wxCommandEvent &event);
     void Open(wxCommandEvent &event);

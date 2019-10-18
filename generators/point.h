@@ -10,7 +10,7 @@ namespace cgtea_geometry {
         Point( double X, double Y ): x(X), y(Y) {};
         double x;
         double y;
-    };//Simple Point structure
+    };
 }
 
 #endif //CGTEA_POINT_H

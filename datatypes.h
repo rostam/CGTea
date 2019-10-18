@@ -3,6 +3,7 @@
 
 #include "boost/config.hpp"
 #include "boost/graph/adjacency_list.hpp"
+#include "boost/graph/sequential_vertex_coloring.hpp"
 #include "boost/cstdlib.hpp"
 #include "boost/graph/topology.hpp"
 #include <memory>

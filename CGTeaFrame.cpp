@@ -26,6 +26,8 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableReports.emplace_back(std::make_unique<MinEigenValue>());
     availableReports.emplace_back(std::make_unique<SumEigenValues>());
 
+    availableActions.emplace_back(std::make_unique<Coloring>());
+
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(1000, "&Open");
     menuFile->Append(1001, "&Save");
@@ -54,6 +56,14 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
         i++;
     }
 
+    wxMenu *menuAction = new wxMenu;
+    for (auto& ai : availableActions) {
+        menuAction->Append(i, wxString(ai->name().c_str(), wxConvUTF8),
+                           wxString(ai->description().c_str(), wxConvUTF8));
+        Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Action));
+        i++;
+    }
+
     wxMenu *menuLayout = new wxMenu;
     menuLayout->Append(i, "Force-directed drawing", "Force-directed drawing");
     Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Layout));
@@ -63,6 +73,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     menuBar->Append(menuFile, "&File");
     menuBar->Append(menuGenerate, "&Generate");
     menuBar->Append(menuReport, "&Report");
+    menuBar->Append(menuAction, "&Action");
     menuBar->Append(menuLayout, "&Layout");
     menuBar->Append(menuHelp, "&Help");
     SetMenuBar(menuBar);
@@ -123,6 +134,10 @@ void CGTeaFrame::Layout(wxCommandEvent& event) {
 
 void CGTeaFrame::Report(wxCommandEvent& event) {
 
+}
+
+void CGTeaFrame::Action(wxCommandEvent& event) {
+    availableActions[0]->action(currentGraph);
 }
 
 void CGTeaFrame::Open(wxCommandEvent& event) {
