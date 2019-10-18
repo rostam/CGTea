@@ -10,7 +10,7 @@
 class CGTeaApp: public wxApp {
     BasicDrawPane *drawPane;
 public:
-    virtual bool OnInit();
+    bool OnInit() override;
 };
 
 #endif //CGTEA_CGTEAAPP_H
