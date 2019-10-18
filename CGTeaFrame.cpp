@@ -4,6 +4,8 @@
 
 #include "CGTeaFrame.h"
 
+#include <memory>
+
 wxBEGIN_EVENT_TABLE(CGTeaFrame, wxFrame)
                 EVT_MENU(wxID_EXIT, CGTeaFrame::OnExit)
                 EVT_MENU(wxID_ABOUT, CGTeaFrame::OnAbout)
@@ -11,6 +13,13 @@ wxEND_EVENT_TABLE()
 
 CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
         : wxFrame(NULL, wxID_ANY, title, pos, size) {
+    availableGenerators.emplace_back(std::make_unique<Cycle>());
+    availableGenerators.emplace_back(std::make_unique<Banana>());
+    availableGenerators.emplace_back(std::make_unique<Complete>());
+    availableGenerators.emplace_back(std::make_unique<Prism>());
+    availableGenerators.emplace_back(std::make_unique<Antiprism>());
+    availableGenerators.emplace_back(std::make_unique<Regular>());
+
     wxMenu *menuFile = new wxMenu;
 //    menuFile->Append(ID_Hello, "&Hello...\tCtrl-H","Help string shown in status bar for this menu item");
     menuFile->AppendSeparator();
@@ -18,7 +27,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     wxMenu *menuGenerate = new wxMenu;
     int i = 1;
 //    std::apply([&](auto&&... args) {((menuGenerate->Append(i, wxString(args.name().c_str(), wxConvUTF8), wxString(args.description().c_str(), wxConvUTF8)),i++), ...);}, availableGenerators);
-    for (GeneratorInterface *gi : availableGenerators) {
+    for (auto& gi : availableGenerators) {
         menuGenerate->Append(i, wxString(gi->name().c_str(), wxConvUTF8),
                              wxString(gi->description().c_str(), wxConvUTF8));
         Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Generate));
@@ -83,9 +92,8 @@ void CGTeaFrame::Generate(wxCommandEvent& event) {
     if (position_of_comma == -1) return;
     if (!valueTyped.substr(0, position_of_comma).ToLong(&value_n)) { return; }
     if (!valueTyped.substr(position_of_comma + 1).ToLong(&value_k)) { return; }
-    cerr << value_n << " " << value_k << endl;
     int id = event.GetId();
-    currentGraph = availableGenerators[id]->generate_with_positions(value_n, value_k, 300, 300);
+    currentGraph = availableGenerators[id-1]->generate_with_positions(value_n, value_k, 300, 300);
     Refresh();
 }
 

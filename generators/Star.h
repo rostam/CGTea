@@ -26,6 +26,7 @@ public:
         pos.insert(pos.begin(), cgtea_geometry::Point(width,height));
         int i = 0;
         for_each_v(g, [&](Ver v) {
+            cerr << pos[i].x << " " << pos[i].y << endl;
             boost::put(boost::vertex_distance, g, v, pos[i]);
             i++;
         });

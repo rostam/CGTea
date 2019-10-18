@@ -15,12 +15,15 @@
 #include "datatypes.h"
 #include <string>
 #endif
+#include <memory>
+
 #include "generators/Cycle.h"
 #include "generators/Complete.h"
 #include "generators/Antiprism.h"
 #include "generators/Prism.h"
 #include "generators/Star.h"
 #include "generators/Regular.h"
+#include "generators/Banana.h"
 #include "reports/NumOfVertices.h"
 #include "reports/NumOfEdges.h"
 #include "reports/MaxDegree.h"
@@ -35,9 +38,13 @@ public:
 
     CGTeaFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
 
-    std::vector<GeneratorInterface *> availableGenerators =
-            vector<GeneratorInterface *>({new Cycle(), new Complete(), new Antiprism(),
-                                          new Prism(), new Star(), new Regular()});
+    std::vector<std::unique_ptr<GeneratorInterface>> availableGenerators;
+//    availableGenerators.emplace_back(std::unique_ptr<Cycle>(new Cycle()));
+//            std::vector<std::unique_ptr<GeneratorInterface>>({
+//                std::unique_ptr<Cycle>(new Cycle()), std::unique_ptr<Complete>(new Complete()),
+//                std::unique_ptr<Antiprism>(new Antiprism())});
+                        //,
+                         //                 new Prism(), new Star(), new Regular()});
 
     std::vector<ReportInterface *> availableReports =
             vector<ReportInterface *>({new NumOfVertices(), new NumOfEdges(), new MaxDegree(),
