@@ -5,6 +5,7 @@
 #ifndef CGTEA_G6FORMAT_H
 #define CGTEA_G6FORMAT_H
 
+#include <utility>
 #include <vector>
 #include "../datatypes.h"
 #include <string>     // std::string, std::stoi
@@ -117,8 +118,8 @@ public:
 
     ////////////////////////////////////////////////////////////////////
     ////////////// Generate G6 Format
-    std::string graphToG6(Graph g) {
-        std::string result = "";
+    std::string graphToG6(const Graph& g) {
+        std::string result;
         for (int i = 1, k = 1; k < boost::num_vertices(g); i++, k++) {
             for (int j = 0; j < i; j++) {
                 Graph::edge_descriptor e1;
@@ -132,9 +133,9 @@ public:
     }
 
     std::string encodeGraph(int NoNodes, std::string adjmatrix) {
-        std::string rv = "";
+        std::string rv;
         vector<int> nn = encodeN(NoNodes);
-        vector<int> adj = encodeR(adjmatrix);
+        vector<int> adj = encodeR(std::move(adjmatrix));
         vector<int> res(nn.size() + adj.size());// = new int[nn.length + adj.length];
         for (int n : nn)
             res[n] = n;
@@ -176,10 +177,10 @@ public:
 
     }
 
-    vector<int> R(std::string a) {
+    vector<int> R(const std::string& a) {
         vector<int> bytes (a.length());
-        for (int i = 0; i < a.length() / 6; i++) {
-            int tmp = std::stoi(a.substr(i * 6, ((i * 6) + 6) - (i * 6)).c_str(), nullptr, 2);
+        for (unsigned int i = 0; i < a.length() / 6; i++) {
+            int tmp = std::stoi(a.substr(i * 6, ((i * 6) + 6) - (i * 6)), nullptr, 2);
             bytes[i] = (tmp + 63);
         }
 
@@ -192,16 +193,16 @@ public:
     }
 
     std::string padR(std::string str) {
-        int padwith = 6 - (str.length() % 6);
-        for (int i = 0; i < padwith; i++) {
+        unsigned int padwith = 6 - (str.length() % 6);
+        for (unsigned int i = 0; i < padwith; i++) {
             str += "0";
         }
         return str;
     }
 
     std::string padL(std::string str, int h) {
-        std::string retval = "";
-        for (int i = 0; i < h - str.length(); i++) {
+        std::string retval;
+        for (unsigned int i = 0; i < h - str.length(); i++) {
             retval += "0";
         }
         return retval + str;

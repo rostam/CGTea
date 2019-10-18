@@ -7,12 +7,11 @@
 #include <memory>
 
 wxBEGIN_EVENT_TABLE(CGTeaFrame, wxFrame)
-                EVT_MENU(wxID_EXIT, CGTeaFrame::OnExit)
                 EVT_MENU(wxID_ABOUT, CGTeaFrame::OnAbout)
 wxEND_EVENT_TABLE()
 
 CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-        : wxFrame(NULL, wxID_ANY, title, pos, size) {
+        : wxFrame(nullptr, wxID_ANY, title, pos, size) {
     availableGenerators.emplace_back(std::make_unique<Cycle>());
     availableGenerators.emplace_back(std::make_unique<Banana>());
     availableGenerators.emplace_back(std::make_unique<Complete>());
@@ -35,6 +34,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
 
     Connect(1000, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Open));
     Connect(1001, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Save));
+    Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::OnExit));
 
     wxMenu *menuGenerate = new wxMenu;
     int i = 1;
