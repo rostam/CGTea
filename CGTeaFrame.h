@@ -39,16 +39,7 @@ public:
     CGTeaFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
 
     std::vector<std::unique_ptr<GeneratorInterface>> availableGenerators;
-//    availableGenerators.emplace_back(std::unique_ptr<Cycle>(new Cycle()));
-//            std::vector<std::unique_ptr<GeneratorInterface>>({
-//                std::unique_ptr<Cycle>(new Cycle()), std::unique_ptr<Complete>(new Complete()),
-//                std::unique_ptr<Antiprism>(new Antiprism())});
-                        //,
-                         //                 new Prism(), new Star(), new Regular()});
-
-    std::vector<ReportInterface *> availableReports =
-            vector<ReportInterface *>({new NumOfVertices(), new NumOfEdges(), new MaxDegree(),
-                                       new MaxEigenValue(), new MinEigenValue(), new SumEigenValues()});
+    std::vector<std::unique_ptr<ReportInterface>> availableReports;
 //    std::tuple<Cycle, Complete, Antiprism> availableGenerators = std::make_tuple(Cycle(), Complete(), Antiprism());
 private:
 

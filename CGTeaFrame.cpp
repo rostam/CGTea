@@ -20,6 +20,13 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableGenerators.emplace_back(std::make_unique<Antiprism>());
     availableGenerators.emplace_back(std::make_unique<Regular>());
 
+    availableReports.emplace_back(std::make_unique<NumOfVertices>());
+    availableReports.emplace_back(std::make_unique<NumOfEdges>());
+    availableReports.emplace_back(std::make_unique<MaxDegree>());
+    availableReports.emplace_back(std::make_unique<MaxEigenValue>());
+    availableReports.emplace_back(std::make_unique<MinEigenValue>());
+    availableReports.emplace_back(std::make_unique<SumEigenValues>());
+
     wxMenu *menuFile = new wxMenu;
 //    menuFile->Append(ID_Hello, "&Hello...\tCtrl-H","Help string shown in status bar for this menu item");
     menuFile->AppendSeparator();
@@ -35,9 +42,9 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     }
 
     wxMenu *menuReport = new wxMenu;
-    for (ReportInterface *ri : availableReports) {
+    for (auto& ri : availableReports) {
         menuReport->Append(i, wxString(ri->name().c_str(), wxConvUTF8),
-                           wxString(ri->description().c_str(), wxConvUTF8));
+                wxString(ri->description().c_str(), wxConvUTF8));
         Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Report));
         i++;
     }

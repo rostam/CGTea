@@ -23,7 +23,7 @@ void CGTeaSidebar::computeStat(wxCommandEvent & WXUNUSED(event))
 {
     auto frame = ((CGTeaFrame*)this->m_parent);
     string out;
-    for(ReportInterface* gi : frame->availableReports) {
+    for(auto& gi : frame->availableReports) {
         out += gi->name() + ": " + gi->report(frame->currentGraph) + "\n";
     }
     statistics_text->SetLabelText(wxString(out.c_str()));
