@@ -20,7 +20,7 @@
 
 class CGTeaSidebar : public wxPanel {
 public:
-    wxStaticText* statistics_text = nullptr;
+    wxTextCtrl* statistics_text = nullptr;
     CGTeaSidebar(CGTeaFrame *parent, wxWindowID winid);
     void computeStat(wxCommandEvent & event);
 };

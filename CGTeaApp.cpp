@@ -10,10 +10,12 @@
 
 bool CGTeaApp::OnInit()
 {
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    CGTeaFrame *frame = new CGTeaFrame("CGTea", wxPoint(100, 100), wxSize(1200, 1000) );
+    wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
+    CGTeaFrame *frame = new CGTeaFrame("CGTea", wxPoint(100, 100), wxSize(1200, 600) );
+    CGTeaSidebar *cgTeaSidebar = new CGTeaSidebar(frame, wxID_ANY);
+
     drawPane = new BasicDrawPane( frame );
-    sizer->Add(new CGTeaSidebar(frame, wxID_ANY), 1, wxEXPAND | wxALL);
+    sizer->Add(cgTeaSidebar, 1, wxEXPAND | wxALL);
     sizer->Add(drawPane, 1, wxEXPAND | wxALL);
     frame->SetSizer(sizer);
     frame->SetAutoLayout(true);

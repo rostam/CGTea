@@ -133,7 +133,7 @@ void CGTeaFrame::Layout(wxCommandEvent& event) {
 }
 
 void CGTeaFrame::Report(wxCommandEvent& event) {
-
+    cerr << this->GetSizer()->GetChildren()[0]->GetClassInfo()->GetClassName();
 }
 
 void CGTeaFrame::Action(wxCommandEvent& event) {
