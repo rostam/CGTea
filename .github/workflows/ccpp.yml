@@ -12,5 +12,5 @@ jobs:
     - name: ghaction-cmake
       uses: lpenz/ghaction-cmake@v0.1
       with:
-        dependencies: wxwidget 
+        dependencies: wx2.8-headers libwxgtk2.8-0 libwxgtk2.8-dev 
        
