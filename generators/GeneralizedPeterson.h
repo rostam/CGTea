@@ -8,8 +8,7 @@
 
 class GeneralizedPeterson : public GeneratorInterface {
 public:
-    GeneralizedPeterson(unsigned int n, unsigned int k) : GeneratorInterface(n, k) {}
-    Graph generate() {
+    Graph generate(unsigned int n, unsigned int k) {
         Graph g;
         int counter = 0;
         for (int i = 0; i < n; i++) {
@@ -21,6 +20,27 @@ public:
                 add_edge(((i + n) % (2 * n)), ((i + n + k) % (2 * n)),g);
         }
         return g;
+    }
+
+    Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {
+        Graph g = generate(n, k);
+        std::vector<cgtea_geometry::Point> pos1 = position_generators::circle(width, height, 100.0, n);
+        std::vector<cgtea_geometry::Point> pos2 = position_generators::circle(width, height, 200.0, n);
+        int i = 0;
+        for_each_v(g, [&](Ver v) {
+            if(i < n) boost::put(boost::vertex_distance, g, v, pos2[i]);
+            else      boost::put(boost::vertex_distance, g, v, pos1[i - n]);
+            i++;
+        });
+        return g;
+    }
+
+    string name() override {
+        return "Generalized Peterson";
+    }
+
+    string description() override {
+        return "Generates a generalized peterson graph.";
     }
 };
 

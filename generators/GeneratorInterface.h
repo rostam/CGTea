@@ -26,6 +26,8 @@ public:
     }
     virtual string name() {return "Generator Interface";};
     virtual string description() {return "Generator Interface";};
+    virtual string category() {return "Generator Interface";};
+    virtual string check_parameters() {return "Generator Interface";};
 };
 
 #endif //EXACT_COLORING_GENERATORINTERFACE_H
