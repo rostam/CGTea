@@ -7,27 +7,26 @@
 #define CGTEA_DIAMETER_H
 
 #include "ReportInterface.h"
-#include "boost/graph/floyd_warshall_shortest.hpp"
-#include <boost/graph/exterior_property.hpp>
+#include "Utils.h"
+
 
 class GraphDiameter : public ReportInterface {
 public:
     string report(const Graph& g) override {
-        typedef boost::exterior_vertex_property<Graph, int> DistanceProperty;
-        typedef DistanceProperty::matrix_type DistanceMatrix;
-        typedef DistanceProperty::matrix_map_type DistanceMatrixMap;
-        DistanceMatrix distances(num_vertices(g));
-        DistanceMatrixMap dm(distances, g);
-        floyd_warshall_all_pairs_shortest_paths(g,dm);
-        cout << boost::num_vertices(g) << endl;
-        for_each_v_const(g, [&](const Ver& v) {
-            for_each_v_const(g, [&](const Ver& u) {
-                cout << v << " " << u << " " << distances[v][u] << endl;
-            });
-        });
-
-//        int n = boostt::num_edges(g);
-        return std::to_string(10);
+        DistanceMatrix dist = Utils::get_floyd_warshall_all_pairs_shortest_paths(g);
+        int max = 0;
+        int num_v = boost::num_vertices(g);
+        for (int v = 0; v < num_v; v++) {
+            for (int u = 0; u < num_v; u++) {
+                if(dist[v][u] < num_v) {
+                    int distance = dist[u][v];
+                    if(distance > max) {
+                        max = distance;
+                    }
+                }
+            }
+        }
+        return std::to_string(max);
     };
     string name() override {
         return "Graph Diameter";

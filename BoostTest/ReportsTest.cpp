@@ -11,10 +11,15 @@
 
 BOOST_AUTO_TEST_SUITE(ReportsTestSuite)
     BOOST_AUTO_TEST_CASE(DiameterTest) {
+        Graph cycle10 = Cycle().generate(10,1);
         GraphDiameter gd;
-        Cycle c;
-        Graph g = c.generate(10,1);
-        gd.report(g);
-        BOOST_CHECK_EQUAL(boost::num_vertices(g),10);
+        auto res = Utils::return_value(gd.report(cycle10), gd.type());
+        BOOST_CHECK_EQUAL(std::get<int>(res), 5);
+//        BOOST_CHECK_EQUAL(GraphDiameter().report(cycle10),boost::num_vertices(cycle10)/2);
+//        Assertions.assertEquals(varDiameter.calculate(peterson),2);
+//        Assertions.assertEquals(varDiameter.calculate(circle4),2);
+//        Assertions.assertEquals(varDiameter.calculate(circle5),2);
+//        Assertions.assertEquals(varDiameter.calculate(complete4), 1);
+//        Assertions.assertEquals(varDiameter.calculate(complete5), 1);
     }
 BOOST_AUTO_TEST_SUITE_END()

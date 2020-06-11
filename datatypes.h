@@ -15,7 +15,8 @@
 #include "generators/point.h"
 #include "Eigen/Dense"
 #include "Eigen/Eigenvalues"
-
+#include <boost/graph/floyd_warshall_shortest.hpp>
+#include <boost/graph/exterior_property.hpp>
 
 
 using namespace std;
@@ -175,5 +176,8 @@ static void for_each_neighbor(const Ver& v, const Graph& g, Lambda func) {
 typedef boost::rectangle_topology<> topology_type;
 typedef topology_type::point_type point_type;
 
+typedef boost::exterior_vertex_property<Graph, int> DistanceProperty;
+typedef DistanceProperty::matrix_type DistanceMatrix;
+typedef DistanceProperty::matrix_map_type DistanceMatrixMap;
 
 #endif
