@@ -25,6 +25,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableReports.emplace_back(std::make_unique<MaxEigenValue>());
     availableReports.emplace_back(std::make_unique<MinEigenValue>());
     availableReports.emplace_back(std::make_unique<SumEigenValues>());
+    availableReports.emplace_back(std::make_unique<GraphDiameter>());
 
     availableActions.emplace_back(std::make_unique<Coloring>());
 

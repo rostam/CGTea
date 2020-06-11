@@ -13,7 +13,7 @@ public:
     Graph generate(unsigned int n, unsigned int k) override {
         Graph g;
         for (unsigned int i = 0; i < n; i++)
-            add_edge(i, ((i + 1) % n), g);
+            add_edge(i, ((i + 1) % n), 1, g);
         return g;
     }
 

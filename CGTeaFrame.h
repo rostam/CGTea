@@ -30,6 +30,7 @@
 #include "reports/MaxEigenValue.h"
 #include "reports/MinEigenValue.h"
 #include "reports/SumEigenValues.h"
+#include "reports/Diameter.h"
 #include "G6Format/G6Format.h"
 #include "actions/Coloring.h"
 

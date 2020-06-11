@@ -13,6 +13,8 @@ public:
     virtual string report(const Graph& g) {};
     virtual string name() {};
     virtual string description() {};
+    virtual string type() {};
+    virtual string category() {};
 };
 
 
