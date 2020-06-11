@@ -22,11 +22,11 @@ class Coloring : public ActionInterface {
     }
 
     string name() override {
-        return "Coloring";
+        return "Heuristic Coloring";
     }
 
     string description() override {
-        return "Graph Coloring.";
+        return "Graph Heuristic Coloring.";
     }
 };
 
