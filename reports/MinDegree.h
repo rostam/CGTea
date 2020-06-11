@@ -2,26 +2,26 @@
 // Created by rostam on 15.10.19.
 //
 
-#ifndef CGTEA_MAXDEGREE_H
-#define CGTEA_MAXDEGREE_H
+#ifndef CGTEA_MINDEGREE_H
+#define CGTEA_MINDEGREE_H
 
 #include "ReportInterface.h"
 
-class MaxDegree : public ReportInterface{
+class MinDegree : public ReportInterface{
 public:
     string report(const Graph& g) override {
-        int max_degree = 0;
+        int min_degree = boost::num_vertices(g) + 1;
         for_each_v_const(g, [&](Ver v){
            int deg = boost::out_degree(v, g);
-           if(deg > max_degree) max_degree = deg;
+           if(deg < min_degree) min_degree = deg;
         });
-        return std::to_string(max_degree);
+        return std::to_string(min_degree);
     };
     string name() override {
-        return "Maximum degree";
+        return "Minimum degree";
     };
     string description() override {
-        return "Maximum degree";
+        return "Minimum degree";
     };
     string type() override {
         return "int";

@@ -180,4 +180,14 @@ typedef boost::exterior_vertex_property<Graph, int> DistanceProperty;
 typedef DistanceProperty::matrix_type DistanceMatrix;
 typedef DistanceProperty::matrix_map_type DistanceMatrixMap;
 
+static Eigen::MatrixXd adj_mat(const Graph& g) {
+    Eigen::MatrixXd m(boost::num_vertices(g),boost::num_vertices(g));
+    for_each_e_const(g, [&](Edge e){
+        m(boost::source(e,g), boost::target(e,g)) = 1;
+        m(boost::target(e,g), boost::source(e,g)) = 1;
+    });
+
+    return m;
+}
+
 #endif

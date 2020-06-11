@@ -10,7 +10,6 @@ class GeneralizedPeterson : public GeneratorInterface {
 public:
     Graph generate(unsigned int n, unsigned int k) {
         Graph g;
-        int counter = 0;
         for (int i = 0; i < n; i++) {
             add_edge((i % n), ((i + 1) % n), 1, g);
             add_edge((i % n), ((i + n) % (2 * n)), 1, g);

@@ -18,10 +18,12 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableGenerators.emplace_back(std::make_unique<Prism>());
     availableGenerators.emplace_back(std::make_unique<Antiprism>());
     availableGenerators.emplace_back(std::make_unique<Regular>());
+    availableGenerators.emplace_back(std::make_unique<GeneralizedPeterson>());
 
     availableReports.emplace_back(std::make_unique<NumOfVertices>());
     availableReports.emplace_back(std::make_unique<NumOfEdges>());
     availableReports.emplace_back(std::make_unique<MaxDegree>());
+    availableReports.emplace_back(std::make_unique<MinDegree>());
     availableReports.emplace_back(std::make_unique<MaxEigenValue>());
     availableReports.emplace_back(std::make_unique<MinEigenValue>());
     availableReports.emplace_back(std::make_unique<SumEigenValues>());
