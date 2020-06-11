@@ -12,6 +12,13 @@
 
 class GraphDiameter : public ReportInterface {
 public:
+    /**
+     * Computes the diameter of graph
+     * The edges weights should be initialized to 1
+     *
+     * @param g
+     * @return
+     */
     string report(const Graph& g) override {
         DistanceMatrix dist = Utils::get_floyd_warshall_all_pairs_shortest_paths(g);
         int max = 0;
