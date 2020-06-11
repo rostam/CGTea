@@ -14,7 +14,7 @@ public:
         Graph g;
         for (unsigned int i = 0; i < n; i++)
             for (unsigned int j = i+1; j < n; j++)
-            add_edge(i, j, g);
+            add_edge(i, j, 1, g);
         return g;
     }
 

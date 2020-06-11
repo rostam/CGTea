@@ -14,10 +14,10 @@ public:
     Graph generate(unsigned int n, unsigned int k) override {
         Graph g;
         for (int i = 0; i < n; i++) {
-            add_edge(i, n + i, g);
-            add_edge(n + i, 2 * n, g);
-            add_edge(n + i, n + ((i + 1, g) % n, g), g);
-            add_edge(i, 2 * n, g);
+            add_edge(i, n + i, 1, g);
+            add_edge(n + i, 2 * n, 1, g);
+            add_edge(n + i, n + ((i + 1, g) % n, g), 1, g);
+            add_edge(i, 2 * n, 1, g);
         }
     }
 

@@ -12,12 +12,12 @@ public:
         Graph g;
         int counter = 0;
         for (int i = 0; i < n; i++) {
-            add_edge((i % n), ((i + 1) % n),g);
-            add_edge((i % n), ((i + n) % (2 * n)),g);
+            add_edge((i % n), ((i + 1) % n), 1, g);
+            add_edge((i % n), ((i + n) % (2 * n)), 1, g);
             if (i + n + k > 2 * n - 1)
-                add_edge(((i + n) % (2 * n)), ((i + n + k) % (2 * n)) + n,g);
+                add_edge(((i + n) % (2 * n)), ((i + n + k) % (2 * n)) + n, 1, g);
             else
-                add_edge(((i + n) % (2 * n)), ((i + n + k) % (2 * n)),g);
+                add_edge(((i + n) % (2 * n)), ((i + n + k) % (2 * n)), 1, g);
         }
         return g;
     }

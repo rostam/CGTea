@@ -13,23 +13,20 @@ public:
 
     Graph generate(unsigned int n, unsigned int k) override {
         Graph g;
-        
-        
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (j > m - 2)
-                     add_edge(i * m + j, i * m, g);
+                     add_edge(i * m + j, i * m, 1, g);
                 else
-                     add_edge(i * m + j, i * m + j + 1, g);
-                
+                     add_edge(i * m + j, i * m + j + 1, 1, g);
             }
         }
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (i > n - 2)
-                     add_edge(i * m + j, j, g);
+                     add_edge(i * m + j, j, 1, g);
                 else
-                     add_edge(i * m + j, (i + 1, g) * m + j, g);
+                     add_edge(i * m + j, (i + 1, g) * m + j, 1, g);
                 
             }
         }
@@ -42,31 +39,7 @@ public:
     Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {
         Graph g = generate(n, k);
         std::vector<cgtea_geometry::Point> pos = position_generators::circle(width, height, 200.0, n);
-        Graph g;
-        
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (j > m - 2)
-                     add_edge(i * m + j, i * m, g);
-                else
-                     add_edge(i * m + j, i * m + j + 1, g);
-                
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (i > n - 2)
-                     add_edge(i * m + j, j, g);
-                else
-                     add_edge(i * m + j, (i + 1, g) * m + j, g);
-                
-            }
-        }
-
-
-        
-
+        return g;
     }
 
     string name() override {

@@ -13,24 +13,14 @@ public:
 
     Graph generate(unsigned int n, unsigned int k) override {
         Graph g;
-        
-        
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (i == j) continue;
                  add_edge(i, n + j, g);
-                
-
                  add_edge(i,j, g);
-                
-
                  add_edge(n+i,n+j, g);
-                
             }
         }
-
-        
-
     }
 
     Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {
@@ -43,18 +33,11 @@ public:
             for (int j = 0; j < n; j++) {
                 if (i == j) continue;
                  add_edge(i, n + j, g);
-                
-
                  add_edge(i,j, g);
-                
-
                  add_edge(n+i,n+j, g);
                 
             }
         }
-
-        
-
     }
 
     string name() override {
@@ -70,9 +53,7 @@ public:
     };
     
     string check_parameters() override {
-        
     	return null;
-   
     };
 };
 
