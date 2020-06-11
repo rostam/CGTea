@@ -25,14 +25,6 @@ public:
     Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {
         Graph g = generate(n, k);
         std::vector<cgtea_geometry::Point> pos = position_generators::circle(width, height, 200.0, n);
-        Graph g;
-        
-        for (int i = 0; i < n - 1; i++) {
-             add_edge(i, i + 1, g);
-        }
-        add_edge(n-1,0, g);
-        
-
     }
 
     string name() override {
