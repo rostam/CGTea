@@ -12,6 +12,7 @@ public:
     explicit Cmn() : GeneratorInterface() {};
 
     Graph generate(unsigned int n, unsigned int k) override {
+        unsigned int &m = k;
         Graph g;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -26,19 +27,25 @@ public:
                 if (i > n - 2)
                      add_edge(i * m + j, j, 1, g);
                 else
-                     add_edge(i * m + j, (i + 1, g) * m + j, 1, g);
+                     add_edge(i * m + j, (i + 1) * m + j, 1, g);
                 
             }
         }
-
-
-        
-
+        return g;
     }
 
     Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {
+        unsigned int &m = k;
         Graph g = generate(n, k);
-        std::vector<cgtea_geometry::Point> pos = position_generators::circle(width, height, 200.0, n);
+        std::vector<cgtea_geometry::Point> centerPoints = position_generators::circle(width, height, 100.0, n);
+        int i = 0;
+        for_each_v(g, [&](Ver v) {
+            std::vector<cgtea_geometry::Point> pos2 = position_generators::circle(m, centerPoints[i].x, centerPoints[i].y, m);
+            for(int j=0;j < m;j++) {
+                boost::put(boost::vertex_distance, g, v, pos2[i*m + j]);
+            }
+            i++;
+        });
         return g;
     }
 
@@ -55,11 +62,7 @@ public:
     };
     
     string check_parameters() override {
-        
-    	if ( n<0 || m<0)return"Both m & n must be positive!";
-    	else
-    		return null;
-   
+        return "";
     };
 };
 

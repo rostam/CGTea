@@ -11,6 +11,7 @@
 #include "../generators/GeneralizedPeterson.h"
 #include "../generators/Prism.h"
 #include "../generators/Antiprism.h"
+#include "../generators/Cmn.h"
 
 
 #include "../reports/MaxDegree.h"
@@ -69,5 +70,15 @@ BOOST_AUTO_TEST_SUITE(GeneratorsTestSuite)
         BOOST_CHECK_EQUAL(std::stoi(MinDegree().report(g)), 3);
         BOOST_CHECK_EQUAL(std::stoi(GraphDiameter().report(g)), 2);
         BOOST_CHECK_EQUAL(std::stoi(GraphGirthSize().report(g)), 5);
+    }
+    BOOST_AUTO_TEST_CASE(CmnGeneratorTest) {
+        Cmn cmn;
+        Graph g = cmn.generate(5,4);
+        BOOST_CHECK_EQUAL(boost::num_vertices(g),20);
+        BOOST_CHECK_EQUAL(boost::num_edges(g),40);
+        BOOST_CHECK_EQUAL(std::stoi(MaxDegree().report(g)), 4);
+        BOOST_CHECK_EQUAL(std::stoi(MinDegree().report(g)), 4);
+        BOOST_CHECK_EQUAL(std::stoi(GraphDiameter().report(g)), 4);
+        BOOST_CHECK_EQUAL(std::stoi(GraphGirthSize().report(g)), 4);
     }
 BOOST_AUTO_TEST_SUITE_END()

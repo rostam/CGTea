@@ -26,7 +26,15 @@ class position_generators {
 //    }
 
 public:
-
+    /**
+     * generate positions of points in the shape of a circle
+     *
+     * @param w width of circle
+     * @param h height of circle
+     * @param r radius of circle
+     * @param n number of points in the circle
+     * @return the positions of points in the shape of a circle
+     */
     static std::vector<cgtea_geometry::Point> circle(double w, double h, double r, unsigned int n) {
         std::vector<cgtea_geometry::Point> ret;
         for(unsigned int i=0;i < n;i++) {
@@ -35,29 +43,39 @@ public:
         }
         return ret;
     }
-//
-//    static std::vector<std::pair<double, double>> circle(int xOffset, int yOffset, int w, int h, unsigned int n) {
-//        std::vector<std::pair<double, double>> ret;
-//        w = w / 2;
-//        h = h / 2;
-//        w -= xOffset;
-//        h -= yOffset;
-//        for (unsigned int i = 0; i < n; i++) {
-//            double deg = 2 * M_PI / n * i;
-//            double x = sin(deg);
-//            double y = cos(deg);
-//            x *= w;
-//            y *= h;
-//            x += w;
-//            y += h;
-//            x += xOffset;
-//            y += yOffset;
-//            ret.push_back(std::pair((int) x, (int) y));
-//        }
-//        return ret;
-//    }
 
-//
+    /**
+     * generate positions of points in the shape of a circle
+     *
+     * @param xOffset x axis of where to put the center of circle
+     * @param yOffset y axis of where to put the center of circle
+     * @param w width of circle
+     * @param h height of cirlce
+     * @param number of points in the circle
+     * @return positions of points in the shape of a circle
+     */
+    static std::vector<std::pair<double, double>> circle(int xOffset, int yOffset, int w, int h, unsigned int n) {
+        std::vector<std::pair<double, double>> ret;
+        w = w / 2;
+        h = h / 2;
+        w -= xOffset;
+        h -= yOffset;
+        for (unsigned int i = 0; i < n; i++) {
+            double deg = 2 * M_PI / n * i;
+            double x = sin(deg);
+            double y = cos(deg);
+            x *= w;
+            y *= h;
+            x += w;
+            y += h;
+            x += xOffset;
+            y += yOffset;
+            ret.push_back(std::pair((int) x, (int) y));
+        }
+        return ret;
+    }
+
+
 //    public static Point[] circle(int xOffset, int yOffset, int w, int h, int n, double degree) {
 //        Point[] ret = new Point[n];
 //        w = w / 2;
@@ -89,11 +107,11 @@ public:
         return input;
     }
 //
-//    static std::vector<std::pair<double, double>> circle(int r, int x, int y, unsigned int n) {
-//        std::vector<std::pair<double, double>> ret = circle(0, 0, r, r, n);
-//        shift(ret, x, y);
-//        return ret;
-//    }
+    static std::vector<std::pair<double, double>> circle(int r, int x, int y, unsigned int n) {
+        std::vector<std::pair<double, double>> ret = circle(0, 0, r, r, n);
+        shift(ret, x, y);
+        return ret;
+    }
 //
 //    public static Point[] rotate(Point[] input, double degree) {
 //
