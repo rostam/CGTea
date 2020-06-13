@@ -40,7 +40,7 @@ public:
         std::vector<cgtea_geometry::Point> centerPoints = position_generators::circle(width, height, 100.0, n);
         int i = 0;
         for_each_v(g, [&](Ver v) {
-            std::vector<cgtea_geometry::Point> pos2 = position_generators::circle(m, centerPoints[i].x, centerPoints[i].y, m);
+            std::vector<cgtea_geometry::Point> pos2 = position_generators::circle2(m, centerPoints[i].x, centerPoints[i].y, m);
             for(int j=0;j < m;j++) {
                 boost::put(boost::vertex_distance, g, v, pos2[i*m + j]);
             }
@@ -49,15 +49,15 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Cm * Cn";
     }
 
-    string description() override {
+    string description() const override {
         return "Generate Cm*Cn";
     }
     
-    string category() override {
+    string category() const override {
         return "General Graphs";
     };
     

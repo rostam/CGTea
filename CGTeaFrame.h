@@ -25,6 +25,8 @@
 #include "generators/Regular.h"
 #include "generators/Banana.h"
 #include "generators/GeneralizedPeterson.h"
+#include "generators/Cmn.h"
+
 #include "reports/NumOfVertices.h"
 #include "reports/NumOfEdges.h"
 #include "reports/MaxDegree.h"

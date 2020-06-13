@@ -33,11 +33,11 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Star";
     }
 
-    string description() override {
+    string description() const override {
         return "Generates a star graph.";
     }
 };

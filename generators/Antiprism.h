@@ -38,12 +38,16 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Antiprism Graphs";
     }
 
-    string description() override {
+    string description() const override {
         return "Generates an antiprism graph.";
+    }
+
+    string category() const override {
+        return "General";
     }
 };
 

@@ -28,12 +28,16 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Cycle";
     }
 
-    string description() override {
+    string description() const override {
         return "Generates a cycle graph.";
+    }
+
+    string category() const override {
+        return "General";
     }
 };
 

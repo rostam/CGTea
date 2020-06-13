@@ -29,12 +29,16 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Complete Graph";
     }
 
-    string description() override {
+    string description() const override {
         return "Generates a complete graph.";
+    }
+
+    string category() const override {
+        return "General";
     }
 };
 

@@ -38,12 +38,16 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Prism Graph";
     }
 
-    string description() override {
+    string description() const override {
         return "Generates a prism graph.";
+    }
+
+    string category() const override {
+        return "General";
     }
 };
 

@@ -34,12 +34,16 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Generalized Peterson";
     }
 
-    string description() override {
+    string description() const override {
         return "Generates a generalized peterson graph.";
+    }
+
+    string category() const override {
+        return "General";
     }
 };
 

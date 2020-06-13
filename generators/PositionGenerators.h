@@ -54,8 +54,8 @@ public:
      * @param number of points in the circle
      * @return positions of points in the shape of a circle
      */
-    static std::vector<std::pair<double, double>> circle(int xOffset, int yOffset, int w, int h, unsigned int n) {
-        std::vector<std::pair<double, double>> ret;
+    static std::vector<cgtea_geometry::Point> circle_offset(int xOffset, int yOffset, int w, int h, unsigned int n) {
+        std::vector<cgtea_geometry::Point> ret;
         w = w / 2;
         h = h / 2;
         w -= xOffset;
@@ -70,7 +70,7 @@ public:
             y += h;
             x += xOffset;
             y += yOffset;
-            ret.push_back(std::pair((int) x, (int) y));
+            ret.emplace_back( x,  y);
         }
         return ret;
     }
@@ -98,17 +98,16 @@ public:
 //        return ret;
 //    }
 //
-    static std::vector<std::pair<double, double>>
-    shift(std::vector<std::pair<double, double>> input, int xOffset, int yOffset) {
-        for (std::pair<double, double> p : input) {
-            p.first += xOffset;
-            p.second += yOffset;
+    static std::vector<cgtea_geometry::Point> shift(std::vector<cgtea_geometry::Point> input, int xOffset, int yOffset) {
+        for (cgtea_geometry::Point p : input) {
+            p.x += xOffset;
+            p.y += yOffset;
         }
         return input;
     }
 //
-    static std::vector<std::pair<double, double>> circle(int r, int x, int y, unsigned int n) {
-        std::vector<std::pair<double, double>> ret = circle(0, 0, r, r, n);
+    static std::vector<cgtea_geometry::Point> circle2(int r, int x, int y, unsigned int n) {
+        std::vector<cgtea_geometry::Point> ret = circle_offset(0, 0, r, r, n);
         shift(ret, x, y);
         return ret;
     }
