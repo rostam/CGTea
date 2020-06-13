@@ -9,12 +9,9 @@
 
 class ActionInterface {
 public:
-    virtual Graph action(Graph g) {
-        return g;
-    }
-
-    virtual string name() {return "Action Interface";};
-    virtual string description() {return "Action Interface";};
+    virtual Graph action(Graph g) = 0;
+    virtual string name() const = 0;
+    virtual string description() const = 0;
 };
 
 #endif //CGTEA_ACTIONINTERFACE_H

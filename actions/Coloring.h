@@ -21,11 +21,11 @@ class Coloring : public ActionInterface {
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Heuristic Coloring";
     }
 
-    string description() override {
+    string description() const override {
         return "Graph Heuristic Coloring.";
     }
 
