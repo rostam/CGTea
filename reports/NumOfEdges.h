@@ -13,11 +13,14 @@ public:
         int n = boost::num_edges(g);
         return std::to_string(n);
     };
-    string name() override {
+    string name() const override {
         return "Number of edges";
     };
-    string description() override {
+    string description() const override {
         return "Number of edges";
+    };
+    string type() const override {
+        return "int";
     };
 };
 

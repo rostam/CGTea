@@ -28,6 +28,7 @@ class Coloring : public ActionInterface {
     string description() override {
         return "Graph Heuristic Coloring.";
     }
+
 };
 
 

@@ -35,16 +35,16 @@ public:
         }
         return std::to_string(max);
     };
-    string name() override {
+    string name() const override {
         return "Graph Diameter";
     };
-    string description() override {
+    string description() const override {
         return "Graph Diameter";
     };
-    string type() override {
+    string type() const override {
         return "int";
     };
-    string category() override {
+    string category() const override {
         return "General";
     };
 };

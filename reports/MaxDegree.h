@@ -17,16 +17,16 @@ public:
         });
         return std::to_string(max_degree);
     };
-    string name() override {
+    string name() const override {
         return "Maximum degree";
     };
-    string description() override {
+    string description() const override {
         return "Maximum degree";
     };
-    string type() override {
+    string type() const override {
         return "int";
     };
-    string category() override {
+    string category() const override {
         return "General";
     };
 };

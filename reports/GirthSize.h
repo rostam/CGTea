@@ -57,16 +57,16 @@ public:
             return "0";
         return std::to_string(girth);
     };
-    string name() override {
+    string name() const override {
         return "Graph Girth Size";
     };
-    string description() override {
+    string description() const override {
         return "Graph Girth Size";
     };
-    string type() override {
+    string type() const override {
         return "int";
     };
-    string category() override {
+    string category() const override {
         return "General";
     };
 };

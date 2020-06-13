@@ -13,11 +13,17 @@ public:
         int n = boost::num_vertices(g);
         return std::to_string(n);
     };
-    string name() override {
+    string name() const override {
         return "Number of vertices";
     };
-    string description() override {
+    string description() const override {
         return "Number of vertices";
+    };
+    string type() const override {
+        return "int";
+    };
+    string category() const override {
+        return "General";
     };
 };
 

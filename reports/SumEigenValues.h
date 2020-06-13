@@ -14,11 +14,14 @@ public:
         std::tuple<double,double,double> t = MaxEigenValue::eigen_values(g);
         return std::to_string(std::get<2>(t));
     };
-    string name() override {
+    string name() const override {
         return "Sum of eigen values";
     };
-    string description() override {
+    string description() const  override {
         return "Sum of eigen values";
+    };
+    string type() const override {
+        return "int";
     };
 };
 

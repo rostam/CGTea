@@ -13,11 +13,14 @@ public:
         std::tuple<double,double,double> t = eigen_values(g);
         return std::to_string(std::get<0>(t));
     };
-    string name() override {
+    string name() const override {
         return "Maximum eigen value";
     };
-    string description() override {
+    string description() const override {
         return "Maximum eigen value";
+    };
+    string type() const override {
+        return "int";
     };
 
     static std::tuple<double,double,double> eigen_values(const Graph& g) {
