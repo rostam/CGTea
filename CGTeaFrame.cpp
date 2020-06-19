@@ -3,6 +3,7 @@
 //
 
 #include "CGTeaFrame.h"
+#include "CGTeaSidebar.h"
 
 #include <memory>
 
@@ -137,7 +138,13 @@ void CGTeaFrame::Layout(wxCommandEvent& event) {
 }
 
 void CGTeaFrame::Report(wxCommandEvent& event) {
-    cerr << this->GetSizer()->GetChildren()[0]->GetClassInfo()->GetClassName();
+    int id = event.GetId();
+//    side
+//    cerr << availableReports[id - availableGenerators.size() - 1]->report(currentGraph);
+//    cerr << wstring(((CGTeaSidebar*)this->GetSizer()->GetChildren()[0]->GetWindow())->statistics_text->GetValue());
+    std::string report_results = availableReports[id - availableGenerators.size() - 1]->report(currentGraph);
+    std::string report_name = availableReports[id - availableGenerators.size() - 1]->name();
+    ((CGTeaSidebar*)this->GetSizer()->GetChildren()[0]->GetWindow())->statistics_text->SetValue(report_name + ": " +report_results);
 }
 
 void CGTeaFrame::Action(wxCommandEvent& event) {
