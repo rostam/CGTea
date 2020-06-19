@@ -168,6 +168,12 @@ void CGTeaFrame::Open(wxCommandEvent& event) {
             in.close();
             G6Format g6Format;
             currentGraph = g6Format.stringToGraph(g6);
+            std::vector<cgtea_geometry::Point> pos = compute_force_directed(10, 10, 300, 300, currentGraph);
+            int i = 0;
+            for_each_v(currentGraph, [&](Ver v) {
+                boost::put(boost::vertex_distance, currentGraph, v, pos[i]);
+                i++;
+            });
         }
         Refresh();
     }
