@@ -3,8 +3,8 @@
 // Created by rostam on 10.10.19.
 //
 
-#ifndef CGTEA_KCONNECTED.JAVA_H
-#define CGTEA_KCONNECTED.JAVA_H
+#ifndef CGTEA_KCONNECTED_H
+#define CGTEA_KCONNECTED_H
 
 #include "ReportInterface.h"
 
@@ -14,18 +14,18 @@ public:
         int n = boost::num_edges(g);
         return std::to_string(n);
     };
-    string name() override {
+    string name() const override {
         return "Vertex Connectivity";
     };
-    string description() override {
+    string description() const override {
         return "Vertex Connectivity";
     };
-    string type() override {
+    string type() const override {
         return "int";
     };
-    string category() override {
+    string category() const override {
         return "Connectivity";
     };
 };
 
-#endif //CGTEA_KCONNECTED.JAVA_H
+#endif //CGTEA_KCONNECTED_H

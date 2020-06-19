@@ -36,15 +36,15 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Helm Graph";
     }
 
-    string description() override {
+    string description() const override {
         return "Generate Helm Graph";
     }
 
-    string category() override {
+    string category() const override {
         return "Web Class Graphs";
     };
 

@@ -8,8 +8,14 @@ include_directories(${Boost_INCLUDE_DIRS})
 file(GLOB BoostTestSrc
     "BoostTest/*.cpp"
 )
+file(GLOB Reports
+        "reports/*.cpp"
+)
+file(GLOB Generators
+        "generators/*.cpp"
+        )
 #set( CMAKE_CXX_FLAGS "`wx-config --cxxflags --libs`")
-add_executable(CGTea generators/compute_force_directed.cpp CGTeaApp.cpp BasicDrawPane.cpp CGTeaFrame.cpp CGTeaSidebar.cpp  reports/GirthSize.cpp reports/MaxEigenValue.cpp reports/MinEigenValue.cpp reports/EigenRelatedFunctions.h reports/SumEigenValues.cpp)
-add_executable(BoostTest generators/compute_force_directed.cpp  reports/GirthSize.cpp reports/MaxEigenValue.cpp reports/MinEigenValue.cpp reports/EigenRelatedFunctions.h reports/SumEigenValues.cpp ${BoostTestSrc})
+add_executable(CGTea CGTeaApp.cpp BasicDrawPane.cpp CGTeaFrame.cpp CGTeaSidebar.cpp  ${Reports} ${Generators})
+add_executable(BoostTest ${Reports} ${Generators}  ${BoostTestSrc})
 target_link_libraries(CGTea ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(BoostTest ${Boost_LIBRARIES})

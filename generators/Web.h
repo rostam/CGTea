@@ -73,15 +73,15 @@ public:
 
     }
 
-    string name() override {
+    string name() const override {
         return "Web Graph";
     }
 
-    string description() override {
+    string description() const override {
         return "Generate Web Graph";
     }
     
-    string category() override {
+    string category() const override {
         return "Web Class Graphs";
     };
     

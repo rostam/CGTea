@@ -3,8 +3,8 @@
 // Created by rostam on 10.10.19.
 //
 
-#ifndef CGTEA_NUMOFQUADRANGLE.JAVA_H
-#define CGTEA_NUMOFQUADRANGLE.JAVA_H
+#ifndef CGTEA_NUMOFQUADRANGLE_H
+#define CGTEA_NUMOFQUADRANGLE_H
 
 #include "ReportInterface.h"
 
@@ -14,18 +14,18 @@ public:
         int n = boost::num_edges(g);
         return std::to_string(n);
     };
-    string name() override {
+    string name() const override {
         return "number of quadrangle";
     };
-    string description() override {
+    string description() const override {
         return "number of quadrangle";
     };
-    string type() override {
+    string type() const override {
         return "int";
     };
-    string category() override {
+    string category() const override {
         return "General";
     };
 };
 
-#endif //CGTEA_NUMOFQUADRANGLE.JAVA_H
+#endif //CGTEA_NUMOFQUADRANGLE_H

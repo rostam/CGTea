@@ -35,15 +35,15 @@ public:
 
     }
 
-    string name() override {
+    string name() const override {
         return "Complete Tree";
     }
 
-    string description() override {
+    string description() const override {
         return "Generates a complete tree";
     }
     
-    string category() override {
+    string category() const override {
         return "Trees";
     };
     

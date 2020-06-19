@@ -33,15 +33,15 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Path";
     }
 
-    string description() override {
+    string description() const override {
         return "Generates a path with n vertices";
     }
     
-    string category() override {
+    string category() const override {
         return "Trees";
     };
     

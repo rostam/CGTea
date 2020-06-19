@@ -3,8 +3,8 @@
 // Created by rostam on 10.10.19.
 //
 
-#ifndef CGTEA_WEIGHTEDSZEGEDINDEX.JAVA_H
-#define CGTEA_WEIGHTEDSZEGEDINDEX.JAVA_H
+#ifndef CGTEA_WEIGHTEDSZEGEDINDEX_H
+#define CGTEA_WEIGHTEDSZEGEDINDEX_H
 
 #include "ReportInterface.h"
 
@@ -14,18 +14,18 @@ public:
         int n = boost::num_edges(g);
         return std::to_string(n);
     };
-    string name() override {
+    string name() const override {
         return "Weighted Szeged Index";
     };
-    string description() override {
+    string description() const override {
         return "Weighted Szeged Index";
     };
-    string type() override {
+    string type() const override {
         return "int";
     };
-    string category() override {
+    string category() const override {
         return "Topological Indices";
     };
 };
 
-#endif //CGTEA_WEIGHTEDSZEGEDINDEX.JAVA_H
+#endif //CGTEA_WEIGHTEDSZEGEDINDEX_H

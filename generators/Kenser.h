@@ -49,15 +49,15 @@ public:
 
     }
 
-    string name() override {
+    string name() const override {
         return "K(n/d)";
     }
 
-    string description() override {
+    string description() const override {
         return "Generate K(n/d)";
     }
     
-    string category() override {
+    string category() const override {
         return "General Graphs";
     };
     

@@ -7,7 +7,7 @@
 
 #include "../datatypes.h"
 #include <variant>
-
+#include <boost/graph/floyd_warshall_shortest.hpp>
 
 class Utils {
 public:
@@ -19,7 +19,7 @@ public:
     static DistanceMatrix get_floyd_warshall_all_pairs_shortest_paths(const Graph& g) {
         DistanceMatrix distances(num_vertices(g));
         DistanceMatrixMap dm(distances, g);
-        floyd_warshall_all_pairs_shortest_paths(g,dm);
+        boost::floyd_warshall_all_pairs_shortest_paths(g,dm);
         return distances;
     }
 

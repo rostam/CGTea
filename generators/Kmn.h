@@ -25,15 +25,15 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Km,n";
     }
 
-    string description() override {
+    string description() const override {
         return "Generate Km,n";
     }
     
-    string category() override {
+    string category() const override {
         return "Multipartite Graphs";
     };
     

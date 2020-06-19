@@ -27,15 +27,15 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Crown Graph";
     }
 
-    string description() override {
+    string description() const override {
         return "Generate Crown Graph";
     }
     
-    string category() override {
+    string category() const override {
         return "Web Class Graphs";
     };
     

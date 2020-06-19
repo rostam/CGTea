@@ -3,8 +3,8 @@
 // Created by rostam on 10.10.19.
 //
 
-#ifndef CGTEA_PERIPHERALVERTICESCOUNT.JAVA_H
-#define CGTEA_PERIPHERALVERTICESCOUNT.JAVA_H
+#ifndef CGTEA_PERIPHERALVERTICESCOUNT_H
+#define CGTEA_PERIPHERALVERTICESCOUNT_H
 
 #include "ReportInterface.h"
 
@@ -14,18 +14,18 @@ public:
         int n = boost::num_edges(g);
         return std::to_string(n);
     };
-    string name() override {
+    string name() const override {
         return "Peripheral vertices count";
     };
-    string description() override {
+    string description() const override {
         return "Peripheral vertices count";
     };
-    string type() override {
+    string type() const override {
         return "int";
     };
-    string category() override {
+    string category() const override {
         return "OurWorks-Conjectures";
     };
 };
 
-#endif //CGTEA_PERIPHERALVERTICESCOUNT.JAVA_H
+#endif //CGTEA_PERIPHERALVERTICESCOUNT_H

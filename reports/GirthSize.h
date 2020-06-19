@@ -26,4 +26,4 @@ public:
     };
 };
 
-#endif //CGTEA_GIRTHSIZE.JAVA_H
+#endif //CGTEA_GIRTHSIZE_H

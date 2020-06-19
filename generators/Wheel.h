@@ -33,15 +33,15 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Wheel Graph";
     }
 
-    string description() override {
+    string description() const override {
         return "Wheel Graph";
     }
     
-    string category() override {
+    string category() const override {
         return "Web Class Graphs";
     };
     

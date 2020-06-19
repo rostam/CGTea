@@ -3,8 +3,8 @@
 // Created by rostam on 10.10.19.
 //
 
-#ifndef CGTEA_EDGEDEGREE.JAVA_H
-#define CGTEA_EDGEDEGREE.JAVA_H
+#ifndef CGTEA_EDGEDEGREE_H
+#define CGTEA_EDGEDEGREE_H
 
 #include "ReportInterface.h"
 
@@ -14,18 +14,18 @@ public:
         int n = boost::num_edges(g);
         return std::to_string(n);
     };
-    string name() override {
+    string name() const override {
         return "Edge Degree";
     };
-    string description() override {
+    string description() const override {
         return "For the edge u~v the edge degree is d(u)+d(v)-2.";
     };
-    string type() override {
+    string type() const override {
         return "int";
     };
-    string category() override {
+    string category() const override {
         return "General";
     };
 };
 
-#endif //CGTEA_EDGEDEGREE.JAVA_H
+#endif //CGTEA_EDGEDEGREE_H

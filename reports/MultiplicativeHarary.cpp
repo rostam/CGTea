@@ -3,8 +3,8 @@
 // Created by rostam on 10.10.19.
 //
 
-#ifndef CGTEA_MULTIPLICATIVEHARARY.JAVA_H
-#define CGTEA_MULTIPLICATIVEHARARY.JAVA_H
+#ifndef CGTEA_MULTIPLICATIVEHARARY_H
+#define CGTEA_MULTIPLICATIVEHARARY_H
 
 #include "ReportInterface.h"
 
@@ -14,18 +14,18 @@ public:
         int n = boost::num_edges(g);
         return std::to_string(n);
     };
-    string name() override {
+    string name() const override {
         return "MultiplicativeHarary Index";
     };
-    string description() override {
+    string description() const override {
         return "MultiplicativeHarary Index";
     };
-    string type() override {
+    string type() const override {
         return "double";
     };
-    string category() override {
+    string category() const override {
         return "Topological Indices";
     };
 };
 
-#endif //CGTEA_MULTIPLICATIVEHARARY.JAVA_H
+#endif //CGTEA_MULTIPLICATIVEHARARY_H

@@ -13,7 +13,6 @@
 #include <random>
 #include "boost/graph/simple_point.hpp"
 #include "generators/point.h"
-#include <boost/graph/floyd_warshall_shortest.hpp>
 #include <boost/graph/exterior_property.hpp>
 
 

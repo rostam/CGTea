@@ -40,15 +40,15 @@ public:
         }
     }
 
-    string name() override {
+    string name() const override {
         return "CockTail Party Graph";
     }
 
-    string description() override {
+    string description() const override {
         return "CockTail Party Graph";
     }
     
-    string category() override {
+    string category() const override {
         return "General Graphs";
     };
     

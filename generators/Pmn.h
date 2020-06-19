@@ -35,15 +35,15 @@ public:
         return g;
     }
 
-    string name() override {
+    string name() const override {
         return "Pm * Pn";
     }
 
-    string description() override {
+    string description() const override {
         return "Generate Pm*Pn";
     }
     
-    string category() override {
+    string category() const override {
         return "General Graphs";
     };
     

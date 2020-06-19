@@ -43,15 +43,15 @@ public:
 
     }
 
-    string name() override {
+    string name() const override {
         return "Tadpole Graph";
     }
 
-    string description() override {
+    string description() const override {
         return "Genrates a Tadpole";
     }
     
-    string category() override {
+    string category() const override {
         return "General Graphs";
     };
     

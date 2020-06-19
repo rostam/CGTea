@@ -3,8 +3,8 @@
 // Created by rostam on 10.10.19.
 //
 
-#ifndef CGTEA_SZEGEDINDEX.JAVA_H
-#define CGTEA_SZEGEDINDEX.JAVA_H
+#ifndef CGTEA_SZEGEDINDEX_H
+#define CGTEA_SZEGEDINDEX_H
 
 #include "ReportInterface.h"
 
@@ -14,18 +14,18 @@ public:
         int n = boost::num_edges(g);
         return std::to_string(n);
     };
-    string name() override {
+    string name() const override {
         return "Szeged Index";
     };
-    string description() override {
+    string description() const override {
         return "Szeged Index";
     };
-    string type() override {
+    string type() const override {
         return "int";
     };
-    string category() override {
+    string category() const override {
         return "Topological Indices";
     };
 };
 
-#endif //CGTEA_SZEGEDINDEX.JAVA_H
+#endif //CGTEA_SZEGEDINDEX_H
