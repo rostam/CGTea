@@ -154,16 +154,21 @@ void CGTeaFrame::Action(wxCommandEvent& event) {
 }
 
 void CGTeaFrame::Open(wxCommandEvent& event) {
-    wxFileDialog *openFileDialog = new wxFileDialog(this);
+    wxFileDialog *openFileDialog = new wxFileDialog(this, _("Choose a file to open"), wxEmptyString, wxEmptyString,
+                                                    _("G6 format files (*.g6)|*.g6|CGTea format files (*.tea)|*.tea|"
+                                                      "MTX format files (*.mtx)|*.mtx"),
+                                                    wxFD_OPEN);
 
     if (openFileDialog->ShowModal() == wxID_OK) {
         wxString fileName = openFileDialog->GetPath();
-        ifstream in(fileName.mb_str());
-        std::string g6;
-        in >> g6;
-        in.close();
-        G6Format g6Format;
-        currentGraph = g6Format.stringToGraph(g6);
+        if (fileName.find(".g6") != std::string::npos) {
+            ifstream in(fileName.mb_str());
+            std::string g6;
+            in >> g6;
+            in.close();
+            G6Format g6Format;
+            currentGraph = g6Format.stringToGraph(g6);
+        }
         Refresh();
     }
 //    wxFileDialog
