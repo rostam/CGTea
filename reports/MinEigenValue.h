@@ -10,10 +10,7 @@
 
 class MinEigenValue : public ReportInterface{
 public:
-    string report(const Graph& g) override {
-        std::tuple<double,double,double> t = MaxEigenValue::eigen_values(g);
-        return std::to_string(std::get<1>(t));
-    };
+    string report(const Graph& g) override;
     string name() const override {
         return "Minimum eigen value";
     };
