@@ -4,6 +4,7 @@
 
 #include "CGTeaFrame.h"
 #include "CGTeaSidebar.h"
+#include <wx/filedlg.h>
 
 #include <memory>
 
@@ -153,12 +154,27 @@ void CGTeaFrame::Action(wxCommandEvent& event) {
 }
 
 void CGTeaFrame::Open(wxCommandEvent& event) {
-    ifstream in("test.g6");
-    std::string g6;
-    in >> g6;
-    in.close();
-    G6Format g6Format;
-    currentGraph = g6Format.stringToGraph(g6);
+    wxFileDialog *openFileDialog = new wxFileDialog(this);
+
+    if (openFileDialog->ShowModal() == wxID_OK) {
+        wxString fileName = openFileDialog->GetPath();
+        ifstream in(fileName.mb_str());
+        std::string g6;
+        in >> g6;
+        in.close();
+        G6Format g6Format;
+        currentGraph = g6Format.stringToGraph(g6);
+        Refresh();
+    }
+//    wxFileDialog
+//            openFileDialog(this, _("Open XYZ file"), "", "",
+//                           "XYZ files (*.xyz)|*.xyz", wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+//    ifstream in("test.g6");
+//    std::string g6;
+//    in >> g6;
+//    in.close();
+//    G6Format g6Format;
+//    currentGraph = g6Format.stringToGraph(g6);
 }
 
 void CGTeaFrame::Save(wxCommandEvent& event) {
