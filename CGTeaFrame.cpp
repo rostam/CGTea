@@ -31,6 +31,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableReports.emplace_back(std::make_unique<MinEigenValue>());
     availableReports.emplace_back(std::make_unique<SumEigenValues>());
     availableReports.emplace_back(std::make_unique<GraphDiameter>());
+    availableReports.emplace_back(std::make_unique<NumberOfTriangles>());
 
     availableActions.emplace_back(std::make_unique<Coloring>());
 
@@ -189,6 +190,15 @@ void CGTeaFrame::Open(wxCommandEvent& event) {
 }
 
 void CGTeaFrame::Save(wxCommandEvent& event) {
+    wxFileDialog *openFileDialog = new wxFileDialog(this, _("Save a file"), wxEmptyString, wxEmptyString,
+                                                    _("G6 format files (*.g6)|*.g6|CGTea format files (*.tea)|*.tea|"
+                                                      "MTX format files (*.mtx)|*.mtx"),
+                                                    wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    if (openFileDialog->ShowModal() == wxID_OK) {
+//        wxString fileName = openFileDialog->GetPath();
+//        if (fileName.find(".g6") != std::string::npos) {
+    }
+
     G6Format g6Format;
     std::string g6 = g6Format.graphToG6(currentGraph);
     ofstream out("test.g6");

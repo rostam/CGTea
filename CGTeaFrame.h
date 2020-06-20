@@ -35,6 +35,8 @@
 #include "reports/MinEigenValue.h"
 #include "reports/SumEigenValues.h"
 #include "reports/Diameter.h"
+#include "reports/NumOfTriangles.h"
+
 #include "G6Format/G6Format.h"
 #include "actions/Coloring.h"
 

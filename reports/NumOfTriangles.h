@@ -11,8 +11,17 @@
 class NumberOfTriangles : public ReportInterface {
 public:
     string report(const Graph& g) override {
-        int n = boost::num_edges(g);
-        return std::to_string(n);
+        int cc = 0;
+        for_each_v_const(g, [&](Ver i) {
+            for_each_neighbor_const(i, g, [&](Ver j) {
+                for_each_neighbor_const(j, g, [&](Ver k) {
+                    if (i!=k && edge(k, i, g).second) {
+                        cc++;
+                    }
+                });
+            });
+        });
+        return std::to_string(cc / 6);
     };
     string name() const override {
         return "Number Of Triangles";

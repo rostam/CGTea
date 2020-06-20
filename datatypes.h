@@ -136,7 +136,15 @@ static void getMetisOrdering(Graph& g, string name, vector<unsigned int>& met_or
 typedef boost::graph_traits<Graph>::adjacency_iterator AdjacencyIterator;
 
 template<typename Lambda>
-static void for_each_neighbor(const Ver& v, const Graph& g, Lambda func) {
+static void for_each_neighbor_const(const Ver& v, const Graph& g, Lambda func) {
+    AdjacencyIterator vi, vi_end;
+    std::tie(vi, vi_end) = boost::adjacent_vertices(v, g);
+    std::for_each(vi,vi_end,func);
+}
+
+
+template<typename Lambda>
+static void for_each_neighbor(const Ver& v, Graph& g, Lambda func) {
     AdjacencyIterator vi, vi_end;
     std::tie(vi, vi_end) = boost::adjacent_vertices(v, g);
     std::for_each(vi,vi_end,func);
