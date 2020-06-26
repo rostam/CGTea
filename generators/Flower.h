@@ -24,15 +24,11 @@ public:
 
     Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {
         Graph g = generate(n, k);
-        std::vector<cgtea_geometry::Point> pos1 = position_generators::circle(width, height, 150.0, n);
-        std::vector<cgtea_geometry::Point> pos2 = position_generators::circle(width, height, 250.0, n);
-        boost::put(boost::vertex_distance, g, 0, cgtea_geometry::Point(width / 2, height / 2));
-        int i = 0;
-        for_each_v(g, [&](Ver v) {
-            if (v <= n && v > 0) boost::put(boost::vertex_distance, g, v, pos1[i + 1]);
-            else if (v > n) boost::put(boost::vertex_distance, g, v, pos2[i + 1]);
-            i++;
-        });
+        std::vector<cgtea_geometry::Point> pos1 = position_generators::circle(width, height, 210.0, n);
+        std::vector<cgtea_geometry::Point> pos2 = position_generators::circle(width, height, 150.0, n, M_PI/(2*n));
+        pos1.insert(pos1.end(),std::make_move_iterator(pos2.begin()),std::make_move_iterator(pos2.end()));
+        pos1.emplace_back(cgtea_geometry::Point(width, height));
+        for_each_v(g, [&](Ver v) { boost::put(boost::vertex_distance, g, v, pos1[v]); });
         return g;
     }
 

@@ -47,6 +47,25 @@ public:
     /**
      * generate positions of points in the shape of a circle
      *
+     * @param w width of circle
+     * @param h height of circle
+     * @param r radius of circle
+     * @param n number of points in the circle
+     * @return the positions of points in the shape of a circle
+     */
+    static std::vector<cgtea_geometry::Point> circle(double w, double h, double r, unsigned int n, double deg_offset) {
+        std::vector<cgtea_geometry::Point> ret;
+        for(unsigned int i=0;i < n;i++) {
+            double deg = 2 * M_PI / n * i + deg_offset;
+            deg += deg_offset;
+            ret.emplace_back( w + r*cos( deg ), h + r*sin( deg ) );
+        }
+        return ret;
+    }
+
+    /**
+     * generate positions of points in the shape of a circle
+     *
      * @param xOffset x axis of where to put the center of circle
      * @param yOffset y axis of where to put the center of circle
      * @param w width of circle
@@ -112,17 +131,17 @@ public:
         return ret;
     }
 //
-//    public static Point[] rotate(Point[] input, double degree) {
-//
-//        for (Point p : input) {
-//            int x = (int) (p.x * Math.cos(degree) - p.y * Math.sin(degree));
-//            int y = (int) (p.x * Math.sin(degree) + p.y * Math.cos(degree));
-//            p.x = x;p.y = y;
-//        }
-//
-//        return input;
-//    }
-//
+    static std::vector<cgtea_geometry::Point> rotate(std::vector<cgtea_geometry::Point> input, double degree) {
+
+        for (cgtea_geometry::Point p : input) {
+            int x = (int) (p.x * cos(degree) - p.y * sin(degree));
+            int y = (int) (p.x * sin(degree) + p.y * cos(degree));
+            p.x = x;p.y = y;
+        }
+
+        return input;
+    }
+////
 //    public static GPoint rotate(GPoint input, double degree) {
 //
 //        double x =  (input.x * Math.cos(degree) - input.y * Math.sin(degree));
