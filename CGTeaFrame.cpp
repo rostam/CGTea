@@ -46,6 +46,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableGenerators.emplace_back(std::make_unique<Cmn>());
     availableGenerators.emplace_back(std::make_unique<Path>());
     availableGenerators.emplace_back(std::make_unique<Flower>());
+    availableGenerators.emplace_back(std::make_unique<Star>());
 
     availableReports.emplace_back(std::make_unique<NumOfVertices>());
     availableReports.emplace_back(std::make_unique<NumOfEdges>());
