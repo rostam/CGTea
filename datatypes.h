@@ -15,10 +15,9 @@
 #include "generators/point.h"
 #include <boost/graph/exterior_property.hpp>
 
+#define printVarNameAndItsValue(x) cout<<"The value of variable "<<(#x)<<" is => "<<x<<"\n"
 
 using namespace std;
-
-typedef const unsigned int cuint;
 
 using boost::property;
 using boost::edge_name;

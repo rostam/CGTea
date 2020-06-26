@@ -17,25 +17,8 @@
 #endif
 #include <memory>
 
-#include "generators/Cycle.h"
-#include "generators/Complete.h"
-#include "generators/Antiprism.h"
-#include "generators/Prism.h"
-#include "generators/Star.h"
-#include "generators/Regular.h"
-#include "generators/Banana.h"
-#include "generators/GeneralizedPeterson.h"
-#include "generators/Cmn.h"
-
-#include "reports/NumOfVertices.h"
-#include "reports/NumOfEdges.h"
-#include "reports/MaxDegree.h"
-#include "reports/MinDegree.h"
-#include "reports/MaxEigenValue.h"
-#include "reports/MinEigenValue.h"
-#include "reports/SumEigenValues.h"
-#include "reports/Diameter.h"
-#include "reports/NumOfTriangles.h"
+#include "generators/GeneratorInterface.h"
+#include "reports/ReportInterface.h"
 
 #include "G6Format/G6Format.h"
 #include "actions/Coloring.h"

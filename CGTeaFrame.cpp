@@ -6,6 +6,28 @@
 #include "CGTeaSidebar.h"
 #include <wx/filedlg.h>
 
+#include "generators/Cycle.h"
+#include "generators/Complete.h"
+#include "generators/Antiprism.h"
+#include "generators/Prism.h"
+#include "generators/Star.h"
+#include "generators/Regular.h"
+#include "generators/Banana.h"
+#include "generators/GeneralizedPeterson.h"
+#include "generators/Cmn.h"
+#include "generators/Path.h"
+#include "generators/Flower.h"
+
+#include "reports/NumOfVertices.h"
+#include "reports/NumOfEdges.h"
+#include "reports/MaxDegree.h"
+#include "reports/MinDegree.h"
+#include "reports/MaxEigenValue.h"
+#include "reports/MinEigenValue.h"
+#include "reports/SumEigenValues.h"
+#include "reports/Diameter.h"
+#include "reports/NumOfTriangles.h"
+
 #include <memory>
 
 wxBEGIN_EVENT_TABLE(CGTeaFrame, wxFrame)
@@ -22,6 +44,8 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableGenerators.emplace_back(std::make_unique<Regular>());
     availableGenerators.emplace_back(std::make_unique<GeneralizedPeterson>());
     availableGenerators.emplace_back(std::make_unique<Cmn>());
+    availableGenerators.emplace_back(std::make_unique<Path>());
+    availableGenerators.emplace_back(std::make_unique<Flower>());
 
     availableReports.emplace_back(std::make_unique<NumOfVertices>());
     availableReports.emplace_back(std::make_unique<NumOfEdges>());

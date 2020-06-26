@@ -24,12 +24,11 @@ public:
     Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {
         Graph g = generate(n, k);
         std::vector<cgtea_geometry::Point> pos = position_generators::circle(width, height, 200.0, n);
-        Graph g;
-        
-        for (int i = 0; i < n - 1; i++) {
-             add_edge(i, i + 1, g);
-        }
-        
+        int i = 0;
+        for_each_v(g, [&](Ver v) {
+            boost::put(boost::vertex_distance, g, v, pos[i]);
+            i++;
+        });
         return g;
     }
 
@@ -46,8 +45,7 @@ public:
     };
     
     string check_parameters() override {
-    	if (n < 0) return "n must be positive";
-        else return null;
+    	return "";
     };
 };
 

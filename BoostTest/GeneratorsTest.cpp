@@ -12,7 +12,8 @@
 #include "../generators/Prism.h"
 #include "../generators/Antiprism.h"
 #include "../generators/Cmn.h"
-
+#include "../generators/Path.h"
+#include "../generators/Flower.h"
 
 #include "../reports/MaxDegree.h"
 #include "../reports/MinDegree.h"
@@ -80,5 +81,26 @@ BOOST_AUTO_TEST_SUITE(GeneratorsTestSuite)
         BOOST_CHECK_EQUAL(std::stoi(MinDegree().report(g)), 4);
         BOOST_CHECK_EQUAL(std::stoi(GraphDiameter().report(g)), 4);
         BOOST_CHECK_EQUAL(std::stoi(GraphGirthSize().report(g)), 4);
+    }
+    BOOST_AUTO_TEST_CASE(PathGeneratorTest) {
+        Path path;
+        Graph g = path.generate(5,1);
+        BOOST_CHECK_EQUAL(boost::num_vertices(g),5);
+        BOOST_CHECK_EQUAL(boost::num_edges(g),4);
+        BOOST_CHECK_EQUAL(std::stoi(MaxDegree().report(g)), 2);
+        BOOST_CHECK_EQUAL(std::stoi(MinDegree().report(g)), 1);
+        BOOST_CHECK_EQUAL(std::stoi(GraphDiameter().report(g)), 4);
+        BOOST_CHECK_EQUAL(std::stoi(GraphGirthSize().report(g)), 4);
+    }
+    BOOST_AUTO_TEST_CASE(FlowerGeneratorTest) {
+        int n = 3;
+        Flower flower;
+        Graph g = flower.generate(n,1);
+        BOOST_CHECK_EQUAL(boost::num_vertices(g),2*n+1);
+        BOOST_CHECK_EQUAL(boost::num_edges(g),4*n);
+        BOOST_CHECK_EQUAL(std::stoi(MaxDegree().report(g)), 2*n);
+        BOOST_CHECK_EQUAL(std::stoi(MinDegree().report(g)), 2);
+        BOOST_CHECK_EQUAL(std::stoi(GraphDiameter().report(g)), 2);
+        BOOST_CHECK_EQUAL(std::stoi(GraphGirthSize().report(g)), 3);
     }
 BOOST_AUTO_TEST_SUITE_END()
