@@ -17,6 +17,7 @@
 #include "generators/Cmn.h"
 #include "generators/Path.h"
 #include "generators/Flower.h"
+#include "generators/Wheel.h"
 
 #include "reports/NumOfVertices.h"
 #include "reports/NumOfEdges.h"
@@ -47,6 +48,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableGenerators.emplace_back(std::make_unique<Path>());
     availableGenerators.emplace_back(std::make_unique<Flower>());
     availableGenerators.emplace_back(std::make_unique<Star>());
+    availableGenerators.emplace_back(std::make_unique<Wheel>());
 
     availableReports.emplace_back(std::make_unique<NumOfVertices>());
     availableReports.emplace_back(std::make_unique<NumOfEdges>());
