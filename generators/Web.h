@@ -13,32 +13,24 @@ public:
 
     Graph generate(unsigned int n, unsigned int k) override {
         Graph g;
-        
-        
-
         for(int j=1;j < t+1;j++) {
             for (int i = 0; i < n - 1; i++) {
                      add_edge(j * n + i, (j * n + i + 1, g), g);
-                    
             }
                  add_edge(j * n + n - 1, j * n, g);
-                
         }
 
         for(int j=0;j < t;j++) {
             for (int i = 0; i < n; i++) {
                  add_edge(j * n + i, j * n + i + n, g);
-                
             }
         }
 
         for(int i=0;i < n;i++) {
             add_edge(t*n + i,(t+1, g)*n, g);
-            
         }
 
-        
-
+        return g;
     }
 
     Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {

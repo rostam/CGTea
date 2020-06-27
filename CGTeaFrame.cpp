@@ -18,6 +18,7 @@
 #include "generators/Path.h"
 #include "generators/Flower.h"
 #include "generators/Wheel.h"
+#include "generators/Crown.h"
 
 #include "reports/NumOfVertices.h"
 #include "reports/NumOfEdges.h"
@@ -49,6 +50,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableGenerators.emplace_back(std::make_unique<Flower>());
     availableGenerators.emplace_back(std::make_unique<Star>());
     availableGenerators.emplace_back(std::make_unique<Wheel>());
+    availableGenerators.emplace_back(std::make_unique<Crown>());
 
     availableReports.emplace_back(std::make_unique<NumOfVertices>());
     availableReports.emplace_back(std::make_unique<NumOfEdges>());
@@ -112,7 +114,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     menuBar->Append(menuHelp, "&Help");
     SetMenuBar(menuBar);
     CreateStatusBar();
-    SetStatusText("Welcome to wxWidgets!");
+    SetStatusText("Welcome to CGTea!");
 
     wxDir dir(wxGetCwd() + "/mats/");
     if (!dir.IsOpened()) {

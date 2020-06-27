@@ -15,15 +15,17 @@ public:
         Graph g;
         for (int i = 0; i < n; i++) {
             add_edge(i, n + i, 1, g);
-            add_edge(n + i, 2 * n, 1, g);
-            add_edge(n + i, n + ((i + 1, g) % n, g), 1, g);
-
+//            add_edge(n + i, 2 * n, 1, g);
+            add_edge(n + i, n + ((i + 1) % n), 1, g);
         }
     }
 
     Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {
         Graph g = generate(n, k);
-        std::vector<cgtea_geometry::Point> pos = position_generators::circle(width, height, 200.0, n);
+        std::vector<cgtea_geometry::Point> pos1 = position_generators::circle(width, height, 100.0, n);
+        std::vector<cgtea_geometry::Point> pos2 = position_generators::circle(width, height, 150.0, n);
+        pos1.insert(pos1.end(),std::make_move_iterator(pos2.begin()),std::make_move_iterator(pos2.end()));
+        for_each_v(g, [&](Ver v) { boost::put(boost::vertex_distance, g, v, pos1[v]); });
         return g;
     }
 
@@ -40,8 +42,7 @@ public:
     };
     
     string check_parameters() override {
-        if( n<3) return "n must be higher than 2!";
-        else return null;
+       return "";
     }
 };
 
