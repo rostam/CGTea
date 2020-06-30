@@ -19,6 +19,7 @@
 #include "generators/Flower.h"
 #include "generators/Wheel.h"
 #include "generators/Crown.h"
+#include "generators/Web.h"
 
 #include "reports/NumOfVertices.h"
 #include "reports/NumOfEdges.h"
@@ -51,6 +52,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableGenerators.emplace_back(std::make_unique<Star>());
     availableGenerators.emplace_back(std::make_unique<Wheel>());
     availableGenerators.emplace_back(std::make_unique<Crown>());
+    availableGenerators.emplace_back(std::make_unique<Web>());
 
     availableReports.emplace_back(std::make_unique<NumOfVertices>());
     availableReports.emplace_back(std::make_unique<NumOfEdges>());
@@ -102,6 +104,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
 
     wxMenu *menuLayout = new wxMenu;
     menuLayout->Append(i, "Force-directed drawing", "Force-directed drawing");
+    menuLayout->Append(++i, "Gursoy Atun Layout", "Gursoy Atun Layout");
     Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Layout));
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
@@ -157,15 +160,19 @@ void CGTeaFrame::Generate(wxCommandEvent& event) {
 }
 
 void CGTeaFrame::Layout(wxCommandEvent& event) {
-//    int id = event.GetId();
-//    currentGraph = availableGenerators[id]->generate_with_force_directed(10,0,500,500);
-    std::vector<cgtea_geometry::Point> pos = compute_force_directed(10, 10, 300, 300, currentGraph);
-    int i = 0;
-    for_each_v(currentGraph, [&](Ver v) {
-        boost::put(boost::vertex_distance, currentGraph, v, pos[i]);
-        i++;
-    });
-    Refresh();
+    int id = event.GetId();
+    if(id == 25) {
+        //    currentGraph = availableGenerators[id]->generate_with_force_directed(10,0,500,500);
+        std::vector<cgtea_geometry::Point> pos = compute_force_directed(10, 10, 300, 300, currentGraph);
+        int i = 0;
+        for_each_v(currentGraph, [&](Ver v) {
+            boost::put(boost::vertex_distance, currentGraph, v, pos[i]);
+            i++;
+        });
+        Refresh();
+    } else if(id == 26) {
+        cerr << "salam";
+    }
 }
 
 void CGTeaFrame::Report(wxCommandEvent& event) {

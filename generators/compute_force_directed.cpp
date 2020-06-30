@@ -3,6 +3,7 @@
 //
 
 #include <boost/graph/fruchterman_reingold.hpp>
+#include <boost/graph/gursoy_atun_layout.hpp>
 #include <boost/graph/random_layout.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/topology.hpp>
@@ -18,6 +19,8 @@
 #include "compute_force_directed.h"
 #include <boost/progress.hpp>
 #include <boost/shared_ptr.hpp>
+
+typedef topology_type::point_type point_type;
 
 class progress_cooling : public boost::linear_cooling<double>
 {

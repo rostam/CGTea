@@ -150,7 +150,7 @@ static void for_each_neighbor(const Ver& v, Graph& g, Lambda func) {
 }
 
 typedef boost::rectangle_topology<> topology_type;
-typedef topology_type::point_type point_type;
+
 
 typedef boost::exterior_vertex_property<Graph, int> DistanceProperty;
 typedef DistanceProperty::matrix_type DistanceMatrix;
