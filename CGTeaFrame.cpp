@@ -104,7 +104,6 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
 
     wxMenu *menuLayout = new wxMenu;
     menuLayout->Append(i, "Force-directed drawing", "Force-directed drawing");
-    menuLayout->Append(++i, "Gursoy Atun Layout", "Gursoy Atun Layout");
     Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Layout));
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
@@ -161,18 +160,14 @@ void CGTeaFrame::Generate(wxCommandEvent& event) {
 
 void CGTeaFrame::Layout(wxCommandEvent& event) {
     int id = event.GetId();
-    if(id == 25) {
-        //    currentGraph = availableGenerators[id]->generate_with_force_directed(10,0,500,500);
-        std::vector<cgtea_geometry::Point> pos = compute_force_directed(10, 10, 300, 300, currentGraph);
-        int i = 0;
-        for_each_v(currentGraph, [&](Ver v) {
-            boost::put(boost::vertex_distance, currentGraph, v, pos[i]);
-            i++;
-        });
-        Refresh();
-    } else if(id == 26) {
-        cerr << "salam";
-    }
+    //    currentGraph = availableGenerators[id]->generate_with_force_directed(10,0,500,500);
+    std::vector<cgtea_geometry::Point> pos = compute_force_directed(10, 10, 300, 300, currentGraph);
+    int i = 0;
+    for_each_v(currentGraph, [&](Ver v) {
+        boost::put(boost::vertex_distance, currentGraph, v, pos[i]);
+        i++;
+    });
+    Refresh();
 }
 
 void CGTeaFrame::Report(wxCommandEvent& event) {
@@ -232,11 +227,13 @@ void CGTeaFrame::Save(wxCommandEvent& event) {
                                                     wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
     if (openFileDialog->ShowModal() == wxID_OK) {
 //        wxString fileName = openFileDialog->GetPath();
+//        wxString fileName = openFileDialog->GetPath();
 //        if (fileName.find(".g6") != std::string::npos) {
     }
 
     G6Format g6Format;
     std::string g6 = g6Format.graphToG6(currentGraph);
+    std::cerr << "hre " << g6 << endl;
     ofstream out("test.g6");
     out << g6;
     out.flush();

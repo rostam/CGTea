@@ -56,7 +56,7 @@ std::vector<cgtea_geometry::Point> compute_force_directed(double x, double y, do
     fruchterman_reingold_force_directed_layout(g, position, topo, cooling(progress_cooling(iterations)));
     std::vector<cgtea_geometry::Point> ret;
     for_each_v_const(g, [&](Ver v) {
-        ret.emplace_back(cgtea_geometry::Point(position[v][0] + 50,position[v][1]+20));
+        ret.emplace_back(cgtea_geometry::Point(position[v][0] + 50,position[v][1] + 20));
     });
     return ret;
 }

@@ -69,6 +69,7 @@ public:
 
     Graph stringToGraph(std::string g6) {
         int n = graphsize(g6);
+
         Graph graph;
         for (int i = 0; i < graphsize(g6); i++) {
             boost::add_vertex(i, graph);
@@ -137,10 +138,13 @@ public:
         vector<int> nn = encodeN(NoNodes);
         vector<int> adj = encodeR(std::move(adjmatrix));
         vector<int> res(nn.size() + adj.size());// = new int[nn.length + adj.length];
-        for (int n : nn)
-            res[n] = n;
-        for (int i = 0; i < adj.size(); i++)
+        for (int i = 0; i < nn.size(); i++) {
+            res[i] = nn[i];
+        }
+
+        for (int i = 0; i < adj.size(); i++) {
             res[i + nn.size()] = adj[i];
+        }
         for (int re : res) {
             rv = rv + (char) re;
         }
