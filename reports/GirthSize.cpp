@@ -5,7 +5,7 @@
 #include "GirthSize.h"
 #include "EigenRelatedFunctions.h"
 
-int bfs(int start, Eigen::MatrixXd mat, int cc, int girth) {
+int bfs(int start, const Eigen::MatrixXd& mat, int cc, int girth) {
     vector<int> baba(cc);
     vector<int> dist(cc);
     for (int i = 0; i < cc; i++) {
@@ -38,18 +38,18 @@ int bfs(int start, Eigen::MatrixXd mat, int cc, int girth) {
 
 string GraphGirthSize::report(const Graph& g) {
     int size = boost::num_vertices(g);
-    Eigen::MatrixXd mat(size, size);
+    Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(size, size);
     for_each_e_const(g, [&](Edge e) {
         mat(boost::source(e, g), boost::target(e, g)) = 1;
         mat(boost::target(e, g), boost::source(e, g)) = 1;
     });
     int girth = std::numeric_limits<int>::max();
     for (int i = 0; i < size; i++) {
-    int sizeofsmallestcycle = bfs(i, mat, size, girth);
-    if (sizeofsmallestcycle != std::numeric_limits<int>::max() && girth > sizeofsmallestcycle)
-        girth = sizeofsmallestcycle;
+        int sizeofsmallestcycle = bfs(i, mat, size, girth);
+        if (sizeofsmallestcycle != std::numeric_limits<int>::max() && girth > sizeofsmallestcycle)
+            girth = sizeofsmallestcycle;
     }
     if (girth == std::numeric_limits<int>::max())
         return "0";
     return std::to_string(girth);
-};
+}

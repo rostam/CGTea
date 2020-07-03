@@ -27,15 +27,17 @@ BOOST_AUTO_TEST_SUITE(ReportsTestSuite)
     }
 
     BOOST_AUTO_TEST_CASE(GirthTest) {
-        Graph cycle10 = Cycle().generate(10, 1);
+
         Graph peterson = GeneralizedPeterson().generate(5, 2);
-        Graph complete5 = Complete().generate(5, 1);
-        GraphGirthSize gs;
-        auto res = Utils::return_value(gs.report(cycle10), gs.type());
+        auto res2 = Utils::return_value(GraphGirthSize().report(peterson), "int");
+        BOOST_CHECK_EQUAL(std::get<int>(res2), 5);
+
+        Graph cycle10 = Cycle().generate(10, 1);
+        auto res = Utils::return_value(GraphGirthSize().report(cycle10), "int");
         BOOST_CHECK_EQUAL(std::get<int>(res), 10);
-        res = Utils::return_value(gs.report(peterson), gs.type());
-        BOOST_CHECK_EQUAL(std::get<int>(res), 5);
-        res = Utils::return_value(gs.report(complete5), gs.type());
-        BOOST_CHECK_EQUAL(std::get<int>(res), 3);
+
+        Graph complete5 = Complete().generate(5, 1);
+        auto res3 = Utils::return_value(GraphGirthSize().report(complete5), "int");
+        BOOST_CHECK_EQUAL(std::get<int>(res3), 3);
     }
 BOOST_AUTO_TEST_SUITE_END()

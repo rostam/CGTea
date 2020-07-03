@@ -15,6 +15,7 @@
 #include "../generators/Path.h"
 #include "../generators/Flower.h"
 #include "../generators/Web.h"
+#include "../generators/Heawood.h"
 
 #include "../reports/MaxDegree.h"
 #include "../reports/MinDegree.h"
@@ -23,6 +24,16 @@
 
 
 BOOST_AUTO_TEST_SUITE(GeneratorsTestSuite)
+    BOOST_AUTO_TEST_CASE(HeawoodTest) {
+        Heawood h;
+        Graph g = h.generate(10,1);
+        BOOST_CHECK_EQUAL(boost::num_vertices(g),14);
+        BOOST_CHECK_EQUAL(boost::num_edges(g),21);
+        BOOST_CHECK_EQUAL(std::stoi(MaxDegree().report(g)), 3);
+        BOOST_CHECK_EQUAL(std::stoi(MinDegree().report(g)), 3);
+        BOOST_CHECK_EQUAL(std::stoi(GraphDiameter().report(g)), 3);
+        BOOST_CHECK_EQUAL(std::stoi(GraphGirthSize().report(g)), 6);
+    }
     BOOST_AUTO_TEST_CASE(CircleGeneratorTest) {
         Cycle c;
         Graph g = c.generate(10,1);

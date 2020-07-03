@@ -23,7 +23,7 @@ public:
         return distances;
     }
 
-    static std::variant<int, double, std::string> return_value(std::string value, std::string type) {
+    static std::variant<int, double, std::string> return_value(const std::string& value, const std::string& type) {
         if(type =="int")
             return std::stoi( value );
         else if(type =="double")
