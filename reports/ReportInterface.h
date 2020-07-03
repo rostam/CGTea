@@ -11,10 +11,10 @@
 class ReportInterface {
 public:
     virtual string report(const Graph& g) {};
-    virtual string name() const = 0;
-    virtual string description() const = 0;
-    virtual string type() const = 0 ;
-    virtual string category() const {
+    [[nodiscard]] virtual string name() const = 0;
+    [[nodiscard]] virtual string description() const = 0;
+    [[nodiscard]] virtual string type() const = 0 ;
+    [[nodiscard]] virtual string category() const {
         return "General";
     };
 };

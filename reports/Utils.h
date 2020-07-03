@@ -31,6 +31,14 @@ public:
         else
             return value;
     }
+
+    static void write_csv_line(std::ofstream& outfile, vector<string>&& v) {
+        for(int i=0;i < v.size();i++) {
+            outfile << v[i];
+            if(i != v.size() - 1) outfile << ",";
+            else outfile << "\n";
+        }
+    }
 };
 
 

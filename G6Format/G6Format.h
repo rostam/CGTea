@@ -59,7 +59,7 @@ public:
                     it++;
                 }
                 if ((x & TOPBIT6) != 0) {
-                    boost::add_edge(i, j, graph);
+                    boost::add_edge(i, j, 1, graph);
                 }
                 x <<= 1;
             }
@@ -94,7 +94,7 @@ public:
                     it++;
                 }
                 if ((x & TOPBIT6) != 0)
-                    boost::add_edge(i, j, graph);
+                    boost::add_edge(i, j, 1, graph);
                 x <<= 1;
             }
         }
