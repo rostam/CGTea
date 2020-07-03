@@ -11,7 +11,7 @@
 enum ConjectureType {All, Trees};
 class ConjectureCheck {
 public:
-    void CheckSaveToFile(ConjectureType ct, std::unique_ptr<ReportInterface> r,
+    void CheckSaveToFile(ConjectureType ct, std::vector<std::unique_ptr<ReportInterface>>& rs,
             std::string input_file_name, std::string output_file_name);
     std::map<std::string, vector<std::string>> CheckReturn(ConjectureType ct, std::unique_ptr<ReportInterface> r,
             std::string input_file_name);

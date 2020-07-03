@@ -8,8 +8,8 @@
 #include "../reports/Utils.h"
 
 
-void ConjectureCheck::CheckSaveToFile(ConjectureType ct, std::unique_ptr<ReportInterface> r, std::string input_file_name,
-                                 std::string output_file_name) {
+void ConjectureCheck::CheckSaveToFile(ConjectureType ct, std::vector<std::unique_ptr<ReportInterface>>& rs,
+        std::string input_file_name, std::string output_file_name) {
     switch (ct) {
         case All:
             std::ifstream file(input_file_name);
@@ -17,11 +17,19 @@ void ConjectureCheck::CheckSaveToFile(ConjectureType ct, std::unique_ptr<ReportI
             std::string str;
             G6Format g6Format;
             int cnt = 0;
-            Utils::write_csv_line(outfile,{"count","g6",r->name()});
+            vector<std::string> keysRow{"count","g6"};
+            for(auto& r : rs) keysRow.emplace_back(r->name());
+            Utils::write_csv_line(outfile,std::move(keysRow));
             while (std::getline(file, str)) {
                 cnt++;
                 Graph g = g6Format.stringToGraph(str);
-                Utils::write_csv_line(outfile,{std::to_string(cnt),  str , r->report(g)});
+                vector<std::string> result_row;
+                result_row.emplace_back(std::to_string(cnt));
+                result_row.emplace_back(str);
+                for(auto& r : rs) {
+                    result_row.emplace_back(r->report(g));
+                }
+                Utils::write_csv_line(outfile, std::move(result_row));
             }
             outfile.close();
             break;
