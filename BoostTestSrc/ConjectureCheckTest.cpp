@@ -12,6 +12,10 @@
 #include "../ConjectureCheck/ConjectureCheck.h"
 #include "../reports/Diameter.h"
 #include "../reports/GirthSize.h"
+#include "../reports/MinDegree.h"
+#include "../reports/MaxDegree.h"
+#include "../reports/MinEigenValue.h"
+#include "../reports/MaxEigenValue.h"
 
 
 BOOST_AUTO_TEST_SUITE(ConjectureCheckTest)
@@ -20,7 +24,10 @@ BOOST_AUTO_TEST_SUITE(ConjectureCheckTest)
         vector<std::unique_ptr<ReportInterface>> vs;
         vs.emplace_back(std::make_unique<GraphDiameter>());
         vs.emplace_back(std::make_unique<GraphGirthSize>());
-        cc.CheckSaveToFile(All, vs,
-                "/home/rostam/all6.g6", "/home/rostam/all6_diameter.csv");
+        vs.emplace_back(std::make_unique<MinDegree>());
+        vs.emplace_back(std::make_unique<MaxDegree>());
+        vs.emplace_back(std::make_unique<MinEigenValue>());
+        vs.emplace_back(std::make_unique<MaxEigenValue>());
+        cc.CheckSaveToFile(All, vs,"/home/rostam/all6.g6", "/home/rostam/all6_diameter.csv");
     }
 BOOST_AUTO_TEST_SUITE_END()
