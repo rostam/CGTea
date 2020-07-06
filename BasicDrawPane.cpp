@@ -60,6 +60,16 @@ BasicDrawPane::BasicDrawPane(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
     distinctColors[18] = wxColour(255, 216, 177, 150);//Coral
     distinctColors[19] = wxColour(0, 0, 128, 150);//Navy
     distinctColors[20] = wxColour(128, 128, 128, 150);//Grey
+    for(int i=21;i<1000;i++) {
+        auto col = distinctColors[i%20];
+        auto r = col.Red();
+        auto g = col.Green();
+        auto b = col.Blue();
+        r = r < 200 ? r + 40 : r - 50;
+        g = g < 200 ? g + 40 : g - 50;
+        b = b < 200 ? b + 40 : b - 50;
+        distinctColors[i] = wxColor(r,g,b,150);
+    }
 }
 
 /*

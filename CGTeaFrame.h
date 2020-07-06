@@ -19,9 +19,9 @@
 
 #include "generators/GeneratorInterface.h"
 #include "reports/ReportInterface.h"
+#include "actions/ActionInterface.h"
 
 #include "G6Format/G6Format.h"
-#include "actions/Coloring.h"
 
 class CGTeaFrame: public wxFrame {
 public:

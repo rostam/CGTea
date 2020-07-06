@@ -31,6 +31,10 @@
 #include "reports/Diameter.h"
 #include "reports/NumOfTriangles.h"
 
+#include "actions/Coloring.h"
+#include "actions/LineGraph.h"
+
+
 #include <memory>
 
 wxBEGIN_EVENT_TABLE(CGTeaFrame, wxFrame)
@@ -65,6 +69,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableReports.emplace_back(std::make_unique<NumberOfTriangles>());
 
     availableActions.emplace_back(std::make_unique<Coloring>());
+    availableActions.emplace_back(std::make_unique<LineGraph>());
 
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(1000, "&Open");
@@ -172,16 +177,14 @@ void CGTeaFrame::Layout(wxCommandEvent& event) {
 
 void CGTeaFrame::Report(wxCommandEvent& event) {
     int id = event.GetId();
-//    side
-//    cerr << availableReports[id - availableGenerators.size() - 1]->report(currentGraph);
-//    cerr << wstring(((CGTeaSidebar*)this->GetSizer()->GetChildren()[0]->GetWindow())->statistics_text->GetValue());
     std::string report_results = availableReports[id - availableGenerators.size() - 1]->report(currentGraph);
     std::string report_name = availableReports[id - availableGenerators.size() - 1]->name();
     ((CGTeaSidebar*)this->GetSizer()->GetChildren()[0]->GetWindow())->statistics_text->SetValue(report_name + ": " +report_results);
 }
 
 void CGTeaFrame::Action(wxCommandEvent& event) {
-    currentGraph = availableActions[0]->action(currentGraph);
+    int id = event.GetId();
+    currentGraph = availableActions[id - availableGenerators.size() - availableReports.size() - 1]->action(currentGraph);
     Refresh();
 }
 

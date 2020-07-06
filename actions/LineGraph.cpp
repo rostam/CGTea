@@ -3,7 +3,7 @@
 //
 
 #include "LineGraph.h"
-
+using namespace  cgtea_geometry;
 Graph LineGraph::action(Graph g) {
     Graph g2;
     int cnt = 0;
@@ -13,16 +13,11 @@ Graph LineGraph::action(Graph g) {
         EdgeToVertexMapper[e] = v;
         VertexToEdgeMapper[v] = e;
         cnt++;
-//        Vertex v = new Vertex();
-//        v.setLabel(e.getLabel());
-//        GPoint loc = new GPoint(e.source.getLocation());
-//        loc.add(e.target.getLocation());
-//        loc.multiply(0.5);
-//        loc.add(e.getCurveControlPoint());
-//        v.setLocation(loc);
-//        e.getProp().obj = v;
-//        v.getProp().obj = e;
-//        g2.insertVertex(v);
+        Ver src = boost::source(e, g);
+        Ver tgt = boost::target(e, g);
+        cgtea_geometry::Point srcPoint = boost::get(boost::vertex_distance, g, src);
+        cgtea_geometry::Point tgtPoint = boost::get(boost::vertex_distance, g, tgt);
+        boost::put(boost::vertex_distance, g2, v, (srcPoint + tgtPoint) / 2);
     });
 
     for_each_v(g, [&](Ver v) {
