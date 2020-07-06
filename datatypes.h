@@ -30,7 +30,7 @@ using boost::graph_traits;
 using boost::vertex_color;
 using boost::vertex_distance;
 
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS,
+typedef boost::adjacency_list<boost::setS, boost::vecS, boost::undirectedS,
         property<boost::vertex_color_t, int,
         property<boost::vertex_distance_t, cgtea_geometry::Point>>,
         property<boost::edge_weight_t, int,
@@ -147,6 +147,13 @@ static void for_each_neighbor(const Ver& v, Graph& g, Lambda func) {
     AdjacencyIterator vi, vi_end;
     std::tie(vi, vi_end) = boost::adjacent_vertices(v, g);
     std::for_each(vi,vi_end,func);
+}
+
+template<typename Lambda>
+static void for_each_out_edges(const Ver& v, Graph& g, Lambda func) {
+    typename graph_traits < Graph >::out_edge_iterator ei, ei_end;
+    boost::tie(ei, ei_end) = out_edges(v, g);
+    std::for_each(ei, ei_end, func);
 }
 
 typedef boost::rectangle_topology<> topology_type;

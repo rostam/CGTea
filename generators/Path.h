@@ -15,7 +15,7 @@ public:
         Graph g;
         
         for (int i = 0; i < n - 1; i++) {
-             add_edge(i, i + 1, g);
+             add_edge(i, i + 1, 1, g);
         }
 
         return g;
