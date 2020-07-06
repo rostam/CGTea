@@ -10,7 +10,7 @@
 #include "../generators/Path.h"
 #include "../generators/Star.h"
 
-BOOST_AUTO_TEST_SUITE(ConjectureCheckTest)
+BOOST_AUTO_TEST_SUITE(ActionsTest)
     BOOST_AUTO_TEST_CASE(LineGraphTest) {
         GeneralizedPeterson gp;
         Graph peterson = gp.generate(5,2);
