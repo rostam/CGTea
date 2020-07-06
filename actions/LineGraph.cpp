@@ -25,15 +25,11 @@ Graph LineGraph::action(Graph g) {
 //        g2.insertVertex(v);
     });
 
-//    for (Vertex v : g1) {
     for_each_v(g, [&](Ver v) {
         for_each_out_edges(v, g, [&](Edge e) {
             for_each_out_edges(v, g, [&](Edge e2) {
                 if (e != e2) {
-//                    cerr << EdgeToVertexMapper[e] << " " << EdgeToVertexMapper[e2] << endl;
                     boost::add_edge(EdgeToVertexMapper[e], EdgeToVertexMapper[e2], 1, g2);
-//                    Edge ne = new Edge((Vertex) e.getProp().obj, (Vertex) e2.getProp().obj);
-//                    g2.insertEdge(ne);
                 }
             });
         });
