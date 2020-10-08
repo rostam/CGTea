@@ -35,6 +35,7 @@ bool CGTeaApp::OnInit()
     sizer->Add(drawPane, 1, wxEXPAND | wxALL);
     frame->SetSizer(sizer);
     frame->SetAutoLayout(true);
+    frame->SetIcon(wxIcon(wxT("gtea.xpm")));
     frame->Show( true );
     return true;
 }

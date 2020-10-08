@@ -143,7 +143,7 @@ void CGTeaFrame::OnExit(wxCommandEvent& event) {
 }
 
 void CGTeaFrame::OnAbout(wxCommandEvent& event) {
-    wxMessageBox("CGTea is a c++-version of GraphTea, a software for working with graphs.",
+    wxMessageBox("CGTea is a C++-version of GraphTea, a software for working with graphs.",
                  "CGTea 1.0", wxOK | wxICON_INFORMATION);
 }
 
