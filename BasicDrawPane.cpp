@@ -146,7 +146,7 @@ void BasicDrawPane::drawEdges(const Graph &g, wxGraphicsContext* gc) {
 
 void BasicDrawPane::drawVertices(const Graph &g, wxGraphicsContext* gc) {
     for_each_v_const(g, [&](Ver v) {
-        int color =  boost::get(vertex_color, g,v);;
+        int color =  boost::get(vertex_color, g,v);
         gc->SetPen(wxPen(wxColor(255, 0, 0), 1)); // 5-pixels-thick red outline
         cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
 //        gc->DrawCircle(wxPoint(pos.x, pos.y), 20 /* radius */ );
@@ -164,7 +164,7 @@ void BasicDrawPane::drawVertices(const Graph &g, wxGraphicsContext* gc) {
         int tmp = boost::get(boost::vertex_index, g, v);
         wxString mystring = wxString::Format(wxT("%i"),tmp);
         wxDouble w, h;
-        gc->GetTextExtent(mystring, &w, &h, NULL, NULL);
+        gc->GetTextExtent(mystring, &w, &h, nullptr, nullptr);
         gc->DrawText(mystring, pos.x-w/2, pos.y-h/2);
     });
 }
