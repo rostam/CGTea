@@ -71,7 +71,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableActions.emplace_back(std::make_unique<Coloring>());
     availableActions.emplace_back(std::make_unique<LineGraph>());
 
-    wxMenu *menuFile = new wxMenu;
+    auto menuFile = new wxMenu;
     menuFile->Append(1000, "&Open");
     menuFile->Append(1001, "&Save");
     menuFile->AppendSeparator();
@@ -81,7 +81,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     Connect(1001, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Save));
     Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::OnExit));
 
-    wxMenu *menuGenerate = new wxMenu;
+    auto menuGenerate = new wxMenu;
     int i = 1;
 //    std::apply([&](auto&&... args) {((menuGenerate->Append(i, wxString(args.name().c_str(), wxConvUTF8), wxString(args.description().c_str(), wxConvUTF8)),i++), ...);}, availableGenerators);
     for (auto& gi : availableGenerators) {
@@ -91,7 +91,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
         i++;
     }
 
-    wxMenu *menuReport = new wxMenu;
+    auto menuReport = new wxMenu;
     for (auto& ri : availableReports) {
         menuReport->Append(i, wxString(ri->name().c_str(), wxConvUTF8),
                 wxString(ri->description().c_str(), wxConvUTF8));
@@ -99,7 +99,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
         i++;
     }
 
-    wxMenu *menuAction = new wxMenu;
+    auto menuAction = new wxMenu;
     for (auto& ai : availableActions) {
         menuAction->Append(i, wxString(ai->name().c_str(), wxConvUTF8),
                            wxString(ai->description().c_str(), wxConvUTF8));
@@ -107,10 +107,10 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
         i++;
     }
 
-    wxMenu *menuLayout = new wxMenu;
+    auto *menuLayout = new wxMenu;
     menuLayout->Append(i, "Force-directed drawing", "Force-directed drawing");
     Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Layout));
-    wxMenu *menuHelp = new wxMenu;
+    auto menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(menuFile, "&File");
