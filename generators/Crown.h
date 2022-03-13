@@ -18,6 +18,7 @@ public:
 //            add_edge(n + i, 2 * n, 1, g);
             add_edge(n + i, n + ((i + 1) % n), 1, g);
         }
+        return g;
     }
 
     Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {
