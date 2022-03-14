@@ -20,6 +20,7 @@
 #include "generators/Wheel.h"
 #include "generators/Crown.h"
 #include "generators/Web.h"
+#include "generators/CocktailParty.h"
 
 #include "reports/NumOfVertices.h"
 #include "reports/NumOfEdges.h"
@@ -43,11 +44,11 @@ wxEND_EVENT_TABLE()
 
 CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
         : wxFrame(nullptr, wxID_ANY, title, pos, size) {
-    availableGenerators.emplace_back(std::make_unique<Cycle>());
+    availableGenerators.emplace_back(std::make_unique<Antiprism>());
     availableGenerators.emplace_back(std::make_unique<Banana>());
+    availableGenerators.emplace_back(std::make_unique<Cycle>());
     availableGenerators.emplace_back(std::make_unique<Complete>());
     availableGenerators.emplace_back(std::make_unique<Prism>());
-    availableGenerators.emplace_back(std::make_unique<Antiprism>());
     availableGenerators.emplace_back(std::make_unique<Regular>());
     availableGenerators.emplace_back(std::make_unique<GeneralizedPeterson>());
     availableGenerators.emplace_back(std::make_unique<Cmn>());
@@ -57,6 +58,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableGenerators.emplace_back(std::make_unique<Wheel>());
     availableGenerators.emplace_back(std::make_unique<Crown>());
     availableGenerators.emplace_back(std::make_unique<Web>());
+    availableGenerators.emplace_back(std::make_unique<CocktailParty>());
 
     availableReports.emplace_back(std::make_unique<NumOfVertices>());
     availableReports.emplace_back(std::make_unique<NumOfEdges>());
