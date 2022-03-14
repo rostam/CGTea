@@ -161,7 +161,7 @@ void BasicDrawPane::drawVertices(const Graph &g, wxGraphicsContext* gc) {
         gc->FillPath(path);
 
         gc->SetBrush(wxBrush( wxColour(0, 0, 0, 255)));
-        int tmp = boost::get(boost::vertex_index, g, v);
+        int tmp = boost::get(boost::vertex_index, g, v) + 1;
         wxString mystring = wxString::Format(wxT("%i"),tmp);
         wxDouble w, h;
         gc->GetTextExtent(mystring, &w, &h, nullptr, nullptr);

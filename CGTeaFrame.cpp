@@ -22,6 +22,7 @@
 #include "generators/Web.h"
 #include "generators/CocktailParty.h"
 #include "generators/Gear.h"
+#include "generators/Heawood.h"
 
 #include "reports/NumOfVertices.h"
 #include "reports/NumOfEdges.h"
@@ -61,6 +62,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableGenerators.emplace_back(std::make_unique<Web>());
     availableGenerators.emplace_back(std::make_unique<CocktailParty>());
     availableGenerators.emplace_back(std::make_unique<Gear>());
+    availableGenerators.emplace_back(std::make_unique<Heawood>());
 
     availableReports.emplace_back(std::make_unique<NumOfVertices>());
     availableReports.emplace_back(std::make_unique<NumOfEdges>());
