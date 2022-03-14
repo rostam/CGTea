@@ -8,6 +8,12 @@
 
 #include "GeneratorInterface.h"
 
+/**
+ * @brief Headwood Graph
+ * 
+ * - Reference: https://mathworld.wolfram.com/HeawoodGraph.html
+ * 
+ */
 class Heawood : public GeneratorInterface {
 public:
     explicit Heawood() : GeneratorInterface() {};
