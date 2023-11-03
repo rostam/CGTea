@@ -31,7 +31,7 @@ public:
     void drawEdges(const Graph &g, wxGraphicsContext* gc);
     void drawVertices(const Graph &g, wxGraphicsContext* gc);
     // some useful events
-    /*
+    
      void mouseMoved(wxMouseEvent& event);
      void mouseDown(wxMouseEvent& event);
      void mouseWheelMoved(wxMouseEvent& event);
@@ -40,7 +40,7 @@ public:
      void mouseLeftWindow(wxMouseEvent& event);
      void keyPressed(wxKeyEvent& event);
      void keyReleased(wxKeyEvent& event);
-     */
+    
 
     DECLARE_EVENT_TABLE()
 };

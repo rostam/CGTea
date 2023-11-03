@@ -9,7 +9,7 @@
 
 BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
 // some useful events
-/*
+
  EVT_MOTION(BasicDrawPane::mouseMoved)
  EVT_LEFT_DOWN(BasicDrawPane::mouseDown)
  EVT_LEFT_UP(BasicDrawPane::mouseReleased)
@@ -18,25 +18,51 @@ BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
  EVT_KEY_DOWN(BasicDrawPane::keyPressed)
  EVT_KEY_UP(BasicDrawPane::keyReleased)
  EVT_MOUSEWHEEL(BasicDrawPane::mouseWheelMoved)
- */
+ 
 
 // catch paint events
-                EVT_PAINT(BasicDrawPane::paintEvent)
+EVT_PAINT(BasicDrawPane::paintEvent)
 
 END_EVENT_TABLE()
 
 
 // some useful events
-/*
+
  void BasicDrawPane::mouseMoved(wxMouseEvent& event) {}
- void BasicDrawPane::mouseDown(wxMouseEvent& event) {}
+ void BasicDrawPane::mouseDown(wxMouseEvent& event) {
+                // boost::put(boost::vertex_distance, g, v, pos[i]);
+    Graph& g = ((CGTeaFrame*)this->m_parent)->currentGraph;
+    Ver vv = boost::num_vertices(g);
+    boost::add_vertex(vv, g);
+    cgtea_geometry::Point p(event.GetPosition().x,event.GetPosition().y);
+    boost::put(boost::vertex_distance, g, vv, p);
+    Refresh();
+    // int radius = 20;
+    // for_each_v_const(g, [&](Ver v) {
+    //     cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
+    //     if (event.GetPosition().GetDistance(pos) < radius) {
+    //         raggedVertexIndex = i;
+    //     }
+    // });
+    //     for (size_t i = 0; i < vertices.size(); ++i) {
+    //         if (event.GetPosition().GetDistance(vertices[i].position) < radius) {
+    //             vertices[i].isBeingDragged = true;
+    //             draggedVertexIndex = i;
+    //             return;
+    //         }
+    //     }
+
+    //     // If no vertex was clicked, create a new one
+    //     vertices.push_back({event.GetPosition()});
+    //     Refresh();
+ }
  void BasicDrawPane::mouseWheelMoved(wxMouseEvent& event) {}
  void BasicDrawPane::mouseReleased(wxMouseEvent& event) {}
  void BasicDrawPane::rightClick(wxMouseEvent& event) {}
  void BasicDrawPane::mouseLeftWindow(wxMouseEvent& event) {}
  void BasicDrawPane::keyPressed(wxKeyEvent& event) {}
  void BasicDrawPane::keyReleased(wxKeyEvent& event) {}
- */
+ 
 
 BasicDrawPane::BasicDrawPane(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
     distinctColors[0] = wxColour(255, 255, 255, 255);//white with alpha = 1
