@@ -36,6 +36,12 @@ typedef boost::adjacency_list<boost::setS, boost::vecS, boost::undirectedS,
         property<boost::edge_weight_t, int,
         property<boost::edge_name_t, string>>> Graph;
 
+typedef boost::adjacency_list<boost::setS, boost::vecS, boost::directedS,
+    property<boost::vertex_color_t, int,
+    property<boost::vertex_distance_t, cgtea_geometry::Point>>,
+    property<boost::edge_weight_t, int,
+    property<boost::edge_name_t, string>>> DirectedGraph;
+
 typedef boost::graph_traits<Graph>::vertex_iterator V_iter;
 typedef boost::graph_traits<Graph>::edge_iterator E_iter;
 typedef Graph::vertex_descriptor Ver;
