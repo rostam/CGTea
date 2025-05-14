@@ -201,18 +201,14 @@ void CGTeaFrame::OnFitWidth(wxCommandEvent& event)
         maxY = std::max(maxY, pos.y);
     });
 
-    // Get the panel width
-    //auto panelSize = this->GetClientSize();
     auto panelSize = this->GetSizer()->GetItem(1)->GetSize();
-    //auto panelSize = this->GetSizer()->GetItemById(0)->GetSize();
     cout << this->GetSizer()->GetItemCount();
     cout << panelSize.GetWidth() << endl;
     cout << panelSize.GetHeight() << endl;
-    double padding = 20; // Leave some space for vertices on the edges
+    double padding = 40;
     double scaleX = (panelSize.GetWidth() - 2 * padding) / (maxX - minX);
     double scaleY = (panelSize.GetHeight() - 2 * padding) / (maxY - minY);
 
-    // Scale and center all vertices
     for_each_v(currentGraph, [&](const Ver v) {
         cgtea_geometry::Point pos = boost::get(boost::vertex_distance, currentGraph, v);
         pos.x = (pos.x - minX) * scaleX + padding;
@@ -224,9 +220,9 @@ void CGTeaFrame::OnFitWidth(wxCommandEvent& event)
 
 
 void CGTeaFrame::Report(wxCommandEvent& event) {
-    int id = event.GetId();
-    std::string report_results = availableReports[id - availableGenerators.size() - 1]->report(currentGraph);
-    std::string report_name = availableReports[id - availableGenerators.size() - 1]->name();
+    const int id = event.GetId();
+    const std::string report_results = availableReports[id - availableGenerators.size() - 1]->report(currentGraph);
+    const std::string report_name = availableReports[id - availableGenerators.size() - 1]->name();
     ((CGTeaSidebar*)this->GetSizer()->GetChildren()[0]->GetWindow())->statistics_text->SetValue(report_name + ": " +report_results);
 }
 
