@@ -202,9 +202,6 @@ void CGTeaFrame::OnFitWidth(wxCommandEvent& event)
     });
 
     auto panelSize = this->GetSizer()->GetItem(1)->GetSize();
-    cout << this->GetSizer()->GetItemCount();
-    cout << panelSize.GetWidth() << endl;
-    cout << panelSize.GetHeight() << endl;
     double padding = 40;
     double scaleX = (panelSize.GetWidth() - 2 * padding) / (maxX - minX);
     double scaleY = (panelSize.GetHeight() - 2 * padding) / (maxY - minY);

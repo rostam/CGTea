@@ -7,11 +7,9 @@
 #include "boost/cstdlib.hpp"
 #include "boost/graph/topology.hpp"
 #include <memory>
-#include <iostream>
 #include <fstream>
 #include <boost/dynamic_bitset.hpp>
 #include <random>
-#include "boost/graph/simple_point.hpp"
 #include "generators/point.h"
 #include <boost/graph/exterior_property.hpp>
 
@@ -157,7 +155,7 @@ static void for_each_neighbor(const Ver& v, Graph& g, Lambda func) {
 
 template<typename Lambda>
 static void for_each_out_edges(const Ver& v, Graph& g, Lambda func) {
-    typename graph_traits < Graph >::out_edge_iterator ei, ei_end;
+    graph_traits < Graph >::out_edge_iterator ei, ei_end;
     boost::tie(ei, ei_end) = out_edges(v, g);
     std::for_each(ei, ei_end, func);
 }

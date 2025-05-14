@@ -8,7 +8,7 @@
 #include "BasicDrawPane.h"
 
 class CGTeaApp: public wxApp {
-    BasicDrawPane *drawPane;
+    BasicDrawPane * drawPane = nullptr;
 public:
     bool OnInit() override;
 };
