@@ -140,16 +140,14 @@ typedef boost::graph_traits<Graph>::adjacency_iterator AdjacencyIterator;
 
 template<typename Lambda>
 static void for_each_neighbor_const(const Ver& v, const Graph& g, Lambda func) {
-    AdjacencyIterator vi, vi_end;
-    std::tie(vi, vi_end) = boost::adjacent_vertices(v, g);
+    auto [vi, vi_end] = boost::adjacent_vertices(v, g);
     std::for_each(vi,vi_end,func);
 }
 
 
 template<typename Lambda>
 static void for_each_neighbor(const Ver& v, Graph& g, Lambda func) {
-    AdjacencyIterator vi, vi_end;
-    std::tie(vi, vi_end) = boost::adjacent_vertices(v, g);
+    auto [vi, vi_end] = boost::adjacent_vertices(v, g);
     std::for_each(vi,vi_end,func);
 }
 
@@ -161,8 +159,6 @@ static void for_each_out_edges(const Ver& v, Graph& g, Lambda func) {
 }
 
 typedef boost::rectangle_topology<> topology_type;
-
-
 typedef boost::exterior_vertex_property<Graph, int> DistanceProperty;
 typedef DistanceProperty::matrix_type DistanceMatrix;
 typedef DistanceProperty::matrix_map_type DistanceMatrixMap;

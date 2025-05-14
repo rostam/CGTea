@@ -10,6 +10,7 @@
 
 class ReportInterface {
 public:
+    virtual ~ReportInterface() = default;
     virtual string report(const Graph& g) = 0;
     [[nodiscard]] virtual string name() const = 0;
     [[nodiscard]] virtual string description() const = 0;

@@ -16,6 +16,4 @@ public:
     std::map<std::string, vector<std::string>> CheckReturn(ConjectureType ct, std::unique_ptr<ReportInterface> r,
             std::string input_file_name);
 };
-
-
 #endif //CGTEA_CONJECTURECHECK_H

@@ -12,6 +12,7 @@
 
 class GeneratorInterface {
 public:
+    virtual ~GeneratorInterface() = default;
     virtual Graph generate(unsigned int n, unsigned int k) { return Graph(); };
 
     virtual Graph

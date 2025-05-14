@@ -11,7 +11,7 @@
  * - Reference: https://mathworld.wolfram.com/CocktailPartyGraph.html
  * - A graph consisting of two rows of paired nodes in which all nodes 
  *   except the paired ones are connected with straight lines
- * - So called because it can be visualised as the set of handshakes 
+ * - So-called because it can be visualized as the set of handshakes
  *   if n couples go to a party and each person shakes hands with every person except his or her partner. 
  * 
  */
@@ -22,15 +22,13 @@ public:
 
     Graph generate_with_positions(unsigned int n, unsigned int k, double width, double height) override {
         Graph g;
-
-
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (i == j) continue;
                  add_edge(i, n + j, g);
                  add_edge(i,j, g);
                  add_edge(n+i,n+j, g);
-                
+
             }
         }
         std::vector<cgtea_geometry::Point> pos = position_generators::circle(width, height, 200.0, 2*n);

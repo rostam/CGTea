@@ -11,9 +11,8 @@ class Pmn : public GeneratorInterface {
 public:
     explicit Pmn() : GeneratorInterface() {};
 
-    Graph generate(unsigned int n, unsigned int k) override {
+    Graph generate(unsigned int n, unsigned int m) override {
         Graph g;
-        
         for (int i = 0; i < n; i++)
             for (int j = 0; j < m; j++) {
                 if (j < m - 1) {
