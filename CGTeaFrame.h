@@ -29,10 +29,11 @@ public:
     std::vector<std::unique_ptr<GeneratorInterface>> availableGenerators;
     std::vector<std::unique_ptr<ReportInterface>> availableReports;
     std::vector<std::unique_ptr<ActionInterface>> availableActions;
+protected:
+    static const long ID_FIT_WIDTH = wxID_HIGHEST + 1;
+    void OnFitWidth(wxCommandEvent &event);
 
-//    std::tuple<Cycle, Complete, Antiprism> availableGenerators = std::make_tuple(Cycle(), Complete(), Antiprism());
 private:
-
     void Generate(wxCommandEvent &event);
     void Report(wxCommandEvent &event);
     void Layout(wxCommandEvent &event);

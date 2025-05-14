@@ -116,6 +116,9 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     auto *menuLayout = new wxMenu;
     menuLayout->Append(i, "Force-directed drawing", "Force-directed drawing");
     Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Layout));
+    i++;
+    menuLayout->Append(i, "&Fit Width", "Fit Graph to Width");
+    Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::OnFitWidth));
     auto menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
     wxMenuBar *menuBar = new wxMenuBar;
@@ -171,6 +174,7 @@ void CGTeaFrame::Generate(wxCommandEvent& event) {
 
 void CGTeaFrame::Layout(wxCommandEvent& event) {
     int id = event.GetId();
+    cout << id;
     //    currentGraph = availableGenerators[id]->generate_with_force_directed(10,0,500,500);
     std::vector<cgtea_geometry::Point> pos = compute_force_directed(10, 10, 300, 300, currentGraph);
     int i = 0;
@@ -180,6 +184,44 @@ void CGTeaFrame::Layout(wxCommandEvent& event) {
     });
     Refresh();
 }
+
+void CGTeaFrame::OnFitWidth(wxCommandEvent& event)
+{
+    // Get the current graph bounds
+    double minX = std::numeric_limits<double>::max();
+    double maxX = std::numeric_limits<double>::lowest();
+    double minY = std::numeric_limits<double>::max();
+    double maxY = std::numeric_limits<double>::lowest();
+
+    for_each_v_const(currentGraph, [&](Ver v) {
+        const cgtea_geometry::Point pos = boost::get(boost::vertex_distance, currentGraph, v);
+        minX = std::min(minX, pos.x);
+        maxX = std::max(maxX, pos.x);
+        minY = std::min(minY, pos.y);
+        maxY = std::max(maxY, pos.y);
+    });
+
+    // Get the panel width
+    //auto panelSize = this->GetClientSize();
+    auto panelSize = this->GetSizer()->GetItem(1)->GetSize();
+    //auto panelSize = this->GetSizer()->GetItemById(0)->GetSize();
+    cout << this->GetSizer()->GetItemCount();
+    cout << panelSize.GetWidth() << endl;
+    cout << panelSize.GetHeight() << endl;
+    double padding = 20; // Leave some space for vertices on the edges
+    double scaleX = (panelSize.GetWidth() - 2 * padding) / (maxX - minX);
+    double scaleY = (panelSize.GetHeight() - 2 * padding) / (maxY - minY);
+
+    // Scale and center all vertices
+    for_each_v(currentGraph, [&](const Ver v) {
+        cgtea_geometry::Point pos = boost::get(boost::vertex_distance, currentGraph, v);
+        pos.x = (pos.x - minX) * scaleX + padding;
+        pos.y = (pos.y - minY) * scaleY + padding;
+        boost::put(boost::vertex_distance, currentGraph, v, pos);
+    });
+    Refresh();
+}
+
 
 void CGTeaFrame::Report(wxCommandEvent& event) {
     int id = event.GetId();
