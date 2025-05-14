@@ -9,13 +9,12 @@
 #include <vector>
 #include "../datatypes.h"
 #include <string>     // std::string, std::stoi
+#include <bitset>
 
 
 class G6Format {
 public:
-    G6Format() {
-
-    }
+    G6Format() = default;
 
     int BIAS6 = 63;
     int SMALLN = 62;
@@ -23,20 +22,20 @@ public:
     int TOPBIT6 = 32;
     int WORDSIZE = 32;
 
-    int SIZELEN(int n) {
+    [[nodiscard]] int SIZELEN(int n) const {
         return (n) <= SMALLN ? 1 : ((n) <= SMALLISHN ? 4 : 8);
     }
 
-    int SETWD(int pos) {
+    static int SETWD(int pos) {
         return ((pos) >> 5);
     }
 
-    int SETBT(int pos) {
+    static int SETBT(int pos) {
         return ((pos) & 037);
     }
 
 
-    Graph stringToGraph2(std::string g6) {
+    Graph stringToGraph2(std::string g6) const {
         int n = graphsize(g6);
         Graph graph;
         std::string p = g6;
@@ -67,7 +66,7 @@ public:
         return graph;
     }
 
-    Graph stringToGraph(std::string g6) {
+    Graph stringToGraph(std::string g6) const {
         int n = graphsize(g6);
 
         Graph graph;
@@ -102,7 +101,7 @@ public:
     }
 
     /* Get size of graph out of graph6 or sparse6 string. */
-    int graphsize(std::string s) {
+    [[nodiscard]] int graphsize(std::string s) const {
         std::string p;
         if (s[0] == ':') p = s.substr(1);
         else p = s;
@@ -151,12 +150,12 @@ public:
         return rv;
     }
 
-    std::string toBinaryString(int n) {
+    static std::string toBinaryString(int n) {
         std::string s = std::bitset<64>(n).to_string(); // string conversion
         return s;
     }
 
-    vector<int> encodeN(long i) {
+    static vector<int> encodeN(long i) {
         vector<int> ret;
         if (0 <= i && i <= 62) {
             ret.emplace_back(i + 63);
@@ -178,10 +177,9 @@ public:
             }
             return ret;
         }
-
     }
 
-    vector<int> R(const std::string& a) {
+    static vector<int> R(const std::string& a) {
         vector<int> bytes (a.length());
         for (unsigned int i = 0; i < a.length() / 6; i++) {
             int tmp = std::stoi(a.substr(i * 6, ((i * 6) + 6) - (i * 6)), nullptr, 2);
@@ -191,12 +189,12 @@ public:
         return bytes;
     }
 
-    vector<int> encodeR(std::string a) {
+    static vector<int> encodeR(std::string a) {
         a = padR(a);
         return R(a);
     }
 
-    std::string padR(std::string str) {
+    static std::string padR(std::string str) {
         unsigned int padwith = 6 - (str.length() % 6);
         for (unsigned int i = 0; i < padwith; i++) {
             str += "0";
@@ -204,7 +202,7 @@ public:
         return str;
     }
 
-    std::string padL(std::string str, int h) {
+    static std::string padL(const std::string& str, int h) {
         std::string retval;
         for (unsigned int i = 0; i < h - str.length(); i++) {
             retval += "0";
