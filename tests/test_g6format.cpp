@@ -4,14 +4,14 @@
 
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
-#include "../G6Format.h"
+#include "../G6Format/G6Format.h"
 
 BOOST_AUTO_TEST_SUITE(G6FormatTests)
 
 BOOST_AUTO_TEST_CASE(test_graph_size_detection)
 {
     G6Format g6;
-    // Test small graph (n ≤ 62)
+    // Test a small graph (n ≤ 62)
     BOOST_CHECK_EQUAL(g6.graphsize("A_"), 1);
     BOOST_CHECK_EQUAL(g6.graphsize("B?"), 2);
 
