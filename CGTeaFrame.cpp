@@ -40,8 +40,10 @@
 
 #include <memory>
 
+#include "SettingsDialog.h"
+
 wxBEGIN_EVENT_TABLE(CGTeaFrame, wxFrame)
-                EVT_MENU(wxID_ABOUT, CGTeaFrame::OnAbout)
+    EVT_MENU(wxID_ABOUT, CGTeaFrame::OnAbout)
 wxEND_EVENT_TABLE()
 
 CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
@@ -80,11 +82,14 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     auto menuFile = std::make_unique<wxMenu>();
     menuFile->Append(1000, "&Open");
     menuFile->Append(1001, "&Save");
+    menuFile->Append(1002, "&Settings");
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
 
     Connect(1000, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Open));
     Connect(1001, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Save));
+    Connect(1002, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::OnSettings));
+
     Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::OnExit));
 
     auto menuGenerate = std::make_unique<wxMenu>();
@@ -283,4 +288,12 @@ void CGTeaFrame::Save(wxCommandEvent& event) {
     out.flush();
     out.close();
     cerr << g6 << endl;
+}
+
+void CGTeaFrame::OnSettings(wxCommandEvent& event) {
+    SettingsDialog dialog(this);
+    if (dialog.ShowModal() == wxID_OK) {
+        currentVertexShape = dialog.GetSelectedShape();
+        Refresh(); // Redraw the graph with the new vertex shape
+    }
 }

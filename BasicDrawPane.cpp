@@ -115,7 +115,7 @@ void BasicDrawPane::paintEvent(wxPaintEvent & evt)
  * at any time. Using this generally does not free you from
  * catching paint events, since it is possible that e.g. the window
  * manager throws away your drawing when the window comes to the
- * background, and expects you will redraw it when the window comes
+ * background and expects you will redraw it when the window comes
  * back (by sending a paint event).
  *
  * In most cases, this will not be needed at all; simply handling
@@ -131,7 +131,7 @@ void BasicDrawPane::paintNow()
 /*
  * Here we do the actual rendering. I put it in a separate
  * method so that it can work no matter what type of DC
- * (e.g. wxPaintDC or wxClientDC) is used.
+ * (e.g., wxPaintDC or wxClientDC) is used.
  */
 void BasicDrawPane::render(wxPaintDC&  dc) {
 
@@ -145,7 +145,7 @@ void BasicDrawPane::render(wxPaintDC&  dc) {
         gc->SetPen(wxPen(wxColor(0, 0, 0), 1)); // black line, 3 pixels thick
         gc->DrawRectangle(0,0,dc.GetSize().GetWidth(),dc.GetSize().GetHeight());
         try {
-            const Graph& g = ((CGTeaFrame*)this->m_parent)->currentGraph;
+            const Graph& g = static_cast<CGTeaFrame*>(this->m_parent)->currentGraph;
             drawEdges(g, gc);
             drawVertices(g, gc);
         } catch (std::exception &e) {
@@ -194,7 +194,7 @@ void BasicDrawPane::drawEdges(const Graph &g, wxGraphicsContext* gc) {
 //     });
 // }
 
-void BasicDrawPane::drawShape(wxGraphicsContext* gc, VertexShape shape,
+void BasicDrawPane::drawShape(wxGraphicsContext* gc, const VertexShape shape,
                             const cgtea_geometry::Point& pos, double size) {
     switch(shape) {
         case VertexShape::Square:
@@ -248,7 +248,10 @@ void BasicDrawPane::drawVertices(const Graph &g, wxGraphicsContext* gc) {
     for_each_v_const(g, [&](Ver v) {
         const int color = boost::get(vertex_color, g, v);
         const cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
-        auto shape = VertexShape::Diamond;
+        //auto shape = VertexShape::Diamond;
+        const auto frame = static_cast<CGTeaFrame*>(this->m_parent);
+        const auto shape = frame ? frame->getCurrentVertexShape() : VertexShape::Circle;
+
 
         // Draw a white background
         gc->SetPen(wxPen(wxColor(255, 0, 0), 1));

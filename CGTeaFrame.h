@@ -25,6 +25,7 @@ public:
     Graph currentGraph;
 
     CGTeaFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
+    VertexShape getCurrentVertexShape() const { return currentVertexShape; }
 
     std::vector<std::unique_ptr<GeneratorInterface>> availableGenerators;
     std::vector<std::unique_ptr<ReportInterface>> availableReports;
@@ -43,6 +44,11 @@ private:
     void OnAbout(wxCommandEvent &event);
     void Open(wxCommandEvent &event);
     void Save(wxCommandEvent &event);
+
+    void OnSettings(wxCommandEvent& event);
+
+    VertexShape currentVertexShape = VertexShape::Circle;
+
 
 wxDECLARE_EVENT_TABLE();
 };

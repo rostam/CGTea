@@ -8,11 +8,9 @@
 #include <wx/wxprec.h>
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
-#include <wx/sizer.h>
 #include "datatypes.h"
 #include <string>
 #endif
-#include <exception>
 #include <wx/graphics.h>
 #include <map>
 

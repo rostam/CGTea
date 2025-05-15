@@ -13,7 +13,11 @@ file(GLOB ConjectureCheck "ConjectureCheck/*.cpp")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
 #set( CMAKE_CXX_FLAGS "`wx-config --cxxflags --libs`")
 add_executable(CGTea CGTeaApp.cpp BasicDrawPane.cpp CGTeaFrame.cpp CGTeaSidebar.cpp  ${Reports} ${Generators} ${Actions}
-        const_values.h)
-add_executable(BoostTest ${Reports} ${Generators}  ${BoostTestSrc} ${ConjectureCheck} ${Actions})
+        const_values.h
+        SettingsDialog.cpp
+        SettingsDialog.h)
+add_executable(BoostTest ${Reports} ${Generators}  ${BoostTestSrc} ${ConjectureCheck} ${Actions}
+        SettingsDialog.cpp
+        SettingsDialog.h)
 target_link_libraries(CGTea ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(BoostTest ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
