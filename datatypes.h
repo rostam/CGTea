@@ -6,7 +6,6 @@
 #include "boost/graph/sequential_vertex_coloring.hpp"
 #include "boost/cstdlib.hpp"
 #include "boost/graph/topology.hpp"
-#include <memory>
 #include <fstream>
 #include <boost/dynamic_bitset.hpp>
 #include <random>
@@ -45,22 +44,20 @@ typedef boost::graph_traits<Graph>::edge_iterator E_iter;
 typedef Graph::vertex_descriptor Ver;
 typedef Graph::edge_descriptor Edge;
 typedef boost::property_map<Graph, boost::edge_weight_t>::type edge_weight_type;
-typedef boost::dynamic_bitset<> dynbit;
+typedef boost::dynamic_bitset<> computed_dynamic_bit;
 
 //typedef std::vector<boost::square_topology<minstd_rand>::point> PositionVec;
 //typedef boost::iterator_property_map<PositionVec::iterator, boost::property_map<Graph, boost::vertex_index_t>::type> PositionMap;
 
 template<typename Lambda>
 static void for_each_v(Graph& g, Lambda func) {
-    V_iter vi, vi_end;
-    tie(vi, vi_end) = vertices(g);
+    auto [vi, vi_end] = vertices(g);
     std::for_each(vi,vi_end,func);
 }
 
 template<typename Lambda>
 static void for_each_v_const(const Graph& g, Lambda func) {
-    V_iter vi, vi_end;
-    tie(vi, vi_end) = vertices(g);
+    auto [vi, vi_end] = vertices(g);
     std::for_each(vi,vi_end,func);
 }
 
@@ -79,7 +76,7 @@ static void for_each_e_const(const Graph& g, Lambda func) {
 }
 
 //static string statistics(const Graph& g) {
-//    tuple<double,double,double> t = eigen_values(g);
+//    tuple<double, double, double> t = eigen_values(g);
 //    string stat = string("Number of vertices:") + to_string( boost::num_vertices(g)) +
 //                  string("\nNumber of edges:") + to_string(boost::num_edges(g)) +
 //                  string("\nMaximum eigenvalue:" + to_string(std::get<0>(t))) +
@@ -88,17 +85,17 @@ static void for_each_e_const(const Graph& g, Lambda func) {
 //    return stat;
 //}
 
-static auto ge_degree = [](pair<int,int> t1, pair<int,int> t2){return t1.second>=t2.second;};
-static auto lt_degree = [](pair<int,int> t1, pair<int,int> t2){return t1.second<t2.second;};
+static auto ge_degree = [](const pair<int,int>& t1, const pair<int,int>& t2){return t1.second>=t2.second;};
+static auto lt_degree = [](const pair<int,int>& t1, const pair<int,int>& t2){return t1.second<t2.second;};
 
-static bool cmp_degrees(pair<int,pair<int,int> > t1, pair<int,pair<int,int> > t2)
+static bool cmp_degrees(const pair<int,pair<int,int> >& t1, const pair<int,pair<int,int> >& t2)
 {
     if (t1.second.second < t2.second.second) {
-        return 1;
+        return true;
     } else if (t1.second.second == t2.second.second && t1.second.first < t2.second.first) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -107,7 +104,7 @@ static bool mysymmetric = false;
 /**
  * \brief Computes the fill-reducing ordering
  *
- * @param g the given simple graph which would be converted to a metis input format
+ * @param g the given simple graph, which would be converted to a metis input format
  * @param name the name of the file which is given to metis command
  * @param met_ord the computed ordering in Metis
  */

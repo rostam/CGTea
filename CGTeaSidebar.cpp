@@ -11,21 +11,19 @@ CGTeaSidebar::CGTeaSidebar(CGTeaFrame *parent, wxWindowID winid) : wxPanel(paren
     wxFont font = statistics_text->GetFont();
     font.SetPointSize(16);
     statistics_text->SetFont(font);
-
-    wxButton* compute_stat = new wxButton(this, 100, "Compute Statistics");
+    auto compute_stat = std::make_unique<wxButton>(this, 100, "Compute Statistics");
     Connect(100, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(CGTeaSidebar::computeStat));
-
-    wxBoxSizer* panel1Sizer = new wxBoxSizer(wxVERTICAL);
+    auto panel1Sizer = std::make_unique<wxBoxSizer>(wxVERTICAL);
     panel1Sizer->Add(statistics_text, 4, wxEXPAND | wxALL, 8);//, 1, wxLEFT, 8);
-    panel1Sizer->Add(compute_stat, 1, wxEXPAND | wxBOTTOM, 8);
-    SetSizer(panel1Sizer);
+    panel1Sizer->Add(compute_stat.release(), 1, wxEXPAND | wxBOTTOM, 8);
+    SetSizer(panel1Sizer.release());
 }
 
 void CGTeaSidebar::computeStat(wxCommandEvent & WXUNUSED(event))
 {
-    auto frame = ((CGTeaFrame*)this->m_parent);
+    auto frame = static_cast<CGTeaFrame*>(this->m_parent);
     string out;
-    for(auto& gi : frame->availableReports) {
+    for(const auto& gi : frame->availableReports) {
         out += gi->name() + ": " + gi->report(frame->currentGraph) + "\n";
     }
     statistics_text->SetValue(wxString(out.c_str()));
