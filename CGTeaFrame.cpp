@@ -49,6 +49,9 @@ wxEND_EVENT_TABLE()
 
 CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
         : wxFrame(nullptr, wxID_ANY, title, pos, size) {
+    currentVertexShape = Config::LoadVertexShape();
+    currentEdgeShape = Config::LoadEdgeShape();
+
     availableGenerators.emplace_back(std::make_unique<Antiprism>());
     availableGenerators.emplace_back(std::make_unique<Banana>());
     availableGenerators.emplace_back(std::make_unique<Cycle>());
