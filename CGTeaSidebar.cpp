@@ -16,7 +16,7 @@ CGTeaSidebar::CGTeaSidebar(CGTeaFrame *parent, wxWindowID winid) : wxPanel(paren
     Connect(100, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(CGTeaSidebar::computeStat));
 
     wxBoxSizer* panel1Sizer = new wxBoxSizer(wxVERTICAL);
-    panel1Sizer->Add(statistics_text, 1, wxEXPAND | wxALL, 8);//, 1, wxLEFT, 8);
+    panel1Sizer->Add(statistics_text, 4, wxEXPAND | wxALL, 8);//, 1, wxLEFT, 8);
     panel1Sizer->Add(compute_stat, 1, wxEXPAND | wxBOTTOM, 8);
     SetSizer(panel1Sizer);
 }
