@@ -19,3 +19,4 @@ add_executable(BoostTest ${Reports} ${Generators}  ${BoostTestSrc} ${ConjectureC
         tests/test_g6format.cpp)
 target_link_libraries(CGTea ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(BoostTest ${Boost_LIBRARIES})
+
