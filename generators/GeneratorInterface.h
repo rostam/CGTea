@@ -18,11 +18,11 @@ public:
     virtual Graph
     generate_with_positions(unsigned int n, unsigned int k, double width, double height) { return Graph(); };
 
-    Graph generate_with_force_directed(unsigned int n, unsigned int k, double width, double height) {
+    Graph generate_with_force_directed(const unsigned int n, const unsigned int k, const double width, const double height) {
         Graph g = generate(n, k);
-        std::vector<cgtea_geometry::Point> pos = compute_force_directed(50, 50, width, height, g);
+        const std::vector<cgtea_geometry::Point> pos = compute_force_directed(50, 50, width, height, g);
         int i = 0;
-        for_each_v(g, [&](Ver v) {
+        for_each_v(g, [&](const Ver v) {
             boost::put(boost::vertex_distance, g, v, pos[i]);
             i++;
         });

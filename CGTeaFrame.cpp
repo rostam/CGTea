@@ -77,7 +77,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableActions.emplace_back(std::make_unique<Coloring>());
     availableActions.emplace_back(std::make_unique<LineGraph>());
 
-    auto menuFile = new wxMenu;
+    auto menuFile = std::make_unique<wxMenu>();
     menuFile->Append(1000, "&Open");
     menuFile->Append(1001, "&Save");
     menuFile->AppendSeparator();
@@ -87,7 +87,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     Connect(1001, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Save));
     Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::OnExit));
 
-    auto menuGenerate = new wxMenu;
+    auto menuGenerate = std::make_unique<wxMenu>();
     int i = 1;
 //    std::apply([&](auto&&... args) {((menuGenerate->Append(i, wxString(args.name().c_str(), wxConvUTF8), wxString(args.description().c_str(), wxConvUTF8)),i++), ...);}, availableGenerators);
     for (auto& gi : availableGenerators) {
@@ -97,7 +97,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
         i++;
     }
 
-    auto menuReport = new wxMenu;
+    auto menuReport = std::make_unique<wxMenu>();
     for (auto& ri : availableReports) {
         menuReport->Append(i, wxString(ri->name().c_str(), wxConvUTF8),
                 wxString(ri->description().c_str(), wxConvUTF8));
@@ -105,7 +105,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
         i++;
     }
 
-    auto menuAction = new wxMenu;
+    auto menuAction = std::make_unique<wxMenu>();
     for (auto& ai : availableActions) {
         menuAction->Append(i, wxString(ai->name().c_str(), wxConvUTF8),
                            wxString(ai->description().c_str(), wxConvUTF8));
@@ -113,22 +113,22 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
         i++;
     }
 
-    auto *menuLayout = new wxMenu;
+    auto menuLayout = std::make_unique<wxMenu>();
     menuLayout->Append(i, "Force-directed drawing", "Force-directed drawing");
     Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::Layout));
     i++;
     menuLayout->Append(i, "&Fit Width", "Fit Graph to Width");
     Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::OnFitWidth));
-    auto menuHelp = new wxMenu;
+    auto menuHelp = std::make_unique<wxMenu>();
     menuHelp->Append(wxID_ABOUT);
-    wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuGenerate, "&Generate");
-    menuBar->Append(menuReport, "&Report");
-    menuBar->Append(menuAction, "&Action");
-    menuBar->Append(menuLayout, "&Layout");
-    menuBar->Append(menuHelp, "&Help");
-    SetMenuBar(menuBar);
+    auto menuBar = std::make_unique<wxMenuBar>();
+    menuBar->Append(menuFile.release(), "&File");
+    menuBar->Append(menuGenerate.release(), "&Generate");
+    menuBar->Append(menuReport.release(), "&Report");
+    menuBar->Append(menuAction.release(), "&Action");
+    menuBar->Append(menuLayout.release(), "&Layout");
+    menuBar->Append(menuHelp.release(), "&Help");
+    SetMenuBar(menuBar.release());
     CreateStatusBar();
     SetStatusText("Welcome to CGTea!");
 
@@ -147,11 +147,11 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     }
 }
 
-void CGTeaFrame::OnExit(wxCommandEvent& event) {
+void CGTeaFrame::OnExit(wxCommandEvent&) {
     Close(true);
 }
 
-void CGTeaFrame::OnAbout(wxCommandEvent& event) {
+void CGTeaFrame::OnAbout(wxCommandEvent&) {
     wxMessageBox("CGTea is a C++-version of GraphTea, a software for working with graphs.",
                  "CGTea 1.0", wxOK | wxICON_INFORMATION);
 }
@@ -220,7 +220,7 @@ void CGTeaFrame::Report(wxCommandEvent& event) {
     const int id = event.GetId();
     const std::string report_results = availableReports[id - availableGenerators.size() - 1]->report(currentGraph);
     const std::string report_name = availableReports[id - availableGenerators.size() - 1]->name();
-    ((CGTeaSidebar*)this->GetSizer()->GetChildren()[0]->GetWindow())->statistics_text->SetValue(report_name + ": " +report_results);
+    static_cast<CGTeaSidebar*>(this->GetSizer()->GetChildren()[0]->GetWindow())->statistics_text->SetValue(report_name + ": " +report_results);
 }
 
 void CGTeaFrame::Action(wxCommandEvent& event) {

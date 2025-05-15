@@ -33,7 +33,7 @@ public:
         }
         std::vector<cgtea_geometry::Point> pos = position_generators::circle(width, height, 200.0, 2*n);
         
-        for_each_v(g, [&](Ver v) {boost::put(boost::vertex_distance, g, v, pos[v]);});
+        for_each_v(g, [&](const Ver v) {boost::put(boost::vertex_distance, g, v, pos[v]);});
         return g;
     }
 
