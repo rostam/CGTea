@@ -5,6 +5,8 @@
 #ifndef CONST_VALUES_H
 #define CONST_VALUES_H
 
+#include "magic_enum.h"
+
 enum class VertexShape {
     Circle,
     Square,
