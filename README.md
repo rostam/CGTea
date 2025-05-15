@@ -16,6 +16,3 @@ There are three main dependencies for this project:
     ```
 
 Please note that the project is in active development, and contributions are welcome. For more information, please refer to the source code and comments therein.
-
-### Tests
-![C/C++ CI](https://github.com/{username}/{repository}/workflows/C/C++%20CI/badge.svg)
