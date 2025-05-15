@@ -26,13 +26,13 @@
 
 bool CGTeaApp::OnInit()
 {
-    auto *sizer = new wxBoxSizer(wxHORIZONTAL);
-    auto *frame = new CGTeaFrame("CGTea", wxPoint(100, 100), wxSize(1200, 600) );
-    auto *cgTeaSidebar = new CGTeaSidebar(frame, wxID_ANY);
+    auto sizer = std::make_unique<wxBoxSizer>(wxHORIZONTAL);
+    auto frame = new CGTeaFrame("CGTea", wxPoint(100, 100), wxSize(1200, 600) );
+    auto cgTeaSidebar = new CGTeaSidebar(frame, wxID_ANY);
     drawPane = new BasicDrawPane( frame );
     sizer->Add(cgTeaSidebar, 1, wxEXPAND | wxALL);
     sizer->Add(drawPane, 4, wxEXPAND | wxALL);
-    frame->SetSizer(sizer);
+    frame->SetSizer(sizer.release());
     frame->SetAutoLayout(true);
     frame->SetIcon(wxIcon(wxT("gtea.xpm")));
     frame->Show( true );
