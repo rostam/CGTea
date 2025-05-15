@@ -13,9 +13,13 @@ class SettingsDialog : public wxDialog {
 public:
     explicit SettingsDialog(wxWindow* parent);
     VertexShape GetSelectedShape() const;
+    EdgeShape GetSelectedEdgeShape() const;
+
 
 private:
     wxRadioBox* shapeRadioBox;
+    wxRadioBox* edgeShapeRadioBox;
+
 };
 
 #endif //CGTEA_SETTINGSDIALOG_H

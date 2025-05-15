@@ -12,4 +12,11 @@ enum class VertexShape {
     Diamond
 };
 
+enum class EdgeShape {
+    Line,
+    Curve,
+    DoubleArrow,
+    Dashed
+};
+
 #endif //CONST_VALUES_H

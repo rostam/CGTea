@@ -26,6 +26,8 @@ public:
 
     CGTeaFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
     VertexShape getCurrentVertexShape() const { return currentVertexShape; }
+    EdgeShape getCurrentEdgeShape() const { return currentEdgeShape; }
+
 
     std::vector<std::unique_ptr<GeneratorInterface>> availableGenerators;
     std::vector<std::unique_ptr<ReportInterface>> availableReports;
@@ -48,6 +50,8 @@ private:
     void OnSettings(wxCommandEvent& event);
 
     VertexShape currentVertexShape = VertexShape::Circle;
+    EdgeShape currentEdgeShape = EdgeShape::Line;
+
 
 
 wxDECLARE_EVENT_TABLE();

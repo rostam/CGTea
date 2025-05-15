@@ -34,6 +34,23 @@ public:
     void drawTriangle(wxGraphicsContext* gc, const cgtea_geometry::Point& pos, double size);
     void drawDiamond(wxGraphicsContext* gc, const cgtea_geometry::Point& pos, double size);
 
+    void drawEdgeShape(wxGraphicsContext* gc, EdgeShape shape,
+                  const cgtea_geometry::Point& src,
+                  const cgtea_geometry::Point& tgt);
+    void drawLine(wxGraphicsContext* gc,
+                 const cgtea_geometry::Point& src,
+                 const cgtea_geometry::Point& tgt);
+    void drawCurve(wxGraphicsContext* gc,
+                  const cgtea_geometry::Point& src,
+                  const cgtea_geometry::Point& tgt);
+    void drawDoubleArrow(wxGraphicsContext* gc,
+                        const cgtea_geometry::Point& src,
+                        const cgtea_geometry::Point& tgt);
+    void drawDashed(wxGraphicsContext* gc,
+                   const cgtea_geometry::Point& src,
+                   const cgtea_geometry::Point& tgt);
+
+
      void mouseMoved(wxMouseEvent& event);
      void mouseDown(wxMouseEvent& event);
      void mouseWheelMoved(wxMouseEvent& event);

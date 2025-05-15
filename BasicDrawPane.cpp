@@ -156,19 +156,19 @@ void BasicDrawPane::render(wxPaintDC&  dc) {
 
 }
 
-void BasicDrawPane::drawEdges(const Graph &g, wxGraphicsContext* gc) {
-    for_each_e_const(g, [&](Edge e) {
-        const Ver src = boost::source(e,g);
-        const Ver tgt = boost::target(e,g);
-        const cgtea_geometry::Point src_pos = boost::get(boost::vertex_distance, g, src);
-        const cgtea_geometry::Point tgt_pos = boost::get(boost::vertex_distance, g, tgt);
-        gc->SetPen(wxPen(wxColor(0, 0, 0), 2)); // black line, 3 pixels thick
-        wxGraphicsPath path = gc->CreatePath();
-        path.MoveToPoint(src_pos.x, src_pos.y);
-        path.AddLineToPoint(tgt_pos.x, tgt_pos.y);
-        gc->StrokePath(path);
-    });
-}
+// void BasicDrawPane::drawEdges(const Graph &g, wxGraphicsContext* gc) {
+//     for_each_e_const(g, [&](Edge e) {
+//         const Ver src = boost::source(e,g);
+//         const Ver tgt = boost::target(e,g);
+//         const cgtea_geometry::Point src_pos = boost::get(boost::vertex_distance, g, src);
+//         const cgtea_geometry::Point tgt_pos = boost::get(boost::vertex_distance, g, tgt);
+//         gc->SetPen(wxPen(wxColor(0, 0, 0), 2)); // black line, 3 pixels thick
+//         wxGraphicsPath path = gc->CreatePath();
+//         path.MoveToPoint(src_pos.x, src_pos.y);
+//         path.AddLineToPoint(tgt_pos.x, tgt_pos.y);
+//         gc->StrokePath(path);
+//     });
+// }
 
 // void BasicDrawPane::drawVertices(const Graph &g, wxGraphicsContext* gc) {
 //     for_each_v_const(g, [&](Ver v) {
@@ -269,5 +269,113 @@ void BasicDrawPane::drawVertices(const Graph &g, wxGraphicsContext* gc) {
         wxDouble w, h;
         gc->GetTextExtent(mystring, &w, &h, nullptr, nullptr);
         gc->DrawText(mystring, pos.x-w/2, pos.y-h/2);
+    });
+}
+
+void BasicDrawPane::drawEdgeShape(wxGraphicsContext* gc, EdgeShape shape,
+                                const cgtea_geometry::Point& src,
+                                const cgtea_geometry::Point& tgt) {
+    switch(shape) {
+        case EdgeShape::Curve:
+            drawCurve(gc, src, tgt);
+            break;
+        case EdgeShape::DoubleArrow:
+            drawDoubleArrow(gc, src, tgt);
+            break;
+        case EdgeShape::Dashed:
+            drawDashed(gc, src, tgt);
+            break;
+        case EdgeShape::Line:
+        default:
+            drawLine(gc, src, tgt);
+            break;
+    }
+}
+
+void BasicDrawPane::drawLine(wxGraphicsContext* gc,
+                           const cgtea_geometry::Point& src,
+                           const cgtea_geometry::Point& tgt) {
+    wxGraphicsPath path = gc->CreatePath();
+    path.MoveToPoint(src.x, src.y);
+    path.AddLineToPoint(tgt.x, tgt.y);
+    gc->StrokePath(path);
+}
+
+void BasicDrawPane::drawCurve(wxGraphicsContext* gc,
+                            const cgtea_geometry::Point& src,
+                            const cgtea_geometry::Point& tgt) {
+    wxGraphicsPath path = gc->CreatePath();
+    path.MoveToPoint(src.x, src.y);
+    // Calculate control point for quadratic curve
+    double midX = (src.x + tgt.x) / 2;
+    double midY = (src.y + tgt.y) / 2;
+    double offsetY = 30; // Curve height
+    path.AddQuadCurveToPoint(midX, midY - offsetY, tgt.x, tgt.y);
+    gc->StrokePath(path);
+}
+
+void BasicDrawPane::drawDoubleArrow(wxGraphicsContext* gc,
+                                  const cgtea_geometry::Point& src,
+                                  const cgtea_geometry::Point& tgt) {
+    // Draw main line
+    drawLine(gc, src, tgt);
+
+    // Calculate arrow parameters
+    double angle = atan2(tgt.y - src.y, tgt.x - src.x);
+    double arrowLength = 15;
+    double arrowAngle = M_PI / 6;  // 30 degrees
+
+    // Draw arrows at both ends
+    for(const auto& point : {src, tgt}) {
+        double baseAngle = (point.x == src.x && point.y == src.y) ?
+                          angle + M_PI : angle;
+
+        wxGraphicsPath arrowPath = gc->CreatePath();
+        arrowPath.MoveToPoint(point.x, point.y);
+        arrowPath.AddLineToPoint(
+            point.x + arrowLength * cos(baseAngle + arrowAngle),
+            point.y + arrowLength * sin(baseAngle + arrowAngle)
+        );
+        arrowPath.MoveToPoint(point.x, point.y);
+        arrowPath.AddLineToPoint(
+            point.x + arrowLength * cos(baseAngle - arrowAngle),
+            point.y + arrowLength * sin(baseAngle - arrowAngle)
+        );
+        gc->StrokePath(arrowPath);
+    }
+}
+
+void BasicDrawPane::drawDashed(wxGraphicsContext* gc,
+                             const cgtea_geometry::Point& src,
+                             const cgtea_geometry::Point& tgt) {
+    // Create a new dashed pen
+    wxPen dashedPen(wxColor(0, 0, 0), 2); // Match the regular pen style
+    wxDash dashes[] = {5, 5}; // 5 pixel dash, 5 pixel gap
+    dashedPen.SetDashes(2, dashes);
+    dashedPen.SetStyle(wxPENSTYLE_USER_DASH);
+    gc->SetPen(dashedPen);
+
+    // Draw the dashed line
+    wxGraphicsPath path = gc->CreatePath();
+    path.MoveToPoint(src.x, src.y);
+    path.AddLineToPoint(tgt.x, tgt.y);
+    gc->StrokePath(path);
+
+    // Reset to solid pen
+    gc->SetPen(wxPen(wxColor(0, 0, 0), 2));
+}
+
+void BasicDrawPane::drawEdges(const Graph &g, wxGraphicsContext* gc) {
+    for_each_e_const(g, [&](Edge e) {
+        const Ver src = boost::source(e,g);
+        const Ver tgt = boost::target(e,g);
+        const cgtea_geometry::Point src_pos = boost::get(boost::vertex_distance, g, src);
+        const cgtea_geometry::Point tgt_pos = boost::get(boost::vertex_distance, g, tgt);
+        gc->SetPen(wxPen(wxColor(0, 0, 0), 2));
+
+        const auto frame = static_cast<CGTeaFrame*>(this->m_parent);
+        const auto edgeShape = frame ? frame->getCurrentEdgeShape() : EdgeShape::Line;
+
+        drawEdgeShape(gc, edgeShape, src_pos, tgt_pos);
     });
 }

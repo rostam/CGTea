@@ -40,6 +40,7 @@
 
 #include <memory>
 
+#include "Config.h"
 #include "SettingsDialog.h"
 
 wxBEGIN_EVENT_TABLE(CGTeaFrame, wxFrame)
@@ -294,6 +295,9 @@ void CGTeaFrame::OnSettings(wxCommandEvent& event) {
     SettingsDialog dialog(this);
     if (dialog.ShowModal() == wxID_OK) {
         currentVertexShape = dialog.GetSelectedShape();
+        currentEdgeShape = dialog.GetSelectedEdgeShape();
+        Config::SaveVertexShape(currentVertexShape);
+        Config::SaveEdgeShape(currentEdgeShape);
         Refresh(); // Redraw the graph with the new vertex shape
     }
 }
