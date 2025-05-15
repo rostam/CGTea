@@ -9,6 +9,7 @@
 
 class ActionInterface {
 public:
+    virtual ~ActionInterface() = default;
     virtual Graph action(Graph g) = 0;
     virtual string name() const = 0;
     virtual string description() const = 0;

@@ -35,7 +35,7 @@ public:
     }
 
 
-    Graph stringToGraph2(std::string g6) const {
+    Graph stringToGraph2(const std::string& g6) const {
         int n = graphsize(g6);
         Graph graph;
         std::string p = g6;
@@ -66,7 +66,7 @@ public:
         return graph;
     }
 
-    Graph stringToGraph(std::string g6) const {
+    Graph stringToGraph(const std::string& g6) const {
         int n = graphsize(g6);
 
         Graph graph;
@@ -101,12 +101,11 @@ public:
     }
 
     /* Get size of graph out of graph6 or sparse6 string. */
-    [[nodiscard]] int graphsize(std::string s) const {
+    [[nodiscard]] int graphsize(const std::string& s) const {
         std::string p;
         if (s[0] == ':') p = s.substr(1);
         else p = s;
-        int n;
-        n = p[0] - BIAS6;
+        int n = p[0] - BIAS6;
 
         if (n > SMALLN) {
             n = p[1] - BIAS6;

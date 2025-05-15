@@ -7,7 +7,7 @@ using namespace  cgtea_geometry;
 Graph LineGraph::action(Graph g) {
     Graph g2;
     int cnt = 0;
-    for_each_e(g, [&](Edge e) {
+    for_each_e(g, [&](const Edge& e) {
         Ver v = cnt;
         boost::add_vertex(v, g2);
         EdgeToVertexMapper[e] = v;
@@ -21,8 +21,8 @@ Graph LineGraph::action(Graph g) {
     });
 
     for_each_v(g, [&](Ver v) {
-        for_each_out_edges(v, g, [&](Edge e) {
-            for_each_out_edges(v, g, [&](Edge e2) {
+        for_each_out_edges(v, g, [&](const Edge& e) {
+            for_each_out_edges(v, g, [&](const Edge& e2) {
                 if (e != e2) {
                     boost::add_edge(EdgeToVertexMapper[e], EdgeToVertexMapper[e2], 1, g2);
                 }
