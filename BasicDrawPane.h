@@ -30,8 +30,12 @@ public:
 
     void drawEdges(const Graph &g, wxGraphicsContext* gc);
     void drawVertices(const Graph &g, wxGraphicsContext* gc);
-    // some useful events
-    
+    void drawShape(wxGraphicsContext* gc, VertexShape shape, const cgtea_geometry::Point& pos, double size);
+    void drawCircle(wxGraphicsContext* gc, const cgtea_geometry::Point& pos, double size);
+    void drawSquare(wxGraphicsContext* gc, const cgtea_geometry::Point& pos, double size);
+    void drawTriangle(wxGraphicsContext* gc, const cgtea_geometry::Point& pos, double size);
+    void drawDiamond(wxGraphicsContext* gc, const cgtea_geometry::Point& pos, double size);
+
      void mouseMoved(wxMouseEvent& event);
      void mouseDown(wxMouseEvent& event);
      void mouseWheelMoved(wxMouseEvent& event);

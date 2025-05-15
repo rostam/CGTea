@@ -11,6 +11,7 @@
 #include <random>
 #include "generators/point.h"
 #include <boost/graph/exterior_property.hpp>
+#include "const_values.h"
 
 #define printVarNameAndItsValue(x) cout<<"The value of variable "<<(#x)<<" is => "<<x<<"\n"
 

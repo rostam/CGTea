@@ -31,10 +31,10 @@ END_EVENT_TABLE()
  void BasicDrawPane::mouseMoved(wxMouseEvent& event) {}
  void BasicDrawPane::mouseDown(wxMouseEvent& event) {
                 // boost::put(boost::vertex_distance, g, v, pos[i]);
-    Graph& g = ((CGTeaFrame*)this->m_parent)->currentGraph;
-    Ver vv = boost::num_vertices(g);
+    Graph& g = static_cast<CGTeaFrame*>(this->m_parent)->currentGraph;
+    const Ver vv = boost::num_vertices(g);
     boost::add_vertex(vv, g);
-    cgtea_geometry::Point p(event.GetPosition().x,event.GetPosition().y);
+    const cgtea_geometry::Point p(event.GetPosition().x,event.GetPosition().y);
     boost::put(boost::vertex_distance, g, vv, p);
     Refresh();
     // int radius = 20;
@@ -158,10 +158,10 @@ void BasicDrawPane::render(wxPaintDC&  dc) {
 
 void BasicDrawPane::drawEdges(const Graph &g, wxGraphicsContext* gc) {
     for_each_e_const(g, [&](Edge e) {
-        Ver src = boost::source(e,g);
-        Ver tgt = boost::target(e,g);
-        cgtea_geometry::Point src_pos = boost::get(boost::vertex_distance, g, src);
-        cgtea_geometry::Point tgt_pos = boost::get(boost::vertex_distance, g, tgt);
+        const Ver src = boost::source(e,g);
+        const Ver tgt = boost::target(e,g);
+        const cgtea_geometry::Point src_pos = boost::get(boost::vertex_distance, g, src);
+        const cgtea_geometry::Point tgt_pos = boost::get(boost::vertex_distance, g, tgt);
         gc->SetPen(wxPen(wxColor(0, 0, 0), 2)); // black line, 3 pixels thick
         wxGraphicsPath path = gc->CreatePath();
         path.MoveToPoint(src_pos.x, src_pos.y);
@@ -170,25 +170,99 @@ void BasicDrawPane::drawEdges(const Graph &g, wxGraphicsContext* gc) {
     });
 }
 
+// void BasicDrawPane::drawVertices(const Graph &g, wxGraphicsContext* gc) {
+//     for_each_v_const(g, [&](Ver v) {
+//         int color =  boost::get(vertex_color, g,v);
+//         gc->SetPen(wxPen(wxColor(255, 0, 0), 1)); // 5-pixels-thick red outline
+//         cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
+//         gc->SetBrush(wxBrush( wxColour(255, 255, 255, 255))); // green filling
+//         wxGraphicsPath pathBackground = gc->CreatePath();
+//         pathBackground.AddCircle(pos.x, pos.y, 20 );
+//         gc->FillPath(pathBackground);
+//
+//         gc->SetBrush(wxBrush( distinctColors[color + 1]));
+//         wxGraphicsPath path = gc->CreatePath();
+//         path.AddCircle(pos.x, pos.y, 20 );
+//         gc->FillPath(path);
+//
+//         gc->SetBrush(wxBrush( wxColour(0, 0, 0, 255)));
+//         int tmp = boost::get(boost::vertex_index, g, v) + 1;
+//         wxString mystring = wxString::Format(wxT("%i"),tmp);
+//         wxDouble w, h;
+//         gc->GetTextExtent(mystring, &w, &h, nullptr, nullptr);
+//         gc->DrawText(mystring, pos.x-w/2, pos.y-h/2);
+//     });
+// }
+
+void BasicDrawPane::drawShape(wxGraphicsContext* gc, VertexShape shape,
+                            const cgtea_geometry::Point& pos, double size) {
+    switch(shape) {
+        case VertexShape::Square:
+            drawSquare(gc, pos, size);
+            break;
+        case VertexShape::Triangle:
+            drawTriangle(gc, pos, size);
+            break;
+        case VertexShape::Diamond:
+            drawDiamond(gc, pos, size);
+            break;
+        case VertexShape::Circle:
+        default:
+            drawCircle(gc, pos, size);
+            break;
+    }
+}
+
+void BasicDrawPane::drawCircle(wxGraphicsContext* gc, const cgtea_geometry::Point& pos, double size) {
+    wxGraphicsPath path = gc->CreatePath();
+    path.AddCircle(pos.x, pos.y, size);
+    gc->FillPath(path);
+}
+
+void BasicDrawPane::drawSquare(wxGraphicsContext* gc, const cgtea_geometry::Point& pos, double size) {
+    wxGraphicsPath path = gc->CreatePath();
+    path.AddRectangle(pos.x - size, pos.y - size, size * 2, size * 2);
+    gc->FillPath(path);
+}
+
+void BasicDrawPane::drawTriangle(wxGraphicsContext* gc, const cgtea_geometry::Point& pos, double size) {
+    wxGraphicsPath path = gc->CreatePath();
+    path.MoveToPoint(pos.x, pos.y - size);
+    path.AddLineToPoint(pos.x - size, pos.y + size);
+    path.AddLineToPoint(pos.x + size, pos.y + size);
+    path.CloseSubpath();
+    gc->FillPath(path);
+}
+
+void BasicDrawPane::drawDiamond(wxGraphicsContext* gc, const cgtea_geometry::Point& pos, double size) {
+    wxGraphicsPath path = gc->CreatePath();
+    path.MoveToPoint(pos.x, pos.y - size);
+    path.AddLineToPoint(pos.x + size, pos.y);
+    path.AddLineToPoint(pos.x, pos.y + size);
+    path.AddLineToPoint(pos.x - size, pos.y);
+    path.CloseSubpath();
+    gc->FillPath(path);
+}
+
 void BasicDrawPane::drawVertices(const Graph &g, wxGraphicsContext* gc) {
     for_each_v_const(g, [&](Ver v) {
-        int color =  boost::get(vertex_color, g,v);
-        gc->SetPen(wxPen(wxColor(255, 0, 0), 1)); // 5-pixels-thick red outline
-        cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
-//        gc->DrawCircle(wxPoint(pos.x, pos.y), 20 /* radius */ );
-        gc->SetBrush(wxBrush( wxColour(255, 255, 255, 255))); // green filling
-        wxGraphicsPath pathBackground = gc->CreatePath();
-        pathBackground.AddCircle(pos.x, pos.y, 20 );
-        gc->FillPath(pathBackground);
+        const int color = boost::get(vertex_color, g, v);
+        const cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
+        auto shape = VertexShape::Diamond;
 
-        gc->SetBrush(wxBrush( distinctColors[color + 1]));
-        wxGraphicsPath path = gc->CreatePath();
-        path.AddCircle(pos.x, pos.y, 20 );
-        gc->FillPath(path);
+        // Draw a white background
+        gc->SetPen(wxPen(wxColor(255, 0, 0), 1));
+        gc->SetBrush(wxBrush(wxColour(255, 255, 255, 255)));
+        drawShape(gc, shape, pos, 20);
 
-        gc->SetBrush(wxBrush( wxColour(0, 0, 0, 255)));
+        // Draw a colored shape
+        gc->SetBrush(wxBrush(distinctColors[color + 1]));
+        drawShape(gc, shape, pos, 20);
+
+        // Draw a vertex number
+        gc->SetBrush(wxBrush(wxColour(0, 0, 0, 255)));
         int tmp = boost::get(boost::vertex_index, g, v) + 1;
-        wxString mystring = wxString::Format(wxT("%i"),tmp);
+        wxString mystring = wxString::Format(wxT("%i"), tmp);
         wxDouble w, h;
         gc->GetTextExtent(mystring, &w, &h, nullptr, nullptr);
         gc->DrawText(mystring, pos.x-w/2, pos.y-h/2);
