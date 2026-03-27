@@ -11,50 +11,47 @@ namespace EigenRelatedFunctions {
 
     static std::tuple<double, double, double> eigen_values(const Graph &g) {
         int n = boost::num_vertices(g);
-        Eigen::MatrixXd m(n, n);
+        if (n <= 0) return std::make_tuple(0, 0, 0);
+
+        Eigen::MatrixXd m = Eigen::MatrixXd::Zero(n, n);
         for_each_e_const(g, [&](Edge e) {
             m(boost::source(e, g), boost::target(e, g)) = 1;
             m(boost::target(e, g), boost::source(e, g)) = 1;
         });
-        if (m.rows() <= 0 || m.cols() <= 0) return std::make_tuple(0, 0, 0);
 
         Eigen::EigenSolver<Eigen::MatrixXd> eigensolver;
         eigensolver.compute(m);
-        Eigen::VectorXd eigen_values = eigensolver.eigenvalues().real();
-        Eigen::MatrixXd eigen_vectors = eigensolver.eigenvectors().real();
-        double max_eigen = eigensolver.eigenvalues().real().maxCoeff();
-        double min_eigen = eigensolver.eigenvalues().real().minCoeff();
-        double sum_eigen = eigensolver.eigenvalues().real().sum();
-        return std::make_tuple(max_eigen, min_eigen, sum_eigen);
+        if (eigensolver.info() != Eigen::Success) return std::make_tuple(0, 0, 0);
+
+        Eigen::VectorXd ev = eigensolver.eigenvalues().real();
+        return std::make_tuple(ev.maxCoeff(), ev.minCoeff(), ev.sum());
     }
 
 
     static std::tuple<double,double,double> eigen_values_laplacian(const Graph& g) {
         int n = boost::num_vertices(g);
+        if (n <= 0) return std::make_tuple(0, 0, 0);
+
         std::vector<double> deg_list;
+        deg_list.reserve(n);
         for_each_v_const(g, [&](Ver v) {
             deg_list.emplace_back((double)boost::out_degree(v, g));
         });
 
-        double* ptr = &deg_list[0];
-        Eigen::Map<Eigen::VectorXd> my_vect(ptr, 4);
-        Eigen::MatrixXd m(n,n);
+        Eigen::Map<Eigen::VectorXd> my_vect(deg_list.data(), n);
+        Eigen::MatrixXd m = Eigen::MatrixXd::Zero(n, n);
         for_each_e_const(g, [&](Edge e){
             m(boost::source(e,g), boost::target(e,g)) = 1;
             m(boost::target(e,g), boost::source(e,g)) = 1;
         });
 
-        Eigen::MatrixXd D = my_vect.asDiagonal();
-        m = D - m;
+        m = Eigen::MatrixXd(my_vect.asDiagonal()) - m;
         Eigen::EigenSolver<Eigen::MatrixXd> eigensolver;
         eigensolver.compute(m);
-        Eigen::VectorXd eigen_values = eigensolver.eigenvalues().real();
-        Eigen::MatrixXd eigen_vectors = eigensolver.eigenvectors().real();
+        if (eigensolver.info() != Eigen::Success) return std::make_tuple(0, 0, 0);
 
-        double max_eigen = eigensolver.eigenvalues().real().maxCoeff();
-        double min_eigen = eigensolver.eigenvalues().real().minCoeff();
-        double sum_eigen = eigensolver.eigenvalues().real().sum();
-        return std::make_tuple(max_eigen,min_eigen,sum_eigen);
+        Eigen::VectorXd ev = eigensolver.eigenvalues().real();
+        return std::make_tuple(ev.maxCoeff(), ev.minCoeff(), ev.sum());
     }
 
 

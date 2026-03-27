@@ -6,6 +6,7 @@
 #include "CGTeaFrame.h"
 #include <wx/grid.h>
 #include "CGTeaSidebar.h"
+#include "gtea.xpm"
 
 /*! \mainpage CGTea - A Brief Description.
  * A mini-version of GTea written in C++ in which the view is based on wxWidget.
@@ -34,7 +35,8 @@ bool CGTeaApp::OnInit()
     sizer->Add(drawPane, 4, wxEXPAND | wxALL);
     frame->SetSizer(sizer.release());
     frame->SetAutoLayout(true);
-    frame->SetIcon(wxIcon(wxT("gtea.xpm")));
+    frame->SetIcon(wxIcon(adlpr_e3upj_0));
+    frame->Maximize(true);
     frame->Show( true );
     return true;
 }

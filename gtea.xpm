@@ -1,5 +1,5 @@
 /* XPM */
-static char *adlpr_e3upj_0[] = {
+static const char *adlpr_e3upj_0[] = {
 /* columns rows colors chars-per-pixel */
 "64 64 115 2 ",
 "   c #1B1B5D",

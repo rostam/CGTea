@@ -28,10 +28,18 @@
 #include "reports/NumOfEdges.h"
 #include "reports/MaxDegree.h"
 #include "reports/MinDegree.h"
+#include "reports/AverageDegree.h"
+#include "reports/Density.h"
+#include "reports/NumConnectedComponents.h"
 #include "reports/MaxEigenValue.h"
 #include "reports/MinEigenValue.h"
 #include "reports/SumEigenValues.h"
+#include "reports/GraphEnergy.h"
+#include "reports/AlgebraicConnectivity.h"
 #include "reports/Diameter.h"
+#include "reports/Radius.h"
+#include "reports/GirthSize.h"
+#include "reports/WienerIndex.h"
 #include "reports/NumOfTriangles.h"
 
 #include "actions/Coloring.h"
@@ -74,10 +82,18 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableReports.emplace_back(std::make_unique<NumOfEdges>());
     availableReports.emplace_back(std::make_unique<MaxDegree>());
     availableReports.emplace_back(std::make_unique<MinDegree>());
+    availableReports.emplace_back(std::make_unique<AverageDegree>());
+    availableReports.emplace_back(std::make_unique<Density>());
+    availableReports.emplace_back(std::make_unique<NumConnectedComponents>());
     availableReports.emplace_back(std::make_unique<MaxEigenValue>());
     availableReports.emplace_back(std::make_unique<MinEigenValue>());
     availableReports.emplace_back(std::make_unique<SumEigenValues>());
+    availableReports.emplace_back(std::make_unique<GraphEnergy>());
+    availableReports.emplace_back(std::make_unique<AlgebraicConnectivity>());
     availableReports.emplace_back(std::make_unique<GraphDiameter>());
+    availableReports.emplace_back(std::make_unique<GraphRadius>());
+    availableReports.emplace_back(std::make_unique<GraphGirthSize>());
+    availableReports.emplace_back(std::make_unique<WienerIndex>());
     availableReports.emplace_back(std::make_unique<NumberOfTriangles>());
 
     availableActions.emplace_back(std::make_unique<Coloring>());
