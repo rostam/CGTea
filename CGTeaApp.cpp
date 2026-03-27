@@ -35,7 +35,10 @@ bool CGTeaApp::OnInit()
     sizer->Add(drawPane, 4, wxEXPAND | wxALL);
     frame->SetSizer(sizer.release());
     frame->SetAutoLayout(true);
-    frame->SetIcon(wxIcon(adlpr_e3upj_0));
+    wxBitmap iconBmp(adlpr_e3upj_0);
+    wxIcon icon;
+    icon.CopyFromBitmap(iconBmp);
+    frame->SetIcon(icon);
     frame->Maximize(true);
     frame->Show( true );
     return true;

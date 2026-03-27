@@ -150,7 +150,7 @@ ConjectureCheckerDialog::ConjectureCheckerDialog(
 
     auto* graphBtns  = new wxBoxSizer(wxHORIZONTAL);
     auto* addBtn     = new wxButton(this, wxID_ANY, "Add Graph");
-    auto* addFileBtn = new wxButton(this, wxID_ANY, "Add from G6 File\u2026");
+    auto* addFileBtn = new wxButton(this, wxID_ANY, "Add from G6 File...");
     auto* removeBtn  = new wxButton(this, wxID_ANY, "Remove Selected");
     graphBtns->Add(addBtn,     0, wxRIGHT, 6);
     graphBtns->Add(addFileBtn, 0, wxRIGHT, 6);

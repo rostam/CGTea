@@ -4,8 +4,6 @@
 
 #include "CGTeaSidebar.h"
 #include <thread>
-#include <future>
-#include <chrono>
 
 CGTeaSidebar::CGTeaSidebar(CGTeaFrame *parent, wxWindowID winid) : wxPanel(parent, winid) {
 
@@ -31,45 +29,27 @@ void CGTeaSidebar::computeStat(wxCommandEvent & WXUNUSED(event))
     statistics_text->SetValue("Computing...");
     frame->SetStatusText("Computing statistics...");
 
-    // Snapshot the graph so the background thread has its own copy
+    // Snapshot graph and report list before leaving the main thread
     auto graphCopy = std::make_shared<Graph>(frame->currentGraph);
+    std::vector<ReportInterface*> reports;
+    for (const auto& r : frame->availableReports)
+        reports.push_back(r.get());
 
-    std::thread([this, frame, graphCopy]() {
-        constexpr auto timeout = std::chrono::seconds(30);
-        string out;
-
-        for (const auto& gi : frame->availableReports) {
-            string reportName = gi->name();
-
-            CallAfter([frame, reportName]() {
-                frame->SetStatusText("Computing: " + reportName + "...");
+    std::thread([this, frame, graphCopy, reports]() {
+        std::string out;
+        for (auto* ri : reports) {
+            std::string name = ri->name();
+            CallAfter([frame, name]() {
+                frame->SetStatusText("Computing: " + name + "...");
             });
-
-            // Run each report in a detached thread so we can enforce a timeout
-            std::promise<string> promise;
-            auto future = promise.get_future();
-            ReportInterface* ri = gi.get();
-            std::thread([ri, graphCopy, p = std::move(promise)]() mutable {
-                try {
-                    p.set_value(ri->report(*graphCopy));
-                } catch (...) {
-                    try { p.set_exception(std::current_exception()); } catch (...) {}
-                }
-            }).detach();
-
-            if (future.wait_for(timeout) == std::future_status::ready) {
-                try {
-                    out += reportName + ": " + future.get() + "\n";
-                } catch (...) {
-                    out += reportName + ": (error)\n";
-                }
-            } else {
-                out += reportName + ": (timed out)\n";
+            try {
+                out += name + ": " + ri->report(*graphCopy) + "\n";
+            } catch (...) {
+                out += name + ": (error)\n";
             }
         }
-
         CallAfter([this, frame, out]() {
-            statistics_text->SetValue(wxString(out.c_str()));
+            statistics_text->SetValue(wxString(out));
             frame->SetStatusText("Statistics computed.");
             if (auto* btn = FindWindowById(100, this))
                 btn->Enable();
