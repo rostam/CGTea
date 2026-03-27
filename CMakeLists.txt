@@ -12,7 +12,9 @@ file(GLOB Actions "actions/*.cpp")
 file(GLOB ConjectureCheck "ConjectureCheck/*.cpp")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
 #set( CMAKE_CXX_FLAGS "`wx-config --cxxflags --libs`")
-add_executable(CGTea CGTeaApp.cpp BasicDrawPane.cpp CGTeaFrame.cpp CGTeaSidebar.cpp  ${Reports} ${Generators} ${Actions}
+add_executable(CGTea CGTeaApp.cpp BasicDrawPane.cpp CGTeaFrame.cpp CGTeaSidebar.cpp
+        ConjectureCheckerDialog.cpp ConjectureCheckerDialog.h
+        ${Reports} ${Generators} ${Actions}
         const_values.h
         SettingsDialog.cpp
         SettingsDialog.h)

@@ -47,6 +47,7 @@ private:
     void Save(wxCommandEvent&);
 
     void OnSettings(wxCommandEvent& event);
+    void OnConjectureChecker(wxCommandEvent& event);
 
     VertexShape currentVertexShape = VertexShape::Circle;
     EdgeShape currentEdgeShape = EdgeShape::Line;

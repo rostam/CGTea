@@ -32,6 +32,9 @@ public:
         return g;
     }
 
+    string paramNName()    const override { return "n (petals)"; }
+    unsigned int defaultN() const override { return 5; }
+
     string name() const override {
         return "Flower Graph";
     }

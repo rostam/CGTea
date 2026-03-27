@@ -28,6 +28,8 @@ public:
         return g;
     }
 
+    unsigned int defaultN() const override { return 6; }
+
     string name() const override {
         return "Star";
     }

@@ -38,6 +38,9 @@ public:
         return g;
     }
 
+    string paramNName()    const override { return "n (per strip)"; }
+    unsigned int defaultN() const override { return 4; }
+
     string name() const override {
         return "Prism Graph";
     }

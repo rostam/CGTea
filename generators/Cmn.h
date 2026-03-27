@@ -47,6 +47,12 @@ public:
         return g;
     }
 
+    bool hasSecondParam()  const override { return true; }
+    string paramNName()    const override { return "n (rows)"; }
+    string paramKName()    const override { return "m (columns)"; }
+    unsigned int defaultN() const override { return 3; }
+    unsigned int defaultK() const override { return 4; }
+
     string name() const override {
         return "Cm * Cn";
     }

@@ -37,6 +37,9 @@ public:
         return g;
     }
 
+    string paramNName()    const override { return "n (pairs)"; }
+    unsigned int defaultN() const override { return 4; }
+
     string name() const override {
         return "CockTail Party Graph";
     }

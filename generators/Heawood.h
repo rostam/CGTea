@@ -32,6 +32,8 @@ public:
         return g;
     }
 
+    bool hasAnyParam() const override { return false; }
+
     string name() const override {
         return "Heawood Graph";
     }

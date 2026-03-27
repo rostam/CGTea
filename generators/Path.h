@@ -28,6 +28,8 @@ public:
         return g;
     }
 
+    unsigned int defaultN() const override { return 7; }
+
     string name() const override {
         return "Path";
     }

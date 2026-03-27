@@ -29,6 +29,8 @@ public:
         return g;
     }
 
+    unsigned int defaultN() const override { return 5; }
+
     string name() const override {
         return "Complete Graph";
     }

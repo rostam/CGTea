@@ -24,6 +24,8 @@ public:
         return g;
     }
 
+    unsigned int defaultN() const override { return 8; }
+
     string name() const override {
         return "Cycle";
     }

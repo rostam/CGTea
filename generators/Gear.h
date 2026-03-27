@@ -43,6 +43,9 @@ public:
         return g;
     }
 
+    string paramNName()    const override { return "n (teeth)"; }
+    unsigned int defaultN() const override { return 5; }
+
     string name() const override {
         return "Gear Graph";
     }

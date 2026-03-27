@@ -44,6 +44,7 @@
 
 #include "actions/Coloring.h"
 #include "actions/LineGraph.h"
+#include "ConjectureCheckerDialog.h"
 
 
 #include <memory>
@@ -143,6 +144,12 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     i++;
     menuLayout->Append(i, "&Fit Width", "Fit Graph to Width");
     Connect(i, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CGTeaFrame::OnFitWidth));
+    auto menuAnalysis = std::make_unique<wxMenu>();
+    menuAnalysis->Append(1010, "&Conjecture Checker\tCtrl+J",
+                         "Compute reports on multiple graphs and compare results");
+    Connect(1010, wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(CGTeaFrame::OnConjectureChecker));
+
     auto menuHelp = std::make_unique<wxMenu>();
     menuHelp->Append(wxID_ABOUT);
     auto menuBar = std::make_unique<wxMenuBar>();
@@ -151,6 +158,7 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     menuBar->Append(menuReport.release(), "&Report");
     menuBar->Append(menuAction.release(), "&Action");
     menuBar->Append(menuLayout.release(), "&Layout");
+    menuBar->Append(menuAnalysis.release(), "&Analysis");
     menuBar->Append(menuHelp.release(), "&Help");
     SetMenuBar(menuBar.release());
     CreateStatusBar();
@@ -168,18 +176,33 @@ void CGTeaFrame::OnAbout(wxCommandEvent&) {
 }
 
 void CGTeaFrame::Generate(wxCommandEvent& event) {
-    wxString valueTyped;
-    wxTextEntryDialog myDialog(this, _("n,k"), _("Enter graph parameters"), _("10,0"));
-    if (myDialog.ShowModal() == wxID_OK) {
-        valueTyped = myDialog.GetValue();
-    }
-    long value_n, value_k;
-    int position_of_comma = valueTyped.find(",");
-    if (position_of_comma == -1) return;
-    if (!valueTyped.substr(0, position_of_comma).ToLong(&value_n)) { return; }
-    if (!valueTyped.substr(position_of_comma + 1).ToLong(&value_k)) { return; }
     int id = event.GetId();
-    currentGraph = availableGenerators[id-1]->generate_with_positions(value_n, value_k, 300, 300);
+    auto& gen = availableGenerators[id - 1];
+
+    long value_n = gen->defaultN();
+    long value_k = gen->defaultK();
+
+    if (!gen->hasAnyParam()) {
+        // Fixed graph (e.g. Heawood) — no input needed
+    } else if (gen->hasSecondParam()) {
+        wxString defaultVal = wxString::Format("%ld, %ld", value_n, value_k);
+        wxString label = wxString(gen->paramNName()) + ",  " + wxString(gen->paramKName());
+        wxTextEntryDialog dlg(this, label, _("Enter graph parameters"), defaultVal);
+        if (dlg.ShowModal() != wxID_OK) return;
+        wxString val = dlg.GetValue();
+        int comma = val.find(",");
+        if (comma == wxNOT_FOUND) return;
+        if (!val.substr(0, comma).Trim().ToLong(&value_n)) return;
+        if (!val.substr(comma + 1).Trim().ToLong(&value_k)) return;
+    } else {
+        wxString label = wxString(gen->paramNName());
+        wxTextEntryDialog dlg(this, label, _("Enter graph parameters"),
+                              wxString::Format("%ld", value_n));
+        if (dlg.ShowModal() != wxID_OK) return;
+        if (!dlg.GetValue().Trim().ToLong(&value_n)) return;
+    }
+
+    currentGraph = gen->generate_with_positions(value_n, value_k, 300, 300);
     Refresh();
 }
 
@@ -287,6 +310,11 @@ void CGTeaFrame::OnSettings(wxCommandEvent& event) {
         currentEdgeShape = dialog.GetSelectedEdgeShape();
         Config::SaveVertexShape(currentVertexShape);
         Config::SaveEdgeShape(currentEdgeShape);
-        Refresh(); // Redraw the graph with the new vertex shape
+        Refresh();
     }
+}
+
+void CGTeaFrame::OnConjectureChecker(wxCommandEvent&) {
+    ConjectureCheckerDialog dlg(this, availableGenerators, availableReports);
+    dlg.ShowModal();
 }

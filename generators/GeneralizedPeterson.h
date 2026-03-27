@@ -34,6 +34,12 @@ public:
         return g;
     }
 
+    bool hasSecondParam()  const override { return true; }
+    string paramNName()    const override { return "n (vertices)"; }
+    string paramKName()    const override { return "k (step)"; }
+    unsigned int defaultN() const override { return 5; }
+    unsigned int defaultK() const override { return 2; }
+
     string name() const override {
         return "Generalized Peterson";
     }

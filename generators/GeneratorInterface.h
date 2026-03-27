@@ -36,6 +36,14 @@ public:
     virtual string category() const { return "General"; }
 
     virtual string check_parameters() { return ""; };
+
+    // Parameter metadata for the UI
+    virtual bool hasAnyParam()    const { return true; }
+    virtual bool hasSecondParam() const { return false; }
+    virtual string paramNName()   const { return "n"; }
+    virtual string paramKName()   const { return "k"; }
+    virtual unsigned int defaultN() const { return 10; }
+    virtual unsigned int defaultK() const { return 0; }
 };
 
 #endif //EXACT_COLORING_GENERATORINTERFACE_H
