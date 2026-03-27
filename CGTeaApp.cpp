@@ -5,6 +5,7 @@
 #include "CGTeaApp.h"
 #include "CGTeaFrame.h"
 #include <wx/grid.h>
+#include <wx/splitter.h>
 #include "CGTeaSidebar.h"
 #include "gtea.xpm"
 
@@ -27,20 +28,32 @@
 
 bool CGTeaApp::OnInit()
 {
-    auto sizer = std::make_unique<wxBoxSizer>(wxHORIZONTAL);
-    auto frame = new CGTeaFrame("CGTea", wxPoint(100, 100), wxSize(1200, 600) );
-    auto cgTeaSidebar = new CGTeaSidebar(frame, wxID_ANY);
-    drawPane = new BasicDrawPane( frame );
-    sizer->Add(cgTeaSidebar, 1, wxEXPAND | wxALL);
-    sizer->Add(drawPane, 4, wxEXPAND | wxALL);
-    frame->SetSizer(sizer.release());
+    wxLog::SetLogLevel(wxLOG_Warning);
+    auto* frame = new CGTeaFrame("CGTea", wxPoint(100, 100), wxSize(1200, 700));
+
+    auto* splitter = new wxSplitterWindow(frame, wxID_ANY,
+                                          wxDefaultPosition, wxDefaultSize,
+                                          wxSP_LIVE_UPDATE | wxSP_THIN_SASH);
+    splitter->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_FRAMEBK));
+
+    auto* sidebar = new CGTeaSidebar(splitter, wxID_ANY);
+    drawPane = new BasicDrawPane(splitter);
+    splitter->SplitVertically(sidebar, drawPane, 290);
+    splitter->SetMinimumPaneSize(180);
+
+    frame->sidebar = sidebar;
+
+    auto* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(splitter, 1, wxEXPAND);
+    frame->SetSizer(mainSizer);
     frame->SetAutoLayout(true);
+
     wxBitmap iconBmp(adlpr_e3upj_0);
     wxIcon icon;
     icon.CopyFromBitmap(iconBmp);
     frame->SetIcon(icon);
     frame->Maximize(true);
-    frame->Show( true );
+    frame->Show(true);
     return true;
 }
 

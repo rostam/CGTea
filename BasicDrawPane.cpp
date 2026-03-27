@@ -30,7 +30,7 @@ END_EVENT_TABLE()
 
  void BasicDrawPane::mouseMoved(wxMouseEvent& event) {}
  void BasicDrawPane::mouseDown(wxMouseEvent& event) {
-    Graph& g = static_cast<CGTeaFrame*>(this->m_parent)->currentGraph;
+    Graph& g = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this))->currentGraph;
     const Ver vv = boost::num_vertices(g);
     boost::add_vertex(vv, g);
     const cgtea_geometry::Point p(event.GetPosition().x,event.GetPosition().y);
@@ -121,12 +121,16 @@ void BasicDrawPane::render(wxPaintDC&  dc) {
     if (gc)
     {
         wxFont font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-        font.SetPointSize(16);
-        gc->SetFont(font,*wxBLACK);
-        gc->SetPen(wxPen(wxColor(0, 0, 0), 1)); // black line, 3 pixels thick
-        gc->DrawRectangle(0,0,dc.GetSize().GetWidth(),dc.GetSize().GetHeight());
+        font.SetPointSize(10);
+        gc->SetFont(font, *wxBLACK);
+
+        // Clean white background
+        gc->SetPen(*wxTRANSPARENT_PEN);
+        gc->SetBrush(wxBrush(wxColour(255, 255, 255)));
+        gc->DrawRectangle(0, 0, dc.GetSize().GetWidth(), dc.GetSize().GetHeight());
+
         try {
-            const Graph& g = static_cast<CGTeaFrame*>(this->m_parent)->currentGraph;
+            const Graph& g = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this))->currentGraph;
             drawEdges(g, gc);
             drawVertices(g, gc);
         } catch (std::exception &e) {
@@ -192,18 +196,18 @@ void BasicDrawPane::drawVertices(const Graph &g, wxGraphicsContext* gc) {
         const int color = boost::get(vertex_color, g, v);
         const cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
         //auto shape = VertexShape::Diamond;
-        const auto frame = static_cast<CGTeaFrame*>(this->m_parent);
+        const auto frame = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this));
         const auto shape = frame ? frame->getCurrentVertexShape() : VertexShape::Circle;
 
 
-        // Draw a white background
-        gc->SetPen(wxPen(wxColor(255, 0, 0), 1));
-        gc->SetBrush(wxBrush(wxColour(255, 255, 255, 255)));
-        drawShape(gc, shape, pos, 20);
+        // Draw a white background with subtle shadow effect
+        gc->SetPen(wxPen(wxColour(160, 160, 160), 1));
+        gc->SetBrush(wxBrush(wxColour(255, 255, 255)));
+        drawShape(gc, shape, pos, 16);
 
         // Draw a colored shape
         gc->SetBrush(wxBrush(distinctColors[color + 1]));
-        drawShape(gc, shape, pos, 20);
+        drawShape(gc, shape, pos, 16);
 
         // Draw a vertex number
         gc->SetBrush(wxBrush(wxColour(0, 0, 0, 255)));
@@ -316,7 +320,7 @@ void BasicDrawPane::drawEdges(const Graph &g, wxGraphicsContext* gc) {
         const cgtea_geometry::Point tgt_pos = boost::get(boost::vertex_distance, g, tgt);
         gc->SetPen(wxPen(wxColor(0, 0, 0), 2));
 
-        const auto frame = static_cast<CGTeaFrame*>(this->m_parent);
+        const auto frame = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this));
         const auto edgeShape = frame ? frame->getCurrentEdgeShape() : EdgeShape::Line;
 
         drawEdgeShape(gc, edgeShape, src_pos, tgt_pos);

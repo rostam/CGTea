@@ -45,6 +45,7 @@
 #include "actions/Coloring.h"
 #include "actions/LineGraph.h"
 #include "ConjectureCheckerDialog.h"
+#include "CGTeaSidebar.h"
 
 
 #include <memory>
@@ -248,10 +249,12 @@ void CGTeaFrame::OnFitWidth(wxCommandEvent& event)
 
 
 void CGTeaFrame::Report(wxCommandEvent& event) {
-    const int id = event.GetId();
-    const std::string report_results = availableReports[id - availableGenerators.size() - 1]->report(currentGraph);
-    const std::string report_name = availableReports[id - availableGenerators.size() - 1]->name();
-    static_cast<CGTeaSidebar*>(this->GetSizer()->GetChildren()[0]->GetWindow())->statistics_text->SetValue(report_name + ": " +report_results);
+    const int idx = event.GetId() - (int)availableGenerators.size() - 1;
+    const std::string result = availableReports[idx]->report(currentGraph);
+    if (sidebar) {
+        sidebar->statistics_grid->SetCellValue(idx, 1, wxString(result));
+        sidebar->statistics_grid->AutoSizeColumn(1);
+    }
 }
 
 void CGTeaFrame::Action(wxCommandEvent& event) {

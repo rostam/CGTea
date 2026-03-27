@@ -19,9 +19,12 @@
 
 #include "G6Format/G6Format.h"
 
+class CGTeaSidebar;
+
 class CGTeaFrame: public wxFrame {
 public:
     Graph currentGraph;
+    CGTeaSidebar* sidebar = nullptr;
 
     CGTeaFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
     VertexShape getCurrentVertexShape() const { return currentVertexShape; }

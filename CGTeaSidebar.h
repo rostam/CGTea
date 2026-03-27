@@ -8,13 +8,14 @@
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
 #endif
+#include <wx/grid.h>
 
 #include "CGTeaFrame.h"
 
 class CGTeaSidebar : public wxPanel {
 public:
-    wxTextCtrl* statistics_text = nullptr;
-    CGTeaSidebar(CGTeaFrame *parent, wxWindowID winid);
+    wxGrid* statistics_grid = nullptr;
+    CGTeaSidebar(wxWindow *parent, wxWindowID winid);
     void computeStat(wxCommandEvent & event);
 };
 
