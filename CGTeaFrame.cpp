@@ -23,6 +23,12 @@
 #include "generators/CocktailParty.h"
 #include "generators/Gear.h"
 #include "generators/Heawood.h"
+#include "generators/Tadpole.h"
+#include "generators/Helm.h"
+#include "generators/Kmn.h"
+#include "generators/Pmn.h"
+#include "generators/Lollipop.h"
+#include "generators/FriendshipGraph.h"
 
 #include "reports/NumOfVertices.h"
 #include "reports/NumOfEdges.h"
@@ -41,6 +47,21 @@
 #include "reports/GirthSize.h"
 #include "reports/WienerIndex.h"
 #include "reports/NumOfTriangles.h"
+#include "reports/HyperWienerIndex.h"
+#include "reports/SzegedIndex.h"
+#include "reports/NumOfQuadrangle.h"
+#include "reports/DegreeDistance.h"
+#include "reports/Harary.h"
+#include "reports/TotalEccentricityIndex.h"
+#include "reports/GutmanIndex.h"
+#include "reports/WienerPolarityIndex.h"
+#include "reports/EdgeDegree.h"
+#include "reports/NumOfStars.h"
+#include "reports/AdditiveHarary.h"
+#include "reports/ReciprocalDegreeDistance.h"
+#include "reports/MostarIndex.cpp"
+#include "reports/MWienerIndex.cpp"
+#include "reports/MultiplicativeHarary.cpp"
 
 #include "actions/Coloring.h"
 #include "actions/LineGraph.h"
@@ -79,6 +100,12 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableGenerators.emplace_back(std::make_unique<CocktailParty>());
     availableGenerators.emplace_back(std::make_unique<Gear>());
     availableGenerators.emplace_back(std::make_unique<Heawood>());
+    availableGenerators.emplace_back(std::make_unique<Tadpole>());
+    availableGenerators.emplace_back(std::make_unique<Helm>());
+    availableGenerators.emplace_back(std::make_unique<Kmn>());
+    availableGenerators.emplace_back(std::make_unique<Pmn>());
+    availableGenerators.emplace_back(std::make_unique<Lollipop>());
+    availableGenerators.emplace_back(std::make_unique<FriendshipGraph>());
 
     availableReports.emplace_back(std::make_unique<NumOfVertices>());
     availableReports.emplace_back(std::make_unique<NumOfEdges>());
@@ -97,6 +124,21 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     availableReports.emplace_back(std::make_unique<GraphGirthSize>());
     availableReports.emplace_back(std::make_unique<WienerIndex>());
     availableReports.emplace_back(std::make_unique<NumberOfTriangles>());
+    availableReports.emplace_back(std::make_unique<NumberOfQuadrangles>());
+    availableReports.emplace_back(std::make_unique<NumberOfStars>());
+    availableReports.emplace_back(std::make_unique<EdgeDegree>());
+    availableReports.emplace_back(std::make_unique<HyperWienerIndex>());
+    availableReports.emplace_back(std::make_unique<HararyIndex>());
+    availableReports.emplace_back(std::make_unique<AdditiveHararyIndex>());
+    availableReports.emplace_back(std::make_unique<ReciprocalDegreeDistance>());
+    availableReports.emplace_back(std::make_unique<SzegedIndex>());
+    availableReports.emplace_back(std::make_unique<MostarIndex>());
+    availableReports.emplace_back(std::make_unique<DegreeDistance>());
+    availableReports.emplace_back(std::make_unique<GutmanIndex>());
+    availableReports.emplace_back(std::make_unique<TotalEccentricityIndex>());
+    availableReports.emplace_back(std::make_unique<WienerPolarityIndex>());
+    availableReports.emplace_back(std::make_unique<MultiplicativeWienerIndex>());
+    availableReports.emplace_back(std::make_unique<MultiplicativeHararyIndex>());
 
     availableActions.emplace_back(std::make_unique<Coloring>());
     availableActions.emplace_back(std::make_unique<LineGraph>());

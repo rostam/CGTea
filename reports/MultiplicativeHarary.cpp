@@ -1,31 +1,28 @@
- 
-//
 // Created by rostam on 10.10.19.
-//
-
 #ifndef CGTEA_MULTIPLICATIVEHARARY_H
 #define CGTEA_MULTIPLICATIVEHARARY_H
-
 #include "ReportInterface.h"
+#include "Utils.h"
+#include <cmath>
 
+// Multiplicative Harary Index: HPi(G) = prod_{u<v} 1/d(u,v)
+// Returned as log value (ln) to avoid underflow on larger graphs.
 class MultiplicativeHararyIndex : public ReportInterface {
 public:
     string report(const Graph& g) override {
-        int n = boost::num_edges(g);
-        return std::to_string(n);
-    };
-    string name() const override {
-        return "MultiplicativeHarary Index";
-    };
-    string description() const override {
-        return "MultiplicativeHarary Index";
-    };
-    string type() const override {
-        return "double";
-    };
-    string category() const override {
-        return "Topological Indices";
-    };
+        int n = boost::num_vertices(g);
+        if (n <= 1) return "0.000000";
+        DistanceMatrix dist = Utils::get_floyd_warshall_all_pairs_shortest_paths(g);
+        double logSum = 0.0;
+        for (int u = 0; u < n; u++)
+            for (int v = u + 1; v < n; v++)
+                if (dist[u][v] > 0 && dist[u][v] < n)
+                    logSum -= std::log(dist[u][v]);
+        return std::to_string(logSum);
+    }
+    string name()        const override { return "Multiplicative Harary Index (log)"; }
+    string description() const override { return "ln(prod_{u<v} 1/d(u,v))"; }
+    string type()        const override { return "double"; }
+    string category()    const override { return "Topological Indices"; }
 };
-
-#endif //CGTEA_MULTIPLICATIVEHARARY_H
+#endif
