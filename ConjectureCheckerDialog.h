@@ -27,6 +27,7 @@ public:
 
 private:
     void OnAddGraph(wxCommandEvent&);
+    void OnAddFromFile(wxCommandEvent&);
     void OnRemoveGraph(wxCommandEvent&);
     void OnCompute(wxCommandEvent&);
     void OnSaveCSV(wxCommandEvent&);

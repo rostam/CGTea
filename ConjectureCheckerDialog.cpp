@@ -3,7 +3,9 @@
 //
 
 #include "ConjectureCheckerDialog.h"
+#include "G6Format/G6Format.h"
 #include <wx/filedlg.h>
+#include <wx/filename.h>
 #include <wx/statline.h>
 #include <fstream>
 
@@ -146,11 +148,13 @@ ConjectureCheckerDialog::ConjectureCheckerDialog(
     m_graphList->SetMinSize(wxSize(300, 140));
     graphBox->Add(m_graphList, 1, wxEXPAND | wxALL, 4);
 
-    auto* graphBtns = new wxBoxSizer(wxHORIZONTAL);
-    auto* addBtn    = new wxButton(this, wxID_ANY, "Add Graph");
-    auto* removeBtn = new wxButton(this, wxID_ANY, "Remove Selected");
-    graphBtns->Add(addBtn,    0, wxRIGHT, 6);
-    graphBtns->Add(removeBtn, 0);
+    auto* graphBtns  = new wxBoxSizer(wxHORIZONTAL);
+    auto* addBtn     = new wxButton(this, wxID_ANY, "Add Graph");
+    auto* addFileBtn = new wxButton(this, wxID_ANY, "Add from G6 File\u2026");
+    auto* removeBtn  = new wxButton(this, wxID_ANY, "Remove Selected");
+    graphBtns->Add(addBtn,     0, wxRIGHT, 6);
+    graphBtns->Add(addFileBtn, 0, wxRIGHT, 6);
+    graphBtns->Add(removeBtn,  0);
     graphBox->Add(graphBtns, 0, wxALL, 6);
     top->Add(graphBox, 1, wxEXPAND | wxALL, 6);
 
@@ -198,6 +202,7 @@ ConjectureCheckerDialog::ConjectureCheckerDialog(
     SetSizer(main);
 
     addBtn->Bind    (wxEVT_BUTTON, &ConjectureCheckerDialog::OnAddGraph,    this);
+    addFileBtn->Bind(wxEVT_BUTTON, &ConjectureCheckerDialog::OnAddFromFile, this);
     removeBtn->Bind (wxEVT_BUTTON, &ConjectureCheckerDialog::OnRemoveGraph, this);
     computeBtn->Bind(wxEVT_BUTTON, &ConjectureCheckerDialog::OnCompute,     this);
     saveBtn->Bind   (wxEVT_BUTTON, &ConjectureCheckerDialog::OnSaveCSV,     this);
@@ -241,6 +246,32 @@ void ConjectureCheckerDialog::OnAddGraph(wxCommandEvent&) {
                 label += ")";
             }
             Graph g = gen->generate(n, k);
+            m_graphEntries.push_back({label, std::move(g)});
+            m_graphList->Append(wxString(label));
+        }
+    }
+}
+
+void ConjectureCheckerDialog::OnAddFromFile(wxCommandEvent&) {
+    wxFileDialog dlg(this, "Open G6 File", "", "",
+                     "G6 files (*.g6)|*.g6|All files (*)|*",
+                     wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE);
+    if (dlg.ShowModal() != wxID_OK) return;
+
+    wxArrayString paths;
+    dlg.GetPaths(paths);
+    G6Format g6fmt;
+
+    for (const wxString& path : paths) {
+        std::ifstream in(path.ToStdString());
+        if (!in) continue;
+        std::string basename = wxFileName(path).GetFullName().ToStdString();
+        std::string line;
+        int count = 0;
+        while (std::getline(in, line)) {
+            if (line.empty() || line[0] == '#') continue;
+            std::string label = basename + " #" + std::to_string(++count);
+            Graph g = g6fmt.stringToGraph2(line);
             m_graphEntries.push_back({label, std::move(g)});
             m_graphList->Append(wxString(label));
         }
