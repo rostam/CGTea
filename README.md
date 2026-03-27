@@ -205,6 +205,18 @@ cmake --build . --target BoostTest
 
 **Settings:** `File → Settings` to choose vertex shape (circle, square, triangle, diamond) and edge style (line, curve, dashed, double-arrow).
 
+### Mouse Editing on the Canvas
+
+| Interaction | Effect |
+|-------------|--------|
+| Double-click on empty space | Create a new vertex at that position |
+| Click on a vertex | Select it (orange ring highlight) |
+| Click on an edge | Select it (blue highlight) |
+| Drag a selected vertex | Move the vertex |
+| Drag a selected edge | Move both endpoints of the edge together |
+| Shift + drag from a vertex to another vertex | Draw a new edge between the two vertices; a dotted preview line follows the cursor while dragging |
+| Release on empty space during Shift+drag | Cancel edge creation |
+
 ---
 
 ## Testing
@@ -251,6 +263,5 @@ CGTea/
 The project is under active development. Areas that welcome contributions:
 
 - Completing `.tea` and `.mtx` file format support
-- Mouse-based graph editing (drag vertices, add edges by clicking)
 - Additional generators and reports
 - Expanding test coverage

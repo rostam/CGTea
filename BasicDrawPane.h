@@ -53,13 +53,27 @@ public:
 
      void mouseMoved(wxMouseEvent& event);
      void mouseDown(wxMouseEvent& event);
+     void mouseDoubleClick(wxMouseEvent& event);
      void mouseWheelMoved(wxMouseEvent& event);
      void mouseReleased(wxMouseEvent& event);
      void rightClick(wxMouseEvent& event);
      void mouseLeftWindow(wxMouseEvent& event);
      void keyPressed(wxKeyEvent& event);
      void keyReleased(wxKeyEvent& event);
-    
+
+    int  m_selectedVertex = -1;
+    bool m_edgeSelected   = false;
+    Ver  m_edgeSrc        = 0;
+    Ver  m_edgeTgt        = 0;
+
+    bool   m_dragging   = false;
+    double m_dragLastX  = 0;
+    double m_dragLastY  = 0;
+
+    bool   m_edgeDrawing   = false;
+    Ver    m_edgeDrawSrc   = 0;
+    double m_rubberX       = 0;
+    double m_rubberY       = 0;
 
     DECLARE_EVENT_TABLE()
 };

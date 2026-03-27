@@ -38,7 +38,7 @@ bool CGTeaApp::OnInit()
 
     auto* sidebar = new CGTeaSidebar(splitter, wxID_ANY);
     drawPane = new BasicDrawPane(splitter);
-    splitter->SplitVertically(sidebar, drawPane, 290);
+    splitter->SplitVertically(sidebar, drawPane, 360);
     splitter->SetMinimumPaneSize(180);
 
     frame->sidebar = sidebar;

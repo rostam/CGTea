@@ -12,6 +12,7 @@ BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
 
  EVT_MOTION(BasicDrawPane::mouseMoved)
  EVT_LEFT_DOWN(BasicDrawPane::mouseDown)
+ EVT_LEFT_DCLICK(BasicDrawPane::mouseDoubleClick)
  EVT_LEFT_UP(BasicDrawPane::mouseReleased)
  EVT_RIGHT_DOWN(BasicDrawPane::rightClick)
  EVT_LEAVE_WINDOW(BasicDrawPane::mouseLeftWindow)
@@ -28,17 +29,155 @@ END_EVENT_TABLE()
 
 // some useful events
 
- void BasicDrawPane::mouseMoved(wxMouseEvent& event) {}
- void BasicDrawPane::mouseDown(wxMouseEvent& event) {
+ void BasicDrawPane::mouseMoved(wxMouseEvent& event) {
+    if (m_edgeDrawing) {
+        m_rubberX = event.GetPosition().x;
+        m_rubberY = event.GetPosition().y;
+        Refresh();
+        return;
+    }
+    if (!m_dragging || !event.Dragging()) return;
+
+    const double mx = event.GetPosition().x;
+    const double my = event.GetPosition().y;
+    const double dx = mx - m_dragLastX;
+    const double dy = my - m_dragLastY;
+    m_dragLastX = mx;
+    m_dragLastY = my;
+
     Graph& g = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this))->currentGraph;
-    const Ver vv = boost::num_vertices(g);
-    boost::add_vertex(vv, g);
-    const cgtea_geometry::Point p(event.GetPosition().x,event.GetPosition().y);
-    boost::put(boost::vertex_distance, g, vv, p);
+
+    if (m_selectedVertex != -1) {
+        // Move the selected vertex
+        for_each_v(g, [&](Ver v) {
+            if ((int)boost::get(boost::vertex_index, g, v) == m_selectedVertex) {
+                cgtea_geometry::Point p = boost::get(boost::vertex_distance, g, v);
+                p.x += dx;
+                p.y += dy;
+                boost::put(boost::vertex_distance, g, v, p);
+            }
+        });
+    } else if (m_edgeSelected) {
+        // Move both endpoints of the selected edge
+        auto moveVert = [&](Ver v) {
+            cgtea_geometry::Point p = boost::get(boost::vertex_distance, g, v);
+            p.x += dx;
+            p.y += dy;
+            boost::put(boost::vertex_distance, g, v, p);
+        };
+        moveVert(m_edgeSrc);
+        moveVert(m_edgeTgt);
+    }
+
     Refresh();
  }
+
+ void BasicDrawPane::mouseDown(wxMouseEvent& event) {
+    const Graph& g = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this))->currentGraph;
+    const double mx = event.GetPosition().x;
+    const double my = event.GetPosition().y;
+    const double r  = 16.0;
+
+    // Hit-test vertices first
+    m_selectedVertex = -1;
+    m_edgeSelected   = false;
+    for_each_v_const(g, [&](Ver v) {
+        const cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
+        const double dx = pos.x - mx, dy = pos.y - my;
+        if (dx*dx + dy*dy <= r*r)
+            m_selectedVertex = (int)boost::get(boost::vertex_index, g, v);
+    });
+
+    // Shift+click on a vertex starts edge drawing — don't drag
+    if (event.ShiftDown() && m_selectedVertex != -1) {
+        m_edgeDrawing = true;
+        m_edgeSrc = 0;
+        for_each_v_const(g, [&](Ver v) {
+            if ((int)boost::get(boost::vertex_index, g, v) == m_selectedVertex)
+                m_edgeDrawSrc = v;
+        });
+        m_rubberX = mx;
+        m_rubberY = my;
+        m_dragging = false;
+        Refresh();
+        return;
+    }
+    m_edgeDrawing = false;
+
+    if (m_selectedVertex == -1) {
+        // Hit-test edges (point-to-segment distance < 6)
+        for_each_e_const(g, [&](Edge e) {
+            if (m_edgeSelected) return;
+            const Ver s = boost::source(e, g), t = boost::target(e, g);
+            const cgtea_geometry::Point sp = boost::get(boost::vertex_distance, g, s);
+            const cgtea_geometry::Point tp = boost::get(boost::vertex_distance, g, t);
+            const double ax = tp.x - sp.x, ay = tp.y - sp.y;
+            const double len2 = ax*ax + ay*ay;
+            if (len2 < 1.0) return;
+            const double t2 = ((mx - sp.x)*ax + (my - sp.y)*ay) / len2;
+            const double tc = t2 < 0.0 ? 0.0 : (t2 > 1.0 ? 1.0 : t2);
+            const double px = sp.x + tc*ax - mx;
+            const double py = sp.y + tc*ay - my;
+            if (px*px + py*py <= 36.0) { // 6^2
+                m_edgeSelected = true;
+                m_edgeSrc = s;
+                m_edgeTgt = t;
+            }
+        });
+    }
+
+    m_dragging  = (m_selectedVertex != -1 || m_edgeSelected);
+    m_dragLastX = mx;
+    m_dragLastY = my;
+
+    Refresh();
+ }
+
+ void BasicDrawPane::mouseDoubleClick(wxMouseEvent& event) {
+    // Only create a vertex if the double-click did not land on an existing vertex
+    const Graph& g = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this))->currentGraph;
+    const double mx = event.GetPosition().x;
+    const double my = event.GetPosition().y;
+    const double r  = 16.0;
+    bool hitVertex = false;
+    for_each_v_const(g, [&](Ver v) {
+        const cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
+        const double dx = pos.x - mx, dy = pos.y - my;
+        if (dx*dx + dy*dy <= r*r) hitVertex = true;
+    });
+    if (hitVertex) return;
+
+    Graph& gw = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this))->currentGraph;
+    const Ver vv = boost::num_vertices(gw);
+    boost::add_vertex(vv, gw);
+    boost::put(boost::vertex_distance, gw, vv, cgtea_geometry::Point(mx, my));
+    m_selectedVertex = -1;
+    m_edgeSelected   = false;
+    Refresh();
+ }
+
  void BasicDrawPane::mouseWheelMoved(wxMouseEvent& event) {}
- void BasicDrawPane::mouseReleased(wxMouseEvent& event) {}
+ void BasicDrawPane::mouseReleased(wxMouseEvent& event) {
+    m_dragging = false;
+    if (!m_edgeDrawing) return;
+    m_edgeDrawing = false;
+
+    const double mx = event.GetPosition().x;
+    const double my = event.GetPosition().y;
+    const double r  = 16.0;
+    Graph& g = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this))->currentGraph;
+    Ver target = boost::graph_traits<Graph>::null_vertex();
+    for_each_v_const(g, [&](Ver v) {
+        const cgtea_geometry::Point pos = boost::get(boost::vertex_distance, g, v);
+        const double dx = pos.x - mx, dy = pos.y - my;
+        if (dx*dx + dy*dy <= r*r && v != m_edgeDrawSrc)
+            target = v;
+    });
+    if (target != boost::graph_traits<Graph>::null_vertex())
+        boost::add_edge(m_edgeDrawSrc, target, g);
+
+    Refresh();
+ }
  void BasicDrawPane::rightClick(wxMouseEvent& event) {}
  void BasicDrawPane::mouseLeftWindow(wxMouseEvent& event) {}
  void BasicDrawPane::keyPressed(wxKeyEvent& event) {}
@@ -133,6 +272,17 @@ void BasicDrawPane::render(wxPaintDC&  dc) {
             const Graph& g = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this))->currentGraph;
             drawEdges(g, gc);
             drawVertices(g, gc);
+
+            // Rubber-band line while drawing a new edge
+            if (m_edgeDrawing) {
+                const cgtea_geometry::Point sp = boost::get(boost::vertex_distance, g, m_edgeDrawSrc);
+                wxPen rubberPen(wxColour(80, 80, 220), 2, wxPENSTYLE_DOT);
+                gc->SetPen(rubberPen);
+                wxGraphicsPath path = gc->CreatePath();
+                path.MoveToPoint(sp.x, sp.y);
+                path.AddLineToPoint(m_rubberX, m_rubberY);
+                gc->StrokePath(path);
+            }
         } catch (std::exception &e) {
             std::cerr << e.what() << std::endl;
         }
@@ -199,6 +349,16 @@ void BasicDrawPane::drawVertices(const Graph &g, wxGraphicsContext* gc) {
         const auto frame = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this));
         const auto shape = frame ? frame->getCurrentVertexShape() : VertexShape::Circle;
 
+
+        // Draw selection ring if selected
+        const int vidx = (int)boost::get(boost::vertex_index, g, v);
+        if (vidx == m_selectedVertex) {
+            gc->SetPen(wxPen(wxColour(255, 140, 0), 3));
+            gc->SetBrush(*wxTRANSPARENT_BRUSH);
+            wxGraphicsPath ring = gc->CreatePath();
+            ring.AddCircle(pos.x, pos.y, 21);
+            gc->DrawPath(ring);
+        }
 
         // Draw a white background with subtle shadow effect
         gc->SetPen(wxPen(wxColour(160, 160, 160), 1));
@@ -318,7 +478,13 @@ void BasicDrawPane::drawEdges(const Graph &g, wxGraphicsContext* gc) {
         const Ver tgt = boost::target(e,g);
         const cgtea_geometry::Point src_pos = boost::get(boost::vertex_distance, g, src);
         const cgtea_geometry::Point tgt_pos = boost::get(boost::vertex_distance, g, tgt);
-        gc->SetPen(wxPen(wxColor(0, 0, 0), 2));
+        const bool selected = m_edgeSelected &&
+            ((src == m_edgeSrc && tgt == m_edgeTgt) ||
+             (src == m_edgeTgt && tgt == m_edgeSrc));
+        if (selected)
+            gc->SetPen(wxPen(wxColour(30, 100, 220), 4));
+        else
+            gc->SetPen(wxPen(wxColor(0, 0, 0), 2));
 
         const auto frame = static_cast<CGTeaFrame*>(wxGetTopLevelParent(this));
         const auto edgeShape = frame ? frame->getCurrentEdgeShape() : EdgeShape::Line;
