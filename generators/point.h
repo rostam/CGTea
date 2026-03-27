@@ -17,7 +17,7 @@ namespace cgtea_geometry {
     }
 
     static Point operator/(const Point& p1, double value) {
-        return Point(p1.x/2, p1.y/2);
+        return Point(p1.x/value, p1.y/value);
     }
 }
 

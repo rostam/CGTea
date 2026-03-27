@@ -158,6 +158,7 @@ public:
         vector<int> ret;
         if (0 <= i && i <= 62) {
             ret.emplace_back(i + 63);
+            return ret;
         } else if (63 <= i && i <= 258047) {
             ret.resize(4);
             ret[0] = 126;
@@ -179,7 +180,7 @@ public:
     }
 
     static vector<int> R(const std::string& a) {
-        vector<int> bytes (a.length());
+        vector<int> bytes (a.length() / 6);
         for (unsigned int i = 0; i < a.length() / 6; i++) {
             int tmp = std::stoi(a.substr(i * 6, ((i * 6) + 6) - (i * 6)), nullptr, 2);
             bytes[i] = (tmp + 63);
@@ -194,7 +195,8 @@ public:
     }
 
     static std::string padR(std::string str) {
-        unsigned int padwith = 6 - (str.length() % 6);
+        unsigned int rem = str.length() % 6;
+        unsigned int padwith = rem == 0 ? 0 : 6 - rem;
         for (unsigned int i = 0; i < padwith; i++) {
             str += "0";
         }

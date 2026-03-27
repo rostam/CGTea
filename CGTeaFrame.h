@@ -9,7 +9,6 @@
 
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
-#include <wx/dir.h>
 #include <string>
 #endif
 #include <memory>
@@ -39,13 +38,13 @@ protected:
 private:
     void Generate(wxCommandEvent &event);
     void Report(wxCommandEvent &event);
-    void Layout(wxCommandEvent &event);
+    void Layout(wxCommandEvent&);
     void Action(wxCommandEvent &event);
 
-    void OnExit(wxCommandEvent &event);
-    void OnAbout(wxCommandEvent &event);
+    void OnExit(wxCommandEvent&);
+    void OnAbout(wxCommandEvent&);
     void Open(wxCommandEvent &event);
-    void Save(wxCommandEvent &event);
+    void Save(wxCommandEvent&);
 
     void OnSettings(wxCommandEvent& event);
 

@@ -15,7 +15,7 @@ public:
     Graph generate(unsigned int n, unsigned int k) override {
         Graph g;
         for (unsigned int i = 1; i < n; i++) {
-            add_edge(0, i, g);
+            add_edge(0, i, 1, g);
         };
         return g;
     }

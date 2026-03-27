@@ -18,23 +18,23 @@ public:
             for (unsigned int i = 0; i < n; i++) {
                 for (unsigned int j = i + 1; j < i + (k / 2) + 1; j++) {
                     if (i != j) {
-                        add_edge(i, j % n, g);
+                        add_edge(i, j % n, 1, g);
                     }
                 }
             }
         } else {
             for (unsigned int i = 0; i < n; i = i + 1) {
                 for (unsigned int j = i + 1; j < i + ((k - 1) / 2) + 1; j++) {
-                    add_edge(i, j % n, g);
+                    add_edge(i, j % n, 1, g);
                 }
 
                 for (unsigned int j = i - 1; j > i - ((k - 1) / 2) - 1; j--) {
-                    add_edge(i, (j + n) % n, g);
+                    add_edge(i, (j + n) % n, 1, g);
                 }
             }
 
             for (unsigned int i = 0; i < n / 2; i++) {
-                add_edge(i, (i + (n / 2)) % n, g);
+                add_edge(i, (i + (n / 2)) % n, 1, g);
             }
         }
         return g;

@@ -98,7 +98,6 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
 
     auto menuGenerate = std::make_unique<wxMenu>();
     int i = 1;
-//    std::apply([&](auto&&... args) {((menuGenerate->Append(i, wxString(args.name().c_str(), wxConvUTF8), wxString(args.description().c_str(), wxConvUTF8)),i++), ...);}, availableGenerators);
     for (auto& gi : availableGenerators) {
         menuGenerate->Append(i, wxString(gi->name().c_str(), wxConvUTF8),
                              wxString(gi->description().c_str(), wxConvUTF8));
@@ -141,19 +140,6 @@ CGTeaFrame::CGTeaFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     CreateStatusBar();
     SetStatusText("Welcome to CGTea!");
 
-    wxDir dir(wxGetCwd() + "/mats/");
-    if (!dir.IsOpened()) {
-        // deal with the error here - wxDir would already log an error message
-        // explaining the exact reason of the failure
-        return;
-    }
-
-    wxString filename;
-    bool cont = dir.GetFirst(&filename);//, filespec, flags);
-    while (cont) {
-        cout << filename.c_str() << endl;
-        cont = dir.GetNext(&filename);
-    }
 }
 
 void CGTeaFrame::OnExit(wxCommandEvent&) {
@@ -181,10 +167,7 @@ void CGTeaFrame::Generate(wxCommandEvent& event) {
     Refresh();
 }
 
-void CGTeaFrame::Layout(wxCommandEvent& event) {
-    int id = event.GetId();
-    cout << id;
-    //    currentGraph = availableGenerators[id]->generate_with_force_directed(10,0,500,500);
+void CGTeaFrame::Layout(wxCommandEvent&) {
     std::vector<cgtea_geometry::Point> pos = compute_force_directed(10, 10, 300, 300, currentGraph);
     int i = 0;
     for_each_v(currentGraph, [&](Ver v) {
@@ -262,36 +245,23 @@ void CGTeaFrame::Open(wxCommandEvent& event) {
         }
         Refresh();
     }
-//    wxFileDialog
-//            openFileDialog(this, _("Open XYZ file"), "", "",
-//                           "XYZ files (*.xyz)|*.xyz", wxFD_OPEN|wxFD_FILE_MUST_EXIST);
-//    ifstream in("test.g6");
-//    std::string g6;
-//    in >> g6;
-//    in.close();
-//    G6Format g6Format;
-//    currentGraph = g6Format.stringToGraph(g6);
 }
 
-void CGTeaFrame::Save(wxCommandEvent& event) {
-    wxFileDialog *openFileDialog = new wxFileDialog(this, _("Save a file"), wxEmptyString, wxEmptyString,
+void CGTeaFrame::Save(wxCommandEvent&) {
+    wxFileDialog *saveFileDialog = new wxFileDialog(this, _("Save a file"), wxEmptyString, wxEmptyString,
                                                     _("G6 format files (*.g6)|*.g6|CGTea format files (*.tea)|*.tea|"
                                                       "MTX format files (*.mtx)|*.mtx"),
                                                     wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-    if (openFileDialog->ShowModal() == wxID_OK) {
-//        wxString fileName = openFileDialog->GetPath();
-//        wxString fileName = openFileDialog->GetPath();
-//        if (fileName.find(".g6") != std::string::npos) {
+    if (saveFileDialog->ShowModal() == wxID_OK) {
+        wxString fileName = saveFileDialog->GetPath();
+        if (fileName.find(".g6") != std::string::npos) {
+            G6Format g6Format;
+            std::string g6 = g6Format.graphToG6(currentGraph);
+            ofstream out(fileName.mb_str());
+            out << g6;
+            out.close();
+        }
     }
-
-    G6Format g6Format;
-    std::string g6 = g6Format.graphToG6(currentGraph);
-    std::cerr << "hre " << g6 << endl;
-    ofstream out("test.g6");
-    out << g6;
-    out.flush();
-    out.close();
-    cerr << g6 << endl;
 }
 
 void CGTeaFrame::OnSettings(wxCommandEvent& event) {

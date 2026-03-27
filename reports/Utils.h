@@ -27,7 +27,7 @@ public:
         if(type =="int")
             return std::stoi( value );
         else if(type =="double")
-            return std::stod( value ),"";
+            return std::stod( value );
         else
             return value;
     }

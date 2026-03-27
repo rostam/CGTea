@@ -16,8 +16,6 @@ add_executable(CGTea CGTeaApp.cpp BasicDrawPane.cpp CGTeaFrame.cpp CGTeaSidebar.
         const_values.h
         SettingsDialog.cpp
         SettingsDialog.h)
-add_executable(BoostTest ${Reports} ${Generators}  ${BoostTestSrc} ${ConjectureCheck} ${Actions}
-        SettingsDialog.cpp
-        SettingsDialog.h)
+add_executable(BoostTest ${Reports} ${Generators} ${BoostTestSrc} ${ConjectureCheck} ${Actions})
 target_link_libraries(CGTea ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(BoostTest ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
