@@ -159,6 +159,90 @@ Click **Save CSV...** to export the table to a comma-separated file that can be 
 
 ---
 
+## Python Bindings
+
+CGTea exposes its graph generators, metrics, and transformations as a native Python extension module (`cgtea`) built with [pybind11](https://pybind11.readthedocs.io/).
+
+### Installation
+
+```bash
+# Prerequisites: Boost, Eigen (at project root), a C++17 compiler
+pip install pybind11
+mkdir build && cd build
+cmake .. -DBUILD_PYTHON_BINDINGS=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build . --target cgtea_py -j4
+# The built cgtea*.so appears in build/ — add it to your PYTHONPATH, or:
+pip install .   # builds and installs into the active environment
+```
+
+### Quick start
+
+```python
+import cgtea
+
+# --- Build graphs ---
+g = cgtea.Graph()
+for i in range(5): g.add_vertex()
+for u, v in [(0,1),(1,2),(2,3),(3,4),(4,0)]: g.add_edge(u, v)
+
+g = cgtea.Graph.from_edges([(0,1),(1,2),(2,0)], n=3)  # triangle
+
+# --- Generators (24 families) ---
+g = cgtea.generators.cycle(6)
+g = cgtea.generators.complete(5)
+g = cgtea.generators.complete_bipartite(3, 4)
+g = cgtea.generators.generalized_petersen(5, 2)  # Petersen graph
+g = cgtea.generators.grid(4, 5)
+g = cgtea.generators.heawood()
+
+# --- Reports (30 metrics) ---
+cgtea.reports.wiener_index(g)            # → int
+cgtea.reports.diameter(g)               # → int
+cgtea.reports.radius(g)                 # → int
+cgtea.reports.girth(g)                  # → int
+cgtea.reports.graph_energy(g)           # → float
+cgtea.reports.algebraic_connectivity(g) # → float
+cgtea.reports.max_eigenvalue(g)         # → float
+
+# --- Adjacency matrix (numpy-compatible) ---
+import numpy as np
+A = np.array(g.adjacency_matrix())
+
+# --- Actions ---
+colored = cgtea.actions.color(g)
+print(colored.vertex_colors())          # greedy coloring indices
+lg = cgtea.actions.line_graph(g)        # line graph L(G)
+
+# --- Graph6 I/O ---
+s = cgtea.to_g6(g)
+g2 = cgtea.from_g6(s)
+
+# --- Discovery ---
+print(cgtea.list_generators())
+print(cgtea.list_reports())
+```
+
+### Graph class API
+
+| Method / Property | Description |
+|-------------------|-------------|
+| `Graph()` | Empty graph |
+| `Graph.from_edges(edges, n=-1)` | Construct from edge list |
+| `g.add_vertex() → int` | Add a vertex, return its index |
+| `g.add_edge(u, v, weight=1)` | Add edge (u, v) |
+| `g.remove_edge(u, v)` | Remove edge (u, v) |
+| `g.n` / `g.m` | Number of vertices / edges |
+| `g.vertices() → list[int]` | All vertex indices |
+| `g.edges() → list[(int,int)]` | All (u, v) pairs |
+| `g.neighbors(v) → list[int]` | Neighbours of v |
+| `g.degree(v) → int` | Degree of v |
+| `g.has_edge(u, v) → bool` | Edge existence check |
+| `g.adjacency_matrix()` | 0/1 matrix as list-of-lists |
+| `g.vertex_colors()` | Color vector (after `actions.color`) |
+| `g.copy()` | Deep copy |
+
+---
+
 ## Dependencies
 
 | Library | Purpose | Install |
@@ -166,8 +250,11 @@ Click **Save CSV...** to export the table to a comma-separated file that can be 
 | [wxWidgets](https://wxwidgets.org/) | GUI | `sudo apt-get install libwxgtk3.2-dev` |
 | [Boost](https://www.boost.org/) | Graph algorithms, unit tests | `sudo apt-get install libboost-all-dev` |
 | [Eigen](https://eigen.tuxfamily.org/) | Spectral / eigenvalue computation | Copy `Eigen/` directory into the project root |
+| [pybind11](https://pybind11.readthedocs.io/) | Python bindings (optional) | `pip install pybind11` |
 
 > The Eigen headers must be placed at `<project-root>/Eigen/`. They are not installed system-wide.
+>
+> wxWidgets is **not** required when building only the Python bindings (`-DBUILD_PYTHON_BINDINGS=ON` without the `CGTea` target).
 
 ---
 
@@ -252,6 +339,10 @@ CGTea/
 ├── actions/                     Graph transformation classes
 ├── G6Format/                    Graph6 encoder/decoder
 ├── ConjectureCheck/             Batch conjecture verification over graph databases
+├── python/                      Python bindings (pybind11)
+│   └── bindings.cpp             Module definition: Graph class, generators, reports, actions
+├── setup.py                     pip install support
+├── pyproject.toml               PEP 518 build metadata
 ├── BoostTestSrc/                Boost.Test unit tests
 └── Eigen/                       Eigen headers (place here manually)
 ```
@@ -265,3 +356,4 @@ The project is under active development. Areas that welcome contributions:
 - Completing `.tea` and `.mtx` file format support
 - Additional generators and reports
 - Expanding test coverage
+- Python bindings: completing stub reports (ChromaticNumber, DominationNumber, MaxCut, KConnected, …) and fixing broken generators (Random, RandomTree, Tree)

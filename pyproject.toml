@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=64", "pybind11>=2.12"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "cgtea"
+version = "1.0.0"
+description = "CGTea – Graph Theory Exploration and Analysis (Python bindings)"
+requires-python = ">=3.8"
+dependencies = ["pybind11>=2.12"]
+
+[project.optional-dependencies]
+numpy   = ["numpy>=1.20"]
+networkx = ["networkx>=2.6"]
+
+[tool.cibuildwheel]
+build = "cp38-* cp39-* cp310-* cp311-* cp312-*"
